@@ -3,6 +3,7 @@ import {Suspense} from "react";
 import {getRouteLocale} from "@/platform/i18n/server";
 import {HeroSection} from "@/site/home/hero-section";
 import {FeaturedProducts} from '@/features/products/featured-products';
+import {EgyptProductShowcase} from '@/site/home/egypt-product-showcase';
 import {SITE_NAME, SITE_URL, buildCanonicalUrl} from "@/config/metadata";
 import {BadgeCheck, Tag, Zap} from "lucide-react";
 import {getTranslations} from 'next-intl/server';
@@ -44,9 +45,10 @@ export default async function Home() {
     return (
         <div className="min-h-screen">
             <HeroSection/>
-            <Suspense>
-                <FeaturedProducts/>
-            </Suspense>
+            <EgyptProductShowcase/>
+            {process.env.NEXT_PUBLIC_ENABLE_CHECKOUT === "true" && (
+                <Suspense><FeaturedProducts/></Suspense>
+            )}
 
             <section className="py-16 md:py-24 bg-muted/30">
                 <div className="container mx-auto px-4">
