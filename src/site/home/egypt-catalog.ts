@@ -7,7 +7,7 @@
 export type EgyptCatalogProduct = {
   sku: string;
   name: string;
-  priceEgp: number;
+  priceEgp: number | null;
   stockStatus: 'in-stock' | 'available-on-order';
   category: string;
   description: string;
@@ -45,6 +45,56 @@ export const egyptCatalogProducts: EgyptCatalogProduct[] = [
     competition: 'WRG Sumo',
     description: 'A robotics kit focused on building and programming a competition-style sumo robot. Check the controller variant before ordering.',
     supplierUrl: 'https://inex.co.th/home/product/robo-creator-xi-sumobot-kit/',
+  },
+  {
+    sku: '8300130',
+    name: 'POP-BOT32i Rover Kit Lite',
+    priceEgp: null,
+    stockStatus: 'available-on-order',
+    category: 'Robotics Learning',
+    competition: 'Robotics / STEM',
+    description: 'Entry-level programmable rover kit using the POP-32i controller.',
+    supplierUrl: 'https://inex.co.th/home/product/pop-bot32i-rover-kit-lite/',
+  },
+  {
+    sku: '8300163',
+    name: 'X-ROVER Robot Kit',
+    priceEgp: null,
+    stockStatus: 'available-on-order',
+    category: 'Robotics Learning',
+    competition: 'STEM Activities',
+    description: 'Wireless remote-control robotics kit for hands-on mechanical building and control.',
+    supplierUrl: 'https://inex.co.th/home/product/x-rover-robot-kit/',
+  },
+  {
+    sku: '8300137',
+    name: 'KidBright Rover Ai',
+    priceEgp: null,
+    stockStatus: 'available-on-order',
+    category: 'AI & STEM',
+    competition: 'AI Robotics',
+    description: 'Educational robot for introductory AI, embedded systems and programming concepts.',
+    supplierUrl: 'https://inex.co.th/home/product/kidbright-rover-ai/',
+  },
+  {
+    sku: '8300152',
+    name: 'Robo-Creator Xi: Rover Kit Plus',
+    priceEgp: null,
+    stockStatus: 'available-on-order',
+    category: 'Robotics Learning',
+    competition: 'Robotics / STEM',
+    description: 'Educational rover based on the ATX2i controller with sensors and a gripper.',
+    supplierUrl: 'https://inex.co.th/home/product/robo-creator-xi-rover-kit-plus/',
+  },
+  {
+    sku: '8300146',
+    name: 'KidBright 32iA JR-BOT',
+    priceEgp: null,
+    stockStatus: 'available-on-order',
+    category: 'Junior Robotics',
+    competition: 'STEM Junior',
+    description: 'Small educational autonomous robot kit with KidBright32iA controller.',
+    supplierUrl: 'https://inex.co.th/home/product/kidbright-32ia-jr-bot/',
   },
 ];
 
