@@ -8,7 +8,7 @@ const mandatory = [
 export function assertRuntimeEnvironment(): void {
     const missing = mandatory.filter(key => {
         const value = process.env[key]?.trim();
-        return !value || value.startsWith('REPLACE_');
+        return !value || /^(?:REPLACE_|YOUR_|<)/i.test(value);
     });
     if (missing.length) {
         throw new Error('Missing required server environment variables: ' + missing.join(', '));
@@ -18,7 +18,7 @@ export function assertRuntimeEnvironment(): void {
     }
     if (process.env.APP_ENV !== 'dev') {
         for (const key of ['BACKEND_PUBLIC_URL', 'STOREFRONT_PUBLIC_URL', 'ASSET_URL_PREFIX']) {
-            if (!process.env[key]?.startsWith('https://')) {
+            if (!process.env[key]?.startsWith('https://') || /YOUR-|example\b/i.test(process.env[key]!)) {
                 throw new Error(key + ' must be a real HTTPS URL in production.');
             }
         }
