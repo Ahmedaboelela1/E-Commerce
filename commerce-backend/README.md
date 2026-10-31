@@ -56,12 +56,13 @@ Required backend server runtime variables:
 
 Use a **fixed egress IP** for the backend server. In Hostinger, use **Databases → Remote MySQL** to allow only that fixed IP to access `u169469823_store`. Do not enable the wildcard/Any Host remote access option.
 
-## Deployment services (2 separate long-running processes)
+## Deployment services (single-process pilot or separate-worker mode)
 
-Run on a VPS or managed platform which supports **persistent workers**:
+The low-volume pilot may run the SQL-backed job queue on the API process by setting `RUN_JOBS_IN_SERVER=true`. This avoids a separate Worker service but can reduce API responsiveness when there are long jobs. Vendure's long-term recommended production configuration is a separate Worker process. Run on a host that keeps the API process active:
 
 - **API service:** install dependencies → build server → build dashboard (when an API for schema introspection is available) → `npm run start`
-- **Worker service:** same codebase and credentials, `npm run start:worker`
+- **Pilot mode:** one API service with `RUN_JOBS_IN_SERVER=true`, no second Worker service.
+- **Scaling mode:** set `RUN_JOBS_IN_SERVER=false` on the API, then add a Worker service with the same codebase/credentials and `npm run start:worker`.
 
 Do not point Hostinger Business's Next.js frontend service at either of these.
 
@@ -71,7 +72,7 @@ npm run build
 # Requires database, migration and running API:
 npm run dashboard:build
 npm run start
-npm run start:worker  # separate process/container
+npm run start:worker  # only for separate-worker mode; not in single-process pilot
 ```
 
 A `dist/dashboard` folder is required for the admin UI. Backend API compilation without a built dashboard is **not** a working dashboard deployment.
@@ -109,7 +110,7 @@ A central Skillverse SuperAdmin can see all channels. Later countries get indepe
 
 - Actual credentials, server host and database contents **have not been provided or accessed**.
 - The initial migration is committed and tested on disposable MySQL 8, but **has not been applied to Hostinger**.
-- The worker and dashboard are source-level integrations; no end-to-end runtime build performed in this environment.
+- The worker and dashboard are source-level integrations. Builds are checked by GitHub Actions, but no production backend runtime has been deployed.
 - Stock counts of the three products and the business identity of the local agent are not known.
 - Supplier lead times, prices of five additional products, taxes, legal terms, shipping and payment gateway are pending.
 - Customer email verification requires an SMTP-enabled EmailPlugin configuration; the storefront's account sign-up must not be enabled until this is complete.
@@ -126,3 +127,7 @@ A central Skillverse SuperAdmin can see all channels. Later countries get indepe
 ## Note: verified empty does not equal connected
 
 The owner has confirmed the Hostinger database is new and empty; **this is not proof that the Vendure server can connect**. The migration is generated in CI on an unrelated MySQL instance. In the real deployment, host, username and password must be provided privately to the backend host, and Hostinger Remote MySQL must allow that host's stable public egress IP. Run `npm run db:check` first; it uses SELECT/SHOW only and refuses to proceed silently if tables already exist.
+
+## Single-process support
+
+For small initial order volumes, set `RUN_JOBS_IN_SERVER=true` on the API process. It calls `JobQueueService.start()` after bootstrap and runs scheduled tasks on the API too. It continues using `DefaultJobQueuePlugin` with SQL-backed persistence. **Do not launch a separate worker while this setting is true**. Refer to `RAILWAY-DEPLOY.md` for the one-service option. This does not guarantee reliable long-running background processing on Hostinger Business, which explicitly does not support always-on background workers. For pilot use, Railway is one suitable persistent process host.
