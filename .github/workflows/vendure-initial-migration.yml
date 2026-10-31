@@ -9,7 +9,7 @@ on:
       - '.github/workflows/vendure-initial-migration.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   generate-initial-migration:
@@ -47,11 +47,33 @@ jobs:
           node-version: 22.16.0
       - run: npm install --no-audit --no-fund
       - name: Generate migration against disposable empty MySQL + shadow DB
-        run: npx vendure migrate --generate initial --from-empty
+        run: |
+          if find src/migrations -maxdepth 1 -type f -name '*.ts' -print -quit 2>/dev/null | grep -q .; then
+            echo "Initial migration already committed; skipping generation."
+          else
+            npx vendure migrate --generate initial --from-empty
+          fi
       - name: Verify a migration was generated
         run: |
           find src/migrations -type f -name '*.ts' -print
           test "$(find src/migrations -type f -name '*.ts' | wc -l)" -gt 0
+      - name: Run schema on disposable test database
+        run: npx vendure migrate --run
+      - name: Check that schema tables exist
+        run: |
+          node --input-type=module -e "import mysql from 'mysql2/promise'; const c=await mysql.createConnection({host:process.env.DB_HOST,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:process.env.DB_NAME}); const [tables]=await c.query('SHOW TABLES'); console.log('Vendure test tables:',tables.length); await c.end(); if(tables.length<70)process.exit(1)"
+      - name: Commit generated baseline to feature branch
+        if: github.ref == 'refs/heads/feat/skillverse-vendure-backend'
+        run: |
+          if [ -n "$(git status --porcelain -- src/migrations)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/migrations/
+            git commit -m "chore: commit tested initial Vendure MySQL schema migration"
+            git push origin "HEAD:feat/skillverse-vendure-backend"
+          else
+            echo "Initial migration already present."
+          fi
       - name: Upload reviewed initial schema as build artifact
         uses: actions/upload-artifact@v4
         with:
