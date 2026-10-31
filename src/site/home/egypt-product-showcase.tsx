@@ -1,5 +1,6 @@
-import {ArrowUpRight, Bot, CheckCircle2, PackageSearch, ShieldCheck, Truck} from 'lucide-react';
+import {ArrowUpRight, CheckCircle2, PackageSearch, ShieldCheck, Truck} from 'lucide-react';
 import {egyptCatalogProducts, formatEgp} from './egypt-catalog';
+import {InexProductImage} from './inex-product-image';
 
 export function EgyptProductShowcase() {
     return (
@@ -19,19 +20,15 @@ export function EgyptProductShowcase() {
                         </p>
                     </div>
                     <span className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-2 text-xs font-medium text-primary">
-                        <ShieldCheck className="h-4 w-4" /> Supplier product details verified
+                        <ShieldCheck className="h-4 w-4" /> Official INEX specifications
                     </span>
                 </div>
 
                 <div className="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
                     {egyptCatalogProducts.filter((product) => product.stockStatus === 'in-stock').map((product) => (
                         <article key={product.sku} className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-                            <div className="relative flex h-48 items-center justify-center overflow-hidden bg-gradient-to-br from-[#102140] via-[#204278] to-[#2e5eab]">
-                                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff18_1px,transparent_1px),linear-gradient(to_bottom,#ffffff18_1px,transparent_1px)] bg-[size:30px_30px]" />
-                                <Bot className="relative h-20 w-20 text-white/90" strokeWidth={1.15} aria-hidden="true" />
-                                <div className="absolute bottom-3 left-4 text-xs font-medium tracking-wide text-white/80">
-                                    INEX ROBOTICS
-                                </div>
+                            <div className="flex h-56 items-center justify-center overflow-hidden bg-white p-4">
+                                <InexProductImage sku={product.sku} name={product.name} className="h-full w-full object-contain" />
                             </div>
 
                             <div className="flex flex-1 flex-col p-5">
@@ -43,6 +40,9 @@ export function EgyptProductShowcase() {
                                 </div>
                                 <h3 className="text-xl font-bold tracking-tight">{product.name}</h3>
                                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{product.description}</p>
+                                <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
+                                    {product.highlights.slice(0, 3).map((feature) => <li key={feature}>• {feature}</li>)}
+                                </ul>
                                 <p className="mt-3 text-xs text-muted-foreground">INEX SKU: {product.sku} · {product.competition}</p>
                                 <div className="mt-auto pt-6">
                                     <p className="text-2xl font-bold text-foreground">{product.priceEgp === null ? 'Price on request' : formatEgp(product.priceEgp)}</p>
@@ -81,10 +81,14 @@ export function EgyptProductShowcase() {
                 <div className="mt-5 grid gap-3 md:grid-cols-2">
                     {egyptCatalogProducts.filter((product) => product.stockStatus === 'available-on-order').map((product) => (
                         <article key={product.sku} className="flex items-start gap-3 rounded-xl border border-border p-4">
-                            <PackageSearch className="mt-1 h-6 w-6 shrink-0 text-primary" aria-hidden="true" />
+                            <div className="h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-white p-1">
+                                <InexProductImage sku={product.sku} name={product.name} className="h-full w-full object-contain" />
+                            </div>
                             <div className="min-w-0 flex-1">
                                 <h4 className="font-semibold">{product.name}</h4>
-                                <p className="mt-1 text-xs text-muted-foreground">SKU {product.sku} · Egypt price & lead time on confirmation</p>
+                                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{product.description}</p>
+                                <p className="mt-2 text-xs font-medium text-primary">Available on order · Egypt price and lead time to be confirmed</p>
+                                <p className="mt-1 text-xs text-muted-foreground">INEX SKU: {product.sku}</p>
                                 <a href={product.supplierUrl} target="_blank" rel="noopener noreferrer"
                                    className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
                                     INEX product details <ArrowUpRight className="h-3.5 w-3.5" />
