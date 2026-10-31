@@ -46,47 +46,39 @@ jobs:
         with:
           node-version: 22.16.0
       - run: npm install --no-audit --no-fund
-      - name: Generate migration against disposable empty MySQL + shadow DB
+      - name: Generate migration against disposable empty MySQL and shadow DB
         run: |
           if find src/migrations -maxdepth 1 -type f -name '*.ts' -print -quit 2>/dev/null | grep -q .; then
-            echo "Initial migration already committed; skipping generation."
+            echo "Migration already committed; skipping generation."
           else
             npx vendure migrate --generate initial --from-empty
           fi
-      - name: Verify a migration was generated
+      - name: Verify migration was generated
         run: |
           find src/migrations -type f -name '*.ts' -print
           test "$(find src/migrations -type f -name '*.ts' | wc -l)" -gt 0
-      - name: Run schema on disposable test database
+      - name: Apply migration on disposable test database
         run: npx vendure migrate --run
-      - name: Check that schema tables exist
+      - name: Verify schema tables
         run: |
           node --input-type=module -e "import mysql from 'mysql2/promise'; const c=await mysql.createConnection({host:process.env.DB_HOST,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:process.env.DB_NAME}); const [tables]=await c.query('SHOW TABLES'); console.log('Vendure test tables:',tables.length); await c.end(); if(tables.length<70)process.exit(1)"
-      - name: Commit generated baseline to feature branch
+      - name: Commit verified initial migration to current feature branch
         if: github.ref == 'refs/heads/feat/skillverse-vendure-backend'
         run: |
-          git fetch origin "feat/skillverse-vendure-backend:refs/remotes/origin/feat/skillverse-vendure-backend"
-          if git ls-tree -r --name-only origin/feat/skillverse-vendure-backend -- commerce-backend/src/migrations | grep -q '\.ts
-      - name: Upload reviewed initial schema as build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: vendure-mysql-initial-migration
-          path: commerce-backend/src/migrations/*.ts
-          if-no-files-found: error
-          retention-days: 14
-; then
-            echo "Migration already exists on remote branch; no changes required."
+          git fetch origin feat/skillverse-vendure-backend
+          if git ls-tree -r --name-only FETCH_HEAD -- commerce-backend/src/migrations | grep -q 'commerce-backend/src/migrations/'; then
+            echo "Migration already exists upstream; no commit needed."
           elif [ -n "$(git status --porcelain -- src/migrations)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add src/migrations/
             git commit -m "chore: commit tested initial Vendure MySQL schema migration"
-            git rebase origin/feat/skillverse-vendure-backend
-            git push origin "HEAD:feat/skillverse-vendure-backend"
+            git rebase FETCH_HEAD
+            git push origin HEAD:feat/skillverse-vendure-backend
           else
-            echo "Initial migration already present."
+            echo "Migration already present."
           fi
-      - name: Upload reviewed initial schema as build artifact
+      - name: Upload generated schema as artifact
         uses: actions/upload-artifact@v4
         with:
           name: vendure-mysql-initial-migration
