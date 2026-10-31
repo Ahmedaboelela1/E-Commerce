@@ -32,5 +32,9 @@ jobs:
         run: npm run check
       - name: Build server and worker
         run: npm run build
+      - name: Build official Vendure Dashboard
+        run: npm run dashboard:build
+      - name: Verify Dashboard static assets
+        run: test -f dist/dashboard/index.html
       # Dashboard build relies on introspection of a running Vendure backend and
       # must be validated separately against an initialized staging database.
