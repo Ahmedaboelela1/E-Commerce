@@ -2,6 +2,19 @@
 
 **State:** source and baseline MySQL migration are prepared in PR #3. This playbook does not imply that Railway, Hostinger DB, or any real admin accounts have been provisioned.
 
+## Simpler low-volume pilot: one API service + MySQL
+
+For launch with a small catalog and low order volume, **do not create a separate Worker service**. Vendure can start the SQL-backed job queue directly inside the API process.
+
+- Set `RUN_JOBS_IN_SERVER=true` on the API service.
+- Run `npm run start` in this single API service; it will also process indexing jobs and scheduled tasks.
+- Keep the MySQL database service. This is the only other required service in Railway when choosing Railway MySQL.
+- Do **not** run `npm run start:worker` at the same time in this mode.
+- Monitor response time and job failures: long-running tasks can slow API requests. On service restart, queued SQL jobs persist, though processing pauses until the service starts again.
+- For real scale, change `RUN_JOBS_IN_SERVER=false`, provision a separate Worker service, then run `npm run start:worker`.
+
+The combined mode is an official Vendure capability but is **not recommended by Vendure for production**, so use it only as a pragmatic pilot with monitoring and low workload.
+
 ## Recommended first deployment: Railway API + Worker + Railway MySQL
 
 We recommend running all three services in **one Railway project**, connected using Railway's *private network*. The existing Hostinger Business Next.js shop remains hosted at `https://shop.skillverse-global.com`.
@@ -21,18 +34,19 @@ If the owner specifically wants `u169469823_store` as the live database, Railway
 3. Add a GitHub service from `Ahmedaboelela1/E-Commerce`. **Choose the feature branch `feat/skillverse-vendure-backend` for staging**, not `main` (unless PR #3 has been merged and verified).
 4. Name this service `vendure-api`. Set **Root Directory = `/commerce-backend`**. Leave deployment connected only to the backend subdirectory.
 5. **Build Command:** `npm run build && npm run dashboard:build`
-6. **Start Command:** `npm run start`. This starts the actual Vendure API server.
-7. Add a second GitHub service from the **same repository/branch**, named `vendure-worker`, and set **Root Directory = `/commerce-backend`**.
-8. Use the same Build Command for the worker; **Start Command:** `npm run start:worker`.
-9. Only the **API** requires a public Railway domain (Settings → Networking → Generate Domain). The worker and MySQL service should stay private. Vendure Dashboard is served on the API domain at `/dashboard/` after its Vite assets are built.
-10. Configure the two services' shared backend environment variables. Never put actual passwords in GitHub or in a public screenshot.
+6. **Start Command:** `npm run start`. Set `RUN_JOBS_IN_SERVER=true` for the single-process pilot, which starts the API and job processor together.
+7. **Skip the separate `vendure-worker` service for the pilot.** Only add it when upgrading to a two-process deployment.
+8. When you eventually add the worker, use the same Build Command and **Start Command:** `npm run start:worker`; disable `RUN_JOBS_IN_SERVER` on API first.
+9. Only the **API** requires a public Railway domain (Settings → Networking → Generate Domain). The MySQL service (and any future Worker) should stay private. Vendure Dashboard is served on the API domain at `/dashboard/` after its Vite assets are built.
+10. Configure the two services' backend environment variables on the single API service (copy the common variables to a Worker only when one is created). Never put actual passwords in GitHub or in a public screenshot.
 
-## Required variables on API and Worker
+## Required variables on API (and future Worker)
 
 **Railway MySQL scenario** (reference variable syntax, assuming the database service is named exactly `MySQL`):
 
 ```dotenv
 APP_ENV=production
+RUN_JOBS_IN_SERVER=true
 DB_HOST=${{MySQL.MYSQLHOST}}
 DB_PORT=${{MySQL.MYSQLPORT}}
 DB_NAME=${{MySQL.MYSQLDATABASE}}
@@ -86,7 +100,7 @@ Railway currently advertises **Hobby $5/month** and **Pro $20/month** baseline s
 ## Diagnostic checkpoints
 
 - Railway API deployment logs show the server listening on the injected PORT; no TypeORM connection errors.
-- Worker logs show the job queue starting.
+- For the pilot, API logs show `Vendure single-process mode: job queue started in API process.`. Once scaled, Worker logs should show the job queue starting.
 - Admin API responds over HTTPS to POST requests at `/admin-api`.
 - Dashboard static page renders at `/dashboard/`; no 404 from missing `dist/dashboard/index.html`.
 - Sign-in succeeds only with private SuperAdmin credentials.
