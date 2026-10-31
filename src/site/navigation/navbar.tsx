@@ -32,6 +32,11 @@ export function Navbar() {
                         </nav>
                     </div>
                     <div className="flex items-center gap-4">
+                        {process.env.SHOW_ADMIN_PREVIEW === 'true' && (
+                            <NavigationLink href="/admin-preview" className="hidden rounded-full border border-primary/30 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/10 sm:inline-flex">
+                                Dashboard preview
+                            </NavigationLink>
+                        )}
                         {!liveCheckout && <span className="hidden rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary sm:inline-flex">Catalog preview</span>}
                         {liveCheckout && (<div className="flex items-center gap-4">
                         <div className="hidden lg:flex">
