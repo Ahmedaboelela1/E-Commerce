@@ -45,7 +45,7 @@ export function EgyptProductShowcase() {
                                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{product.description}</p>
                                 <p className="mt-3 text-xs text-muted-foreground">INEX SKU: {product.sku} · {product.competition}</p>
                                 <div className="mt-auto pt-6">
-                                    <p className="text-2xl font-bold text-foreground">{formatEgp(product.priceEgp)}</p>
+                                    <p className="text-2xl font-bold text-foreground">{product.priceEgp === null ? 'Price on request' : formatEgp(product.priceEgp)}</p>
                                     <p className="mt-1 text-xs text-muted-foreground">Egypt price · availability subject to confirmation</p>
                                     <a
                                         className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-primary px-4 py-3 text-sm font-semibold text-primary transition hover:bg-primary hover:text-primary-foreground"
