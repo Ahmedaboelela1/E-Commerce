@@ -1,0 +1,61 @@
+name: Generate Vendure MySQL baseline migration (disposable DB)
+
+on:
+  push:
+    branches: [feat/skillverse-vendure-backend]
+    paths:
+      - 'commerce-backend/src/**'
+      - 'commerce-backend/package.json'
+      - '.github/workflows/vendure-initial-migration.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  generate-initial-migration:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci-ephemeral-mysql-password
+          MYSQL_DATABASE: vendure_ci_baseline
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+    defaults:
+      run:
+        working-directory: commerce-backend
+    env:
+      APP_ENV: dev
+      DB_HOST: 127.0.0.1
+      DB_PORT: "3306"
+      DB_NAME: vendure_ci_baseline
+      DB_USERNAME: root
+      DB_PASSWORD: ci-ephemeral-mysql-password
+      COOKIE_SECRET: ci-only-random-placeholder-never-for-production-12345
+      SUPERADMIN_USERNAME: ci-migration-admin@example.invalid
+      SUPERADMIN_PASSWORD: ci-only-not-for-production-12345678
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+      - run: npm install --no-audit --no-fund
+      - name: Generate migration against disposable empty MySQL + shadow DB
+        run: npx vendure migrate --generate initial --from-empty
+      - name: Verify a migration was generated
+        run: |
+          find src/migrations -type f -name '*.ts' -print
+          test "$(find src/migrations -type f -name '*.ts' | wc -l)" -gt 0
+      - name: Upload reviewed initial schema as build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendure-mysql-initial-migration
+          path: commerce-backend/src/migrations/*.ts
+          if-no-files-found: error
+          retention-days: 14
