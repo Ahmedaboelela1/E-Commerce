@@ -2,7 +2,7 @@
 
 The Next.js storefront remains in the repository root and is deployed independently to Hostinger. This folder is a **separate Vendure server application**, with a background Worker and the official **React Dashboard**, which cannot be deployed just by pointing Hostinger's Next.js deployment at the repo root.
 
-**Current status: source code prepared, not deployed; no production database touched; no actual users created.**
+**Current status: backend source and initial MySQL schema migration prepared and tested against disposable MySQL 8; not deployed; no Hostinger production database touched; no actual users created.**
 
 ## Systems prepared
 
@@ -21,7 +21,7 @@ The Next.js storefront remains in the repository root and is deployed independen
 
 **Do not run setup commands on a shared or non-empty database.** First check in phpMyAdmin that `u169469823_store` is empty or dedicated solely to Vendure, and take a backup. The database name alone is not enough to connect. A working MySQL connection needs a **host, username, password, and remote IP authorization**.
 
-Vendure's TypeORM `synchronize` is fixed at `false`. A production installation needs an approved **initial migration**. This repository has no initial migration yet because the migration must be generated against a disposable empty MySQL database of the same engine/version and reviewed. The Vendure CLI `npx vendure migrate --generate initial --from-empty` uses a shadow database and therefore needs `CREATE DATABASE` privileges. Shared Hostinger MySQL users may not have that privilege, so generate the initial migration against a separate local MySQL database or controlled server, commit it, then apply to the real empty Hostinger database. On MySQL some DDL cannot be transactionally rolled back, so backups are mandatory.
+Vendure's TypeORM `synchronize` is fixed at `false`. A production installation needs an approved **initial migration**. The initial migration is now committed under `src/migrations/` and has been applied successfully against disposable MySQL 8 by GitHub Actions. Verify the actual Hostinger database engine/version and review the migration before running it on the real database. The Vendure CLI `npx vendure migrate --generate initial --from-empty` uses a shadow database and therefore needs `CREATE DATABASE` privileges. Shared Hostinger MySQL users may not have that privilege, so generate the initial migration against a separate local MySQL database or controlled server, commit it, then apply to the real empty Hostinger database. On MySQL some DDL cannot be transactionally rolled back, so backups are mandatory.
 
 **Never set `synchronize=true` in production to work around the missing initial migration.**
 
@@ -81,7 +81,7 @@ After everything has been configured, the admin is served at `https://BACKEND-DO
 ## First-time provisioning (do not skip order)
 
 1. The owner confirms that **`u169469823_store` is a new empty database**. Once credentials and network access are configured, run `npm run db:check` from the backend host to verify that independently (read-only). Enable remote access only for the backend's known fixed outgoing IP and take a backup before migration.
-2. Produce and review the initial Vendure MySQL migration on a disposable dev database (GitHub Actions test workflow does this with temporary MySQL). Commit only the tested generated migration to the feature branch. Apply it on the real database via `runMigrations()` only after authorized deployment.
+2. Review the committed `src/migrations/1793467748993-initial.ts` migration. GitHub Actions generated it and successfully applied it to disposable MySQL 8. Apply it on the real database via `runMigrations()` only after authorized deployment and a verified database backup.
 3. Configure `SUPERADMIN_USERNAME` and `SUPERADMIN_PASSWORD` privately in the deployment environment, and run `npm run seed:initial` **once** with `ALLOW_INITIAL_SEED=YES_EMPTY_DB_BACKED_UP`. No account credentials should ever be committed. The Vendure system will initialize the first SuperAdmin using the configured values.
 4. Start API and Worker. Build and serve the official Vendure Dashboard.
 5. Set the **actual legal selling agent name** `EGYPT_SELLER_LEGAL_NAME` and `ADMIN_API_URL` (e.g. `https://BACKEND-DOMAIN/admin-api`) plus superadmin secret credentials in a private shell. Run the provisioning script in dry-run mode:
@@ -108,7 +108,7 @@ A central Skillverse SuperAdmin can see all channels. Later countries get indepe
 ## Development status and unresolved configuration
 
 - Actual credentials, server host and database contents **have not been provided or accessed**.
-- The schema migration is **not yet generated**.
+- The initial migration is committed and tested on disposable MySQL 8, but **has not been applied to Hostinger**.
 - The worker and dashboard are source-level integrations; no end-to-end runtime build performed in this environment.
 - Stock counts of the three products and the business identity of the local agent are not known.
 - Supplier lead times, prices of five additional products, taxes, legal terms, shipping and payment gateway are pending.
