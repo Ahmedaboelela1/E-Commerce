@@ -65,11 +65,23 @@ jobs:
       - name: Commit generated baseline to feature branch
         if: github.ref == 'refs/heads/feat/skillverse-vendure-backend'
         run: |
-          if [ -n "$(git status --porcelain -- src/migrations)" ]; then
+          git fetch origin "feat/skillverse-vendure-backend:refs/remotes/origin/feat/skillverse-vendure-backend"
+          if git ls-tree -r --name-only origin/feat/skillverse-vendure-backend -- commerce-backend/src/migrations | grep -q '\.ts
+      - name: Upload reviewed initial schema as build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendure-mysql-initial-migration
+          path: commerce-backend/src/migrations/*.ts
+          if-no-files-found: error
+          retention-days: 14
+; then
+            echo "Migration already exists on remote branch; no changes required."
+          elif [ -n "$(git status --porcelain -- src/migrations)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add src/migrations/
             git commit -m "chore: commit tested initial Vendure MySQL schema migration"
+            git rebase origin/feat/skillverse-vendure-backend
             git push origin "HEAD:feat/skillverse-vendure-backend"
           else
             echo "Initial migration already present."
