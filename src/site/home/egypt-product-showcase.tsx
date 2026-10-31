@@ -24,7 +24,7 @@ export function EgyptProductShowcase() {
                 </div>
 
                 <div className="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-                    {egyptCatalogProducts.map((product) => (
+                    {egyptCatalogProducts.filter((product) => product.stockStatus === 'in-stock').map((product) => (
                         <article key={product.sku} className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
                             <div className="relative flex h-48 items-center justify-center overflow-hidden bg-gradient-to-br from-[#102140] via-[#204278] to-[#2e5eab]">
                                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff18_1px,transparent_1px),linear-gradient(to_bottom,#ffffff18_1px,transparent_1px)] bg-[size:30px_30px]" />
@@ -66,7 +66,7 @@ export function EgyptProductShowcase() {
                     <div>
                         <h3 className="text-xl font-bold">More INEX products — available on request</h3>
                         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                            The wider INEX catalog will be added with an Available on Order status. Delivery estimates,
+                            The wider INEX catalog is being prepared with an Available on Order status. Delivery estimates,
                             local prices and order acceptance will appear only after supplier and agent confirmation.
                         </p>
                         <a className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 hover:underline"
@@ -76,6 +76,22 @@ export function EgyptProductShowcase() {
                             Browse the INEX robotics catalog <ArrowUpRight className="h-4 w-4" />
                         </a>
                     </div>
+                </div>
+
+                <div className="mt-5 grid gap-3 md:grid-cols-2">
+                    {egyptCatalogProducts.filter((product) => product.stockStatus === 'available-on-order').map((product) => (
+                        <article key={product.sku} className="flex items-start gap-3 rounded-xl border border-border p-4">
+                            <PackageSearch className="mt-1 h-6 w-6 shrink-0 text-primary" aria-hidden="true" />
+                            <div className="min-w-0 flex-1">
+                                <h4 className="font-semibold">{product.name}</h4>
+                                <p className="mt-1 text-xs text-muted-foreground">SKU {product.sku} · Egypt price & lead time on confirmation</p>
+                                <a href={product.supplierUrl} target="_blank" rel="noopener noreferrer"
+                                   className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+                                    INEX product details <ArrowUpRight className="h-3.5 w-3.5" />
+                                </a>
+                            </div>
+                        </article>
+                    ))}
                 </div>
 
                 <div className="mt-5 flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
