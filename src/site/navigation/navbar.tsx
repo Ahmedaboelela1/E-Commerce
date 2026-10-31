@@ -12,25 +12,28 @@ import {SearchInput} from '@/site/navigation/search-input';
 import {NavbarUserSkeleton} from '@/site/navigation/skeletons/navbar-user-skeleton';
 import {SearchInputSkeleton} from '@/site/navigation/skeletons/search-input-skeleton';
 
+const liveCheckout = process.env.NEXT_PUBLIC_ENABLE_CHECKOUT === "true";
+
 export function Navbar() {
     return (
         <header className="fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md bg-background/80">
             <div className="container mx-auto px-4">
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center gap-8">
-                        <Suspense>
-                            <MobileNavWrapper />
-                        </Suspense>
-                        <NavigationLink href="/" className="text-xl font-bold">
-                            <Image src="/vendure.svg" alt="Vendure" width={40} height={27} className="h-6 w-auto dark:invert" />
+                        {liveCheckout && <Suspense><MobileNavWrapper /></Suspense>}
+                        <NavigationLink href="/" className="flex items-center gap-2 text-lg font-extrabold tracking-tight">
+                            <Image src="/skillverse-brand.svg" alt="Skillverse Global" width={30} height={34} className="h-9 w-auto" />
+                            <span>Skillverse <span className="text-primary">Global</span></span>
                         </NavigationLink>
                         <nav className="hidden md:flex items-center gap-6">
-                            <Suspense>
-                                <NavbarCollections/>
-                            </Suspense>
+                            {liveCheckout ? <Suspense><NavbarCollections/></Suspense> : (
+                                <NavigationLink href="/#egypt-kits" className="text-sm font-semibold text-muted-foreground hover:text-primary">Egypt Kits</NavigationLink>
+                            )}
                         </nav>
                     </div>
                     <div className="flex items-center gap-4">
+                        {!liveCheckout && <span className="hidden rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary sm:inline-flex">Catalog preview</span>}
+                        {liveCheckout && (<div className="flex items-center gap-4">
                         <div className="hidden lg:flex">
                             <Suspense fallback={<SearchInputSkeleton />}>
                                 <SearchInput/>
@@ -51,6 +54,7 @@ export function Navbar() {
                         <Suspense fallback={<NavbarUserSkeleton />}>
                             <NavbarUser/>
                         </Suspense>
+                        </div>)}
                     </div>
                 </div>
             </div>
