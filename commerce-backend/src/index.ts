@@ -5,7 +5,6 @@ import {
     runMigrations,
     TransactionalConnection,
 } from '@vendure/core';
-import type {INestApplication} from '@nestjs/common';
 import {config} from './vendure-config';
 import {initialData} from './initial-data';
 import {assertRuntimeEnvironment} from './runtime-env';
@@ -19,7 +18,9 @@ import {assertRuntimeEnvironment} from './runtime-env';
  * agent accounts. Vendure itself creates the initial SuperAdmin from the
  * privately configured SUPERADMIN_USERNAME and SUPERADMIN_PASSWORD.
  */
-async function initializeCountriesOnFirstBoot(app: INestApplication): Promise<void> {
+type VendureApp = Awaited<ReturnType<typeof bootstrap>>;
+
+async function initializeCountriesOnFirstBoot(app: VendureApp): Promise<void> {
     if (process.env.HOSTINGER_INITIALIZE_COUNTRIES !== 'YES_NEW_EMPTY_DATABASE') {
         return;
     }
@@ -44,7 +45,7 @@ async function start() {
     assertRuntimeEnvironment();
     // Use the tested, committed schema migrations only; synchronize is never enabled.
     await runMigrations(config);
-    let app: INestApplication | undefined;
+    let app: VendureApp | undefined;
     try {
         app = await bootstrap(config);
         await initializeCountriesOnFirstBoot(app);
