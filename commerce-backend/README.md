@@ -19,7 +19,7 @@ The Next.js storefront remains in the repository root and is deployed independen
 
 ## Database safety
 
-**Do not run setup commands on a shared or non-empty database.** First check in phpMyAdmin that `u169469823_store` is empty or dedicated solely to Vendure, and take a backup. The database name alone is not enough to connect. A working MySQL connection needs a **host, username, password, and remote IP authorization**.
+**Do not run setup commands on a shared or non-empty database.** First check in phpMyAdmin that `u169469823_store` is empty or dedicated solely to Vendure, and take a backup. The database name alone is not enough to connect. A working MySQL connection needs a **host, username, and password**. For a backend hosted in the **same Hostinger hosting account**, try `127.0.0.1`; remote access rules apply only when the backend runs elsewhere.
 
 Vendure's TypeORM `synchronize` is fixed at `false`. A production installation needs an approved **initial migration**. The initial migration is now committed under `src/migrations/` and has been applied successfully against disposable MySQL 8 by GitHub Actions. Verify the actual Hostinger database engine/version and review the migration before running it on the real database. The Vendure CLI `npx vendure migrate --generate initial --from-empty` uses a shadow database and therefore needs `CREATE DATABASE` privileges. Shared Hostinger MySQL users may not have that privilege, so generate the initial migration against a separate local MySQL database or controlled server, commit it, then apply to the real empty Hostinger database. On MySQL some DDL cannot be transactionally rolled back, so backups are mandatory.
 
@@ -27,7 +27,7 @@ Vendure's TypeORM `synchronize` is fixed at `false`. A production installation n
 
 ## Install and configure
 
-From the `commerce-backend/` directory on a development machine or managed Node/VPS environment:
+From the `commerce-backend/` directory on a trusted local development environment or the Hostinger Node.js backend website:
 
 ```bash
 npm install
@@ -41,11 +41,11 @@ Required backend server runtime variables:
 | Name | Description |
 |---|---|
 | `DB_NAME` | `u169469823_store` |
-| `DB_HOST` | Hostinger's actual remote MySQL hostname |
+| `DB_HOST` | `127.0.0.1` when the backend and MySQL share the same Hostinger hosting account |
 | `DB_PORT` | Typically 3306 |
 | `DB_USERNAME` | Hostinger MySQL user |
 | `DB_PASSWORD` | Secret stored in the deployment platform |
-| `DB_SSL` | Set `true` only if Hostinger's remote MySQL endpoint supports verified TLS with a trusted certificate; test connectivity first |
+| `DB_SSL` | `false` for local Hostinger MySQL; verified TLS may be required for remote connections |
 | `SUPERADMIN_USERNAME` | Admin login chosen by owner, ideally their own email |
 | `SUPERADMIN_PASSWORD` | Unique strong initial admin password (20+ characters) |
 | `COOKIE_SECRET` | Secure random session secret (32+ characters) |
@@ -54,17 +54,17 @@ Required backend server runtime variables:
 | `ASSET_URL_PREFIX` | Public backend assets URL with trailing slash |
 | `CORS_ORIGINS` | Allowed origin(s), comma-separated |
 
-Use a **fixed egress IP** for the backend server. In Hostinger, use **Databases → Remote MySQL** to allow only that fixed IP to access `u169469823_store`. Do not enable the wildcard/Any Host remote access option.
+We are **not using Railway**. See `HOSTINGER-DEPLOY.md` for the planned separate Hostinger Node.js website. Local MySQL typically needs no public remote access; don't enable 'Any Host'.
 
 ## Deployment services (single-process pilot or separate-worker mode)
 
-The low-volume pilot may run the SQL-backed job queue on the API process by setting `RUN_JOBS_IN_SERVER=true`. This avoids a separate Worker service but can reduce API responsiveness when there are long jobs. Vendure's long-term recommended production configuration is a separate Worker process. Run on a host that keeps the API process active:
+The low-volume pilot may run the SQL-backed job queue on the API process by setting `RUN_JOBS_IN_SERVER=true`. This avoids a separate Worker service but can reduce API responsiveness when there are long jobs. Vendure's long-term recommended production configuration is a separate Worker process. Attempt the pilot on a **second Hostinger Business Node.js website**, without modifying the existing Next.js shop:
 
 - **API service:** install dependencies → build server → build dashboard (when an API for schema introspection is available) → `npm run start`
 - **Pilot mode:** one API service with `RUN_JOBS_IN_SERVER=true`, no second Worker service.
 - **Scaling mode:** set `RUN_JOBS_IN_SERVER=false` on the API, then add a Worker service with the same codebase/credentials and `npm run start:worker`.
 
-Do not point Hostinger Business's Next.js frontend service at either of these.
+Create a **separate Node.js website** for Vendure; keep the existing Next.js storefront website connected to the repository root. Hostinger web hosting does **not** guarantee always-running background jobs; test in-process job behavior before launch.
 
 ```bash
 npm run check
@@ -81,10 +81,10 @@ After everything has been configured, the admin is served at `https://BACKEND-DO
 
 ## First-time provisioning (do not skip order)
 
-1. The owner confirms that **`u169469823_store` is a new empty database**. Once credentials and network access are configured, run `npm run db:check` from the backend host to verify that independently (read-only). Enable remote access only for the backend's known fixed outgoing IP and take a backup before migration.
+1. The owner confirms that **`u169469823_store` is a new empty database**. Once the new backend website is prepared, run `npm run db:check` from its authorized environment to verify that independently (read-only), and take a backup before migration. If both are on Hostinger, use `127.0.0.1` as DB_HOST.
 2. Review the committed `src/migrations/1793467748993-initial.ts` migration. GitHub Actions generated it and successfully applied it to disposable MySQL 8. Apply it on the real database via `runMigrations()` only after authorized deployment and a verified database backup.
 3. Configure `SUPERADMIN_USERNAME` and `SUPERADMIN_PASSWORD` privately in the deployment environment, and run `npm run seed:initial` **once** with `ALLOW_INITIAL_SEED=YES_EMPTY_DB_BACKED_UP`. No account credentials should ever be committed. The Vendure system will initialize the first SuperAdmin using the configured values.
-4. Start API and Worker. Build and serve the official Vendure Dashboard.
+4. Start the Vendure API with `RUN_JOBS_IN_SERVER=true` and **no separate Worker**, and serve the official Vendure Dashboard.
 5. Set the **actual legal selling agent name** `EGYPT_SELLER_LEGAL_NAME` and `ADMIN_API_URL` (e.g. `https://BACKEND-DOMAIN/admin-api`) plus superadmin secret credentials in a private shell. Run the provisioning script in dry-run mode:
 
 ```bash
@@ -122,12 +122,13 @@ A central Skillverse SuperAdmin can see all channels. Later countries get indepe
 - https://docs.vendure.io/current/framework/core-concepts/channels
 - https://docs.vendure.io/current/framework/developer-guide/importing-data
 - https://docs.vendure.io/current/core/developer-guide/migrations
-- https://support.hostinger.com/en/articles/1583546-how-to-set-up-remote-mysql-access-in-hostinger
+- https://www.hostinger.com/support/connecting-a-hostinger-mysql-database-to-a-node-js-application/
+- https://www.hostinger.com/support/hostinger-node-js-limits-for-web-and-cloud-plans/
 
 ## Note: verified empty does not equal connected
 
-The owner has confirmed the Hostinger database is new and empty; **this is not proof that the Vendure server can connect**. The migration is generated in CI on an unrelated MySQL instance. In the real deployment, host, username and password must be provided privately to the backend host, and Hostinger Remote MySQL must allow that host's stable public egress IP. Run `npm run db:check` first; it uses SELECT/SHOW only and refuses to proceed silently if tables already exist.
+The owner has confirmed the Hostinger database is new and empty; **this is not proof that the Vendure server can connect**. The migration is generated in CI on an unrelated MySQL instance. In the real deployment, host, username and password must be provided privately to the separate Hostinger backend website; when hosted in the same account, try `DB_HOST=127.0.0.1` and avoid exposing remote MySQL. Run `npm run db:check` first; it uses SELECT/SHOW only and refuses to proceed silently if tables already exist.
 
 ## Single-process support
 
-For small initial order volumes, set `RUN_JOBS_IN_SERVER=true` on the API process. It calls `JobQueueService.start()` after bootstrap and runs scheduled tasks on the API too. It continues using `DefaultJobQueuePlugin` with SQL-backed persistence. **Do not launch a separate worker while this setting is true**. Refer to `RAILWAY-DEPLOY.md` for the one-service option. This does not guarantee reliable long-running background processing on Hostinger Business, which explicitly does not support always-on background workers. For pilot use, Railway is one suitable persistent process host.
+For small initial order volumes, set `RUN_JOBS_IN_SERVER=true` on the API process. It calls `JobQueueService.start()` after bootstrap and runs scheduled tasks on the API too. It continues using `DefaultJobQueuePlugin` with SQL-backed persistence. **Do not launch a separate worker while this setting is true**. Refer to `HOSTINGER-DEPLOY.md` for the one-service Hostinger pilot. This does not guarantee reliable long-running background processing on Hostinger Business, which explicitly does not support always-on background workers. Do not enable real checkout until the combined queue and restart behavior is verified on the actual Hostinger account.
