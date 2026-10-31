@@ -38,3 +38,71 @@ jobs:
         run: test -f dist/dashboard/index.html
       # Dashboard build relies on introspection of a running Vendure backend and
       # must be validated separately against an initialized staging database.
+
+  first-boot:
+    name: First boot with an isolated MySQL 8 database
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci-vendure-test-password
+          MYSQL_DATABASE: vendure_firstboot_ci
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+    defaults:
+      run:
+        working-directory: commerce-backend
+    env:
+      APP_ENV: dev
+      RUN_JOBS_IN_SERVER: "true"
+      HOSTINGER_INITIALIZE_COUNTRIES: YES_NEW_EMPTY_DATABASE
+      DB_HOST: 127.0.0.1
+      DB_PORT: "3306"
+      DB_NAME: vendure_firstboot_ci
+      DB_USERNAME: root
+      DB_PASSWORD: ci-vendure-test-password
+      COOKIE_SECRET: ci-test-cookie-key-do-not-ever-use-in-production
+      SUPERADMIN_USERNAME: ci_admin_only
+      SUPERADMIN_PASSWORD: ci-only-admin-password-long-enough-123456
+      PORT: "3077"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+      - name: Install and build Vendure
+        run: npm install --no-audit --no-fund && npm run build
+      - name: Boot API, migrate and populate countries
+        run: |
+          node dist/index.js > /tmp/skillverse-vendure-firstboot.log 2>&1 &
+          echo $! > /tmp/skillverse-vendure-firstboot.pid
+          for attempt in $(seq 1 90); do
+            if curl --fail --silent --max-time 3 -X POST \
+              -H 'Content-Type: application/json' \
+              --data '{"query":"{ activeChannel { code } }"}' \
+              http://127.0.0.1:3077/shop-api | grep -q '"activeChannel"'; then
+              echo 'Shop API reachable'
+              break
+            fi
+            if ! kill -0 "$(cat /tmp/skillverse-vendure-firstboot.pid)" 2>/dev/null; then
+              cat /tmp/skillverse-vendure-firstboot.log
+              exit 1
+            fi
+            sleep 2
+          done
+          node --input-type=module -e "import mysql from 'mysql2/promise';const c=await mysql.createConnection({host:process.env.DB_HOST,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:process.env.DB_NAME});const [[country]]=await c.query('SELECT COUNT(*) AS total FROM country');const [[admin]]=await c.query('SELECT COUNT(*) AS total FROM administrator');await c.end();console.log('Countries:',country.total,'Administrators:',admin.total);if(Number(country.total)!==3||Number(admin.total)<1)process.exit(1)"
+      - name: Stop isolated API
+        if: always()
+        run: |
+          if [ -f /tmp/skillverse-vendure-firstboot.pid ]; then
+            kill "$(cat /tmp/skillverse-vendure-firstboot.pid)" 2>/dev/null || true
+          fi
+          if [ -f /tmp/skillverse-vendure-firstboot.log ]; then
+            tail -n 45 /tmp/skillverse-vendure-firstboot.log
+          fi
