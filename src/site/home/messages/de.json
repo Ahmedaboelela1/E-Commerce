@@ -1,28 +1,28 @@
 {
   "Hero": {
-    "title": "Entdecke hochwertige",
-    "titleHighlight": "Produkte",
-    "subtitle": "Hochwertige Produkte zu außergewöhnlichen Preisen. Kostenloser Versand ab 50 €.",
-    "shopNow": "Jetzt einkaufen",
-    "viewCollections": "Kategorien ansehen"
+    "title": "Build. Code.",
+    "titleHighlight": "Compete.",
+    "subtitle": "Entdecke INEX-Robotik- und STEM-Kits bei Skillverse Global. Lokale Verfügbarkeit und Preise für Ägypten.",
+    "shopNow": "Kits in Ägypten entdecken",
+    "viewCollections": "Ägyptische Produkte"
   },
   "Home": {
-    "pageTitle": "Ihr One-Stop-Shop",
-    "description": "Entdecken Sie hochwertige Produkte zu wettbewerbsfähigen Preisen. Jetzt einkaufen und die besten Angebote für Elektronik, Mode, Haushaltswaren und mehr finden.",
-    "ogDescription": "Entdecken Sie hochwertige Produkte zu wettbewerbsfähigen Preisen. Jetzt die besten Angebote sichern.",
-    "whyShopWithUs": "Warum bei uns einkaufen",
+    "pageTitle": "Robotik und STEM-Kits",
+    "description": "Skillverse Global Store für INEX Robotik und STEM-Produkte.",
+    "ogDescription": "INEX Robotik-Kits bei Skillverse Global entdecken.",
+    "whyShopWithUs": "Für die Innovatoren von morgen",
     "features": {
       "highQuality": {
-        "title": "Hohe Qualität",
-        "description": "Sorgfältig ausgewählte Premiumprodukte für Sie"
+        "title": "INEX Robotik",
+        "description": "Technisch dokumentierte Robotik-Kits von INEX."
       },
       "bestPrices": {
-        "title": "Beste Preise",
-        "description": "Wettbewerbsfähige Preise für alle unsere Produkte"
+        "title": "Lokale Währung",
+        "description": "Preise für Ägypten in EGP."
       },
       "fastDelivery": {
-        "title": "Schnelle Lieferung",
-        "description": "Schneller und zuverlässiger Versand weltweit"
+        "title": "Transparente Verfügbarkeit",
+        "description": "Lokaler Bestand und Lieferzeiten nur nach Bestätigung."
       }
     }
   }

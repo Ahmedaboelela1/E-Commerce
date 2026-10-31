@@ -1,28 +1,28 @@
 {
   "Hero": {
-    "title": "Discover Quality",
-    "titleHighlight": "Products",
-    "subtitle": "Premium products, exceptional prices. Free shipping on orders over $50.",
-    "shopNow": "Shop Now",
-    "viewCollections": "View Collections"
+    "title": "Build. Code.",
+    "titleHighlight": "Compete.",
+    "subtitle": "Explore INEX robotics and STEM kits with Skillverse Global. Local Egypt availability, clear pricing, and a growing international network.",
+    "shopNow": "Explore Egypt Kits",
+    "viewCollections": "See Egypt Products"
   },
   "Home": {
-    "pageTitle": "Your One-Stop Shop",
-    "description": "Discover high-quality products at competitive prices. Shop now for the best deals on electronics, fashion, home goods, and more.",
-    "ogDescription": "Discover high-quality products at competitive prices. Shop now for the best deals.",
-    "whyShopWithUs": "Why Shop With Us",
+    "pageTitle": "Robotics & STEM Kits",
+    "description": "Skillverse Global robotics and STEM shop featuring INEX products for learning and World Robot Games.",
+    "ogDescription": "Explore INEX robotics kits with Skillverse Global.",
+    "whyShopWithUs": "Made for future innovators",
     "features": {
       "highQuality": {
-        "title": "High Quality",
-        "description": "Premium products carefully selected for you"
+        "title": "INEX Robotics",
+        "description": "Explore documented educational robotics kits from INEX."
       },
       "bestPrices": {
-        "title": "Best Prices",
-        "description": "Competitive pricing on all our products"
+        "title": "Local Currency",
+        "description": "Local Egyptian prices in EGP, with country-specific pricing as we expand."
       },
       "fastDelivery": {
-        "title": "Fast Delivery",
-        "description": "Quick and reliable shipping worldwide"
+        "title": "Honest Availability",
+        "description": "See what is locally stocked, and request other products with a confirmed lead time."
       }
     }
   }
