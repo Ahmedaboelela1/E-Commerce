@@ -13,6 +13,10 @@ const corsOrigins = process.env.CORS_ORIGINS?.split(',').map(x => x.trim()).filt
 
 export const config: VendureConfig = {
     defaultLanguageCode: LanguageCode.en,
+    // Pilot only. Scheduled tasks normally run on a dedicated worker.
+    schedulerOptions: {
+        runTasksInWorkerOnly: process.env.RUN_JOBS_IN_SERVER !== 'true',
+    },
     apiOptions: {
         port: PORT,
         adminApiPath: 'admin-api',
