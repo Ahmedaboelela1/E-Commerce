@@ -22,7 +22,7 @@ Hostinger references:
 1. Verify in hPanel that the actual database engine/version is compatible with Vendure's MySQL driver and the generated baseline migration. The schema was generated and tested against **MySQL 8**, whereas Hostinger sometimes uses a MariaDB-compatible engine.
 2. Take a database snapshot/backup before applying the first migration, even if empty.
 3. Keep credentials **only** in Hostinger Environment Variables / private secrets. Never send DB_PASSWORD, COOKIE_SECRET, or admin passwords in a chat, GitHub issue, PR or commit.
-4. Run `npm run db:check` once from a trusted environment that has DB access. It only connects and lists tables, never modifies the schema.
+4. Use Hostinger **Databases → phpMyAdmin** to verify this database has **zero tables** before its first deployment. The optional `npm run db:check` CLI also performs read-only checks, but Hostinger does not support running Node app npm scripts over SSH.
 5. Do not enable any public checkout or customer registration before stock, merchant, email and payment settings have been tested.
 
 ## Add a *new* Node.js website in Hostinger
@@ -48,6 +48,8 @@ Set the following keys on the **new backend Node.js website only**:
 ```dotenv
 APP_ENV=production
 RUN_JOBS_IN_SERVER=true
+# FIRST DEPLOYMENT ONLY: remove this variable after successful setup.
+HOSTINGER_INITIALIZE_COUNTRIES=YES_NEW_EMPTY_DATABASE
 
 DB_HOST=127.0.0.1
 DB_PORT=3306
@@ -70,17 +72,18 @@ CORS_ORIGINS=https://shop.skillverse-global.com,https://api.skillverse-global.co
 
 ## Schema initialization and first user
 
-The committed initial migration is `src/migrations/1793467748993-initial.ts`. It has been tested successfully against **disposable MySQL 8**, but *has not been run on Hostinger*. This app's entrypoint currently runs pending migrations before starting. Accordingly, **do not deploy the backend with real database credentials** until checking the engine, reviewing the migration and approving initial schema creation.
+The committed initial migration is `src/migrations/1793467748993-initial.ts`. It has been tested successfully against **disposable MySQL 8**, but *has not been run on Hostinger*. Its actual database engine/version must be checked in phpMyAdmin first; if the engine differs materially, do not run the migration until compatibility has been verified.
 
-Following database preflight and approval, initialize initial data exactly once:
+The owner confirmed this database is new and empty and approved starting Vendure. After the phpMyAdmin check and backup, the app's first start can:
 
-```bash
-ALLOW_INITIAL_SEED=YES_EMPTY_DB_BACKED_UP npm run seed:initial
-```
+1. Apply the **committed, tested migration** (this is intentionally not the TypeORM `synchronize` mode).
+2. Bootstrap Vendure and create the first SuperAdmin from the private `SUPERADMIN_USERNAME` and `SUPERADMIN_PASSWORD` values.
+3. If `HOSTINGER_INITIALIZE_COUNTRIES=YES_NEW_EMPTY_DATABASE`, populate only the three country/zone entries (Egypt, Saudi Arabia and Tunisia), once. Further restarts see existing countries and skip this seed.
+4. Show the backend Dashboard at `https://api.skillverse-global.com/dashboard/` (use the actual assigned URL if a temporary Hostinger domain was chosen).
 
-The first SuperAdmin username/password are taken from the secret environment variables; users and agent roles are not created by merely committing code to GitHub. Then start the backend and inspect `https://api.skillverse-global.com/dashboard/`. Optional agent-specific setup is in `scripts/provision-egypt.mjs`, and is dry-run by default.
+**After verifying the countries and Admin login, REMOVE `HOSTINGER_INITIALIZE_COUNTRIES` from the environment and restart.** No default passwords or API-accessible setup routes are created. Country-agent admins, real stock, payment and shipping must be configured separately.
 
-**Do not expose a public HTTP route that runs seed commands or accepts database/administrator credentials.** If Hostinger offers no secure one-off command execution mechanism, initialization must be carried out using an authorized SSH/CLI session or another controlled database-compatible environment.
+Hostinger says npm commands are performed during deployment and cannot be invoked via SSH on its managed Node.js hosting. The opt-in first-start country seed avoids requiring that unsupported command. The optional original `npm run seed:initial` CLI exists for controlled development but should not be run as well if the first-start seed is used.
 
 ## Preconditions before real sales
 
