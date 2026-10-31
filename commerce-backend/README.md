@@ -45,6 +45,7 @@ Required backend server runtime variables:
 | `DB_PORT` | Typically 3306 |
 | `DB_USERNAME` | Hostinger MySQL user |
 | `DB_PASSWORD` | Secret stored in the deployment platform |
+| `DB_SSL` | Set `true` only if Hostinger's remote MySQL endpoint supports verified TLS with a trusted certificate; test connectivity first |
 | `SUPERADMIN_USERNAME` | Admin login chosen by owner, ideally their own email |
 | `SUPERADMIN_PASSWORD` | Unique strong initial admin password (20+ characters) |
 | `COOKIE_SECRET` | Secure random session secret (32+ characters) |
@@ -79,8 +80,8 @@ After everything has been configured, the admin is served at `https://BACKEND-DO
 
 ## First-time provisioning (do not skip order)
 
-1. Verify an **empty dedicated** `u169469823_store` database, enable a fixed remote IP, and take a backup.
-2. Produce and review the initial Vendure MySQL migration on a disposable dev database. Commit the resulting migration. Apply it on the real database via `runMigrations()`.
+1. The owner confirms that **`u169469823_store` is a new empty database**. Once credentials and network access are configured, run `npm run db:check` from the backend host to verify that independently (read-only). Enable remote access only for the backend's known fixed outgoing IP and take a backup before migration.
+2. Produce and review the initial Vendure MySQL migration on a disposable dev database (GitHub Actions test workflow does this with temporary MySQL). Commit only the tested generated migration to the feature branch. Apply it on the real database via `runMigrations()` only after authorized deployment.
 3. Configure `SUPERADMIN_USERNAME` and `SUPERADMIN_PASSWORD` privately in the deployment environment, and run `npm run seed:initial` **once** with `ALLOW_INITIAL_SEED=YES_EMPTY_DB_BACKED_UP`. No account credentials should ever be committed. The Vendure system will initialize the first SuperAdmin using the configured values.
 4. Start API and Worker. Build and serve the official Vendure Dashboard.
 5. Set the **actual legal selling agent name** `EGYPT_SELLER_LEGAL_NAME` and `ADMIN_API_URL` (e.g. `https://BACKEND-DOMAIN/admin-api`) plus superadmin secret credentials in a private shell. Run the provisioning script in dry-run mode:
@@ -121,3 +122,7 @@ A central Skillverse SuperAdmin can see all channels. Later countries get indepe
 - https://docs.vendure.io/current/framework/developer-guide/importing-data
 - https://docs.vendure.io/current/core/developer-guide/migrations
 - https://support.hostinger.com/en/articles/1583546-how-to-set-up-remote-mysql-access-in-hostinger
+
+## Note: verified empty does not equal connected
+
+The owner has confirmed the Hostinger database is new and empty; **this is not proof that the Vendure server can connect**. The migration is generated in CI on an unrelated MySQL instance. In the real deployment, host, username and password must be provided privately to the backend host, and Hostinger Remote MySQL must allow that host's stable public egress IP. Run `npm run db:check` first; it uses SELECT/SHOW only and refuses to proceed silently if tables already exist.
