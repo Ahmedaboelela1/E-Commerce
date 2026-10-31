@@ -12,7 +12,9 @@
     "start:worker": "node dist/index-worker.js",
     "seed:initial": "node dist/populate.js",
     "check": "tsc -p tsconfig.json --noEmit",
-    "migration": "vendure migrate"
+    "migration": "vendure migrate",
+    "db:check": "node scripts/check-database.mjs",
+    "migration:generate:initial": "vendure migrate --generate initial --from-empty"
   },
   "dependencies": {
     "@vendure/core": "3.8.0",
