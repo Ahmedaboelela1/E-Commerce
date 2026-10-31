@@ -39,6 +39,7 @@ export const config: VendureConfig = {
         username: process.env.DB_USERNAME || '',
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_NAME || 'u169469823_store',
+        ...(process.env.DB_SSL === 'true' ? {ssl: {rejectUnauthorized: true}} : {}),
     },
     paymentOptions: {
         // No dummy payment provider and no real gateway until local merchant verification.
