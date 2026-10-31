@@ -96,7 +96,7 @@ jobs:
             fi
             sleep 2
           done
-          node --input-type=module -e "import mysql from 'mysql2/promise';const c=await mysql.createConnection({host:process.env.DB_HOST,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:process.env.DB_NAME});const [[country]]=await c.query('SELECT COUNT(*) AS total FROM region WHERE type = 'country'');const [[admin]]=await c.query('SELECT COUNT(*) AS total FROM administrator');await c.end();console.log('Countries:',country.total,'Administrators:',admin.total);if(Number(country.total)!==3||Number(admin.total)<1)process.exit(1)"
+          node --input-type=module -e "import mysql from 'mysql2/promise';const c=await mysql.createConnection({host:process.env.DB_HOST,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:process.env.DB_NAME});const [[country]]=await c.query('SELECT COUNT(*) AS total FROM region');const [[admin]]=await c.query('SELECT COUNT(*) AS total FROM administrator');await c.end();console.log('Countries:',country.total,'Administrators:',admin.total);if(Number(country.total)!==3||Number(admin.total)<1)process.exit(1)"
       - name: Stop isolated API
         if: always()
         run: |
