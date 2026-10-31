@@ -30,6 +30,7 @@ const eslintConfig = [
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "commerce-backend/**", // Isolated Vendure app has its own TypeScript/CI checks.
     ],
   },
   ...featureNames.map((feature) => ({

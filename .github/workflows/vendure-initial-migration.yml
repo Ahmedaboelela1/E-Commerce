@@ -1,0 +1,87 @@
+name: Generate Vendure MySQL baseline migration (disposable DB)
+
+on:
+  push:
+    branches: [feat/skillverse-vendure-backend]
+    paths:
+      - 'commerce-backend/src/**'
+      - 'commerce-backend/package.json'
+      - '.github/workflows/vendure-initial-migration.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  generate-initial-migration:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci-ephemeral-mysql-password
+          MYSQL_DATABASE: vendure_ci_baseline
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=15
+    defaults:
+      run:
+        working-directory: commerce-backend
+    env:
+      APP_ENV: dev
+      DB_HOST: 127.0.0.1
+      DB_PORT: "3306"
+      DB_NAME: vendure_ci_baseline
+      DB_USERNAME: root
+      DB_PASSWORD: ci-ephemeral-mysql-password
+      COOKIE_SECRET: ci-only-random-placeholder-never-for-production-12345
+      SUPERADMIN_USERNAME: ci-migration-admin@example.invalid
+      SUPERADMIN_PASSWORD: ci-only-not-for-production-12345678
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.16.0
+      - run: npm install --no-audit --no-fund
+      - name: Generate migration against disposable empty MySQL and shadow DB
+        run: |
+          if find src/migrations -maxdepth 1 -type f -name '*.ts' -print -quit 2>/dev/null | grep -q .; then
+            echo "Migration already committed; skipping generation."
+          else
+            npx vendure migrate --generate initial --from-empty
+          fi
+      - name: Verify migration was generated
+        run: |
+          find src/migrations -type f -name '*.ts' -print
+          test "$(find src/migrations -type f -name '*.ts' | wc -l)" -gt 0
+      - name: Apply migration on disposable test database
+        run: npx vendure migrate --run
+      - name: Verify schema tables
+        run: |
+          node --input-type=module -e "import mysql from 'mysql2/promise'; const c=await mysql.createConnection({host:process.env.DB_HOST,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:process.env.DB_NAME}); const [tables]=await c.query('SHOW TABLES'); console.log('Vendure test tables:',tables.length); await c.end(); if(tables.length<70)process.exit(1)"
+      - name: Commit verified initial migration to current feature branch
+        if: github.ref == 'refs/heads/feat/skillverse-vendure-backend'
+        run: |
+          git fetch origin feat/skillverse-vendure-backend
+          if git ls-tree -r --name-only FETCH_HEAD -- commerce-backend/src/migrations | grep -q 'commerce-backend/src/migrations/'; then
+            echo "Migration already exists upstream; no commit needed."
+          elif [ -n "$(git status --porcelain -- src/migrations)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/migrations/
+            git commit -m "chore: commit tested initial Vendure MySQL schema migration"
+            git rebase FETCH_HEAD
+            git push origin HEAD:feat/skillverse-vendure-backend
+          else
+            echo "Migration already present."
+          fi
+      - name: Upload generated schema as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendure-mysql-initial-migration
+          path: commerce-backend/src/migrations/*.ts
+          if-no-files-found: error
+          retention-days: 14

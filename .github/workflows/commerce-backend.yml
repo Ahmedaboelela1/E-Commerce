@@ -1,0 +1,40 @@
+name: Commerce Backend
+
+on:
+  pull_request:
+    paths:
+      - 'commerce-backend/**'
+      - '.github/workflows/commerce-backend.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'commerce-backend/**'
+      - '.github/workflows/commerce-backend.yml'
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: commerce-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+      - name: Validate provision script syntax
+        run: node --check scripts/provision-egypt.mjs
+      - name: Verify staged catalog data
+        run: node --test scripts/check-catalog.test.mjs
+      - name: Install backend dependencies
+        run: npm install --no-audit --no-fund
+      - name: TypeScript validation
+        run: npm run check
+      - name: Build server and worker
+        run: npm run build
+      - name: Build official Vendure Dashboard
+        run: npm run dashboard:build
+      - name: Verify Dashboard static assets
+        run: test -f dist/dashboard/index.html
+      # Dashboard build relies on introspection of a running Vendure backend and
+      # must be validated separately against an initialized staging database.
