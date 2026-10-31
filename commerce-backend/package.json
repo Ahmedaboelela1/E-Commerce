@@ -1,0 +1,35 @@
+{
+  "name": "skillverse-vendure-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Skillverse Global centralized Vendure commerce backend, separate from Hostinger Next.js storefront",
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "dev:worker": "ts-node src/index-worker.ts",
+    "build": "tsc -p tsconfig.json",
+    "dashboard:build": "vite build",
+    "start": "node dist/index.js",
+    "start:worker": "node dist/index-worker.js",
+    "seed:initial": "node dist/populate.js",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "migration": "vendure migrate"
+  },
+  "dependencies": {
+    "@vendure/core": "3.8.0",
+    "@vendure/dashboard": "3.8.0",
+    "@vendure/asset-server-plugin": "3.8.0",
+    "mysql2": "^3.15.2",
+    "dotenv": "^17.2.3",
+    "reflect-metadata": "^0.2.2"
+  },
+  "devDependencies": {
+    "@vendure/cli": "3.8.0",
+    "@types/node": "^22.15.0",
+    "typescript": "~5.8.3",
+    "ts-node": "^10.9.2",
+    "vite": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

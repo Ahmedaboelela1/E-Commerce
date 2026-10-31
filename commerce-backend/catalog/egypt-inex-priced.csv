@@ -1,0 +1,4 @@
+name,slug,description,sku,price,taxCategory,stockOnHand,trackInventory,product:manufacturer,product:supplierUrl,variant:supplierSku,variant:availableOnOrder
+POP-BOT32i Soccer Robot Kit,pop-bot32i-soccer-robot-kit,"Programmable INEX soccer robot kit with POP-32i controller.",8300158,25000.00,,0,true,INEX,https://inex.co.th/home/product/pop-bot32i-soccer-robot-kit/,8300158,false
+POP-BOT32i Rover Kit Plus,pop-bot32i-rover-kit-plus,"Educational INEX rover with POP-32i controller and gripper.",8300155,20000.00,,0,true,INEX,https://inex.co.th/home/product/pop-bot32i-rover-kit-plus/,8300155,false
+Robo-Creator Xi SumoBOT Kit,robo-creator-xi-sumobot-kit,"Standard INEX SumoBOT kit; verify the actual control board in Egyptian stock.",8300153,25000.00,,0,true,INEX,https://inex.co.th/home/product/robo-creator-xi-sumobot-kit/,8300153,false
