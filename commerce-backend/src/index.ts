@@ -26,7 +26,7 @@ async function initializeCountriesOnFirstBoot(app: VendureApp): Promise<void> {
     }
     const conn = app.get(TransactionalConnection).rawConnection;
     const result: Array<{countryCount: number | string}> =
-        await conn.query('SELECT COUNT(*) AS countryCount FROM country');
+        await conn.query('SELECT COUNT(*) AS countryCount FROM region WHERE type = 'country'');
     const countryCount = Number(result[0]?.countryCount ?? 0);
 
     // Never repeat country/zone initialization after the first successful run.
