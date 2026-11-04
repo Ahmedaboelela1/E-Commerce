@@ -12,7 +12,7 @@ type SkillverseBrandProps = {
 export function SkillverseBrand({inverse = false, compact = false}: SkillverseBrandProps) {
     return (
         <span className="inline-flex shrink-0 items-center gap-2.5">
-            <span className={inverse ? 'inline-flex items-center rounded-md bg-white p-1' : 'inline-flex items-center'}>
+            <span className={inverse ? 'inline-flex items-center rounded-md bg-white p-1' : 'inline-flex items-center dark:rounded-md dark:bg-white dark:p-1'}>
                 <Image
                     src="/skillverse-brand.svg"
                     alt=""
