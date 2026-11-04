@@ -159,62 +159,68 @@ export default async function ProductDetailPage({
                 </div>
             </div>
 
-            {/* Shipping & Trust Badges */}
-            <section className="py-8 mt-8 border-y border-border/50">
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
-                            <Truck className="h-4 w-4 text-primary" />
-                            {t('trustBadges.fastShipping')}
-                        </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
-                            <RotateCcw className="h-4 w-4 text-primary" />
-                            {t('trustBadges.freeReturns')}
-                        </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
-                            <ShieldCheck className="h-4 w-4 text-primary" />
-                            {t('trustBadges.secureCheckout')}
-                        </div>
-                        <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
-                            <Clock className="h-4 w-4 text-primary" />
-                            {t('trustBadges.guarantee')}
+            {/* Store policies in the starter are sample text. Hide them until
+                actual Egypt shipping/returns terms and checkout are configured. */}
+            {process.env.NEXT_PUBLIC_ENABLE_CHECKOUT === 'true' && (
+                <>
+                {/* Shipping & Trust Badges */}
+                <section className="py-8 mt-8 border-y border-border/50">
+                    <div className="container mx-auto px-4">
+                        <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8">
+                            <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
+                                <Truck className="h-4 w-4 text-primary" />
+                                {t('trustBadges.fastShipping')}
+                            </div>
+                            <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
+                                <RotateCcw className="h-4 w-4 text-primary" />
+                                {t('trustBadges.freeReturns')}
+                            </div>
+                            <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
+                                <ShieldCheck className="h-4 w-4 text-primary" />
+                                {t('trustBadges.secureCheckout')}
+                            </div>
+                            <div className="inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm font-medium text-muted-foreground">
+                                <Clock className="h-4 w-4 text-primary" />
+                                {t('trustBadges.guarantee')}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            {/* Store FAQ Section */}
-            <section className="py-16 bg-muted/30">
-                <div className="container mx-auto px-4 max-w-2xl">
-                    <h2 className="text-2xl font-bold text-center mb-8">{t('faq.title')}</h2>
-                    <Accordion className="w-full">
-                        <AccordionItem value="shipping">
-                            <AccordionTrigger>{t('faq.shipping.question')}</AccordionTrigger>
-                            <AccordionContent>
-                                {t('faq.shipping.answer')}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="returns">
-                            <AccordionTrigger>{t('faq.returns.question')}</AccordionTrigger>
-                            <AccordionContent>
-                                {t('faq.returns.answer')}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="tracking">
-                            <AccordionTrigger>{t('faq.tracking.question')}</AccordionTrigger>
-                            <AccordionContent>
-                                {t('faq.tracking.answer')}
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="international">
-                            <AccordionTrigger>{t('faq.international.question')}</AccordionTrigger>
-                            <AccordionContent>
-                                {t('faq.international.answer')}
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
-            </section>
+                </section>
+    
+                {/* Store FAQ Section */}
+                <section className="py-16 bg-muted/30">
+                    <div className="container mx-auto px-4 max-w-2xl">
+                        <h2 className="text-2xl font-bold text-center mb-8">{t('faq.title')}</h2>
+                        <Accordion className="w-full">
+                            <AccordionItem value="shipping">
+                                <AccordionTrigger>{t('faq.shipping.question')}</AccordionTrigger>
+                                <AccordionContent>
+                                    {t('faq.shipping.answer')}
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="returns">
+                                <AccordionTrigger>{t('faq.returns.question')}</AccordionTrigger>
+                                <AccordionContent>
+                                    {t('faq.returns.answer')}
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="tracking">
+                                <AccordionTrigger>{t('faq.tracking.question')}</AccordionTrigger>
+                                <AccordionContent>
+                                    {t('faq.tracking.answer')}
+                                </AccordionContent>
+                            </AccordionItem>
+                            <AccordionItem value="international">
+                                <AccordionTrigger>{t('faq.international.question')}</AccordionTrigger>
+                                <AccordionContent>
+                                    {t('faq.international.answer')}
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                    </div>
+                </section>
+                </>
+            )}
 
             {primaryCollection && (
                 <RelatedProducts
