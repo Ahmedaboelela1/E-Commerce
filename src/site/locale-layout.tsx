@@ -39,6 +39,10 @@ export async function generateMetadata(): Promise<Metadata> {
             template: `%s | ${SITE_NAME}`,
         },
         description: t('siteDescription', {siteName: SITE_NAME}),
+        icons: {
+            icon: [{url: '/skillverse-brand.svg', type: 'image/svg+xml', sizes: 'any'}],
+            shortcut: '/skillverse-brand.svg',
+        },
         openGraph: {
             type: "website",
             siteName: SITE_NAME,
@@ -71,8 +75,8 @@ export const viewport: Viewport = {
     initialScale: 1,
     maximumScale: 5,
     themeColor: [
-        {media: "(prefers-color-scheme: light)", color: "#ffffff"},
-        {media: "(prefers-color-scheme: dark)", color: "#000000"},
+        {media: "(prefers-color-scheme: light)", color: "#102140"},
+        {media: "(prefers-color-scheme: dark)", color: "#102140"},
     ],
 };
 
