@@ -22,7 +22,7 @@ export function SkillverseBrand({inverse = false, compact = false}: SkillverseBr
                     className={compact ? 'h-8 w-auto' : 'h-10 w-auto'}
                 />
             </span>
-            <span className="inline-flex flex-col leading-none" aria-hidden="true">
+            <span className={compact ? "hidden flex-col leading-none sm:inline-flex" : "inline-flex flex-col leading-none"} aria-hidden="true">
                 <span className="whitespace-nowrap text-[18px] font-extrabold tracking-[-0.045em] sm:text-[20px]">
                     <span className={inverse ? 'text-white' : 'text-[#102140] dark:text-white'}>Skill</span>
                     <span className={inverse ? 'text-[#91b8fa]' : 'text-[#2e5eab] dark:text-[#91b8fa]'}>Verse</span>
