@@ -38,8 +38,8 @@ export function getAssetUploadDirectory(): string {
     } catch (error) {
         throw new Error(
             `ASSET_UPLOAD_DIR is not writable (${directory}). ` +
-            'Create a private folder outside hbuilds/public_html in Hostinger File Manager.',
-            {cause: error}
+            'Create a private folder outside hbuilds/public_html in Hostinger File Manager. ' +
+            'Filesystem error: ' + String(error)
         );
     }
     console.log(`Vendure asset uploads configured at persistent directory: ${directory}`);
