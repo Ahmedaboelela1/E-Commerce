@@ -10,8 +10,11 @@ import {getActiveChannel} from '@/platform/vendure/channel';
  */
 export async function getActiveCurrencyCode(): Promise<string> {
     const cookieValue = await getCurrencyCookie();
-    if (cookieValue) return cookieValue;
-
     const channel = await getActiveChannel();
+    // A visitor may still have a USD cookie from the old demo storefront.
+    // Never request an unsupported currency from the EGP-only Egypt channel.
+    if (cookieValue && channel.availableCurrencyCodes.includes(cookieValue as typeof channel.availableCurrencyCodes[number])) {
+        return cookieValue;
+    }
     return channel.defaultCurrencyCode;
 }
