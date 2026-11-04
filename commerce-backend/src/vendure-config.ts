@@ -6,6 +6,7 @@ import {
 } from '@vendure/core';
 import {AssetServerPlugin} from '@vendure/asset-server-plugin';
 import {DashboardPlugin} from '@vendure/dashboard/plugin';
+import {getAssetUploadDirectory} from './asset-upload-directory';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const PORT = Number(process.env.PORT || 3000);
@@ -66,7 +67,7 @@ export const config: VendureConfig = {
         DefaultSearchPlugin.init({bufferUpdates: false, indexStockStatus: true}),
         AssetServerPlugin.init({
             route: 'assets',
-            assetUploadDir: path.join(process.cwd(), 'static/assets'),
+            assetUploadDir: getAssetUploadDirectory(),
             assetUrlPrefix: process.env.ASSET_URL_PREFIX || undefined,
         }),
         DashboardPlugin.init({

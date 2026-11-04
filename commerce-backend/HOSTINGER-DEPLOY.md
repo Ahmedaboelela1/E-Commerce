@@ -65,6 +65,8 @@ SUPERADMIN_PASSWORD=<unique random 20+ character password>
 BACKEND_PUBLIC_URL=https://api.skillverse-global.com
 STOREFRONT_PUBLIC_URL=https://shop.skillverse-global.com
 ASSET_URL_PREFIX=https://api.skillverse-global.com/assets/
+# Create this private directory outside hbuilds/public_html first:
+ASSET_UPLOAD_DIR=/home/u169469823/domains/api.skillverse-global.com/storage/vendure-assets
 CORS_ORIGINS=https://shop.skillverse-global.com,https://api.skillverse-global.com
 ```
 
@@ -84,6 +86,42 @@ The owner confirmed this database is new and empty and approved starting Vendure
 **After verifying the countries and Admin login, REMOVE `HOSTINGER_INITIALIZE_COUNTRIES` from the environment and restart.** No default passwords or API-accessible setup routes are created. Country-agent admins, real stock, payment and shipping must be configured separately.
 
 Hostinger says npm commands are performed during deployment and cannot be invoked via SSH on its managed Node.js hosting. The opt-in first-start country seed avoids requiring that unsupported command. The optional original `npm run seed:initial` CLI exists for controlled development but should not be run as well if the first-start seed is used.
+
+## Fix missing INEX images and keep assets after redeploy
+
+**Observed:** a Vendure Asset row exists in MySQL (900 × 900 / 107 KB), but the original link
+`https://api.skillverse-global.com/assets/source/…` returns `Resource not found`.
+The former `assetUploadDir: path.join(process.cwd(), 'static/assets')` was inside Hostinger's
+versioned `hbuilds` deployment directory, so uploaded images were not reliably persistent.
+
+1. In **Hostinger hPanel → Websites → api.skillverse-global.com → File Manager**, go to
+   `/home/u169469823/domains/api.skillverse-global.com/` (confirm actual root and Unix user from File Manager).
+2. Create the directory `storage/vendure-assets` there, **sibling to** `hbuilds` and
+   `public_html`, **not nested inside either**. This folder is private, not web-served by Apache.
+   Ensure the Node.js app Unix user has write access; Hostinger may restrict paths.
+3. In the **API backend website** environment variables (not the Next.js shop),
+   set `ASSET_UPLOAD_DIR=/home/u169469823/domains/api.skillverse-global.com/storage/vendure-assets`.
+   Keep `ASSET_URL_PREFIX=https://api.skillverse-global.com/assets/` unchanged.
+4. Redeploy the **API backend** from the updated `main` branch. The app now checks that the folder
+   exists and is readable/writable. If the app shows an `ASSET_UPLOAD_DIR is not writable`
+   error, **do not use hbuilds as a workaround**; inspect permissions or move to supported object storage.
+5. Existing image data in the database does **not** recreate missing image bytes.
+   In Vendure Dashboard → Catalog → Assets, upload the original POP-BOT32i image again,
+   attach it as the featured image to its **Product**, and as needed to its **Variant**.
+   Only remove the broken Asset reference **after** the new upload opens directly under
+   `https://api.skillverse-global.com/assets/source/…` and displays in the shop.
+6. Test durability: upload an image, copy its Source File link, **redeploy the backend again**
+   and check the **same link** still returns an image and the product card displays it.
+   Also verify thumbnail/preview URLs after redeploy and confirm Hostinger backups include
+   `storage/vendure-assets`.
+
+**Important:** Hostinger explicitly says `hbuilds/` and `public_html` are deployment-managed
+and overwritten on redeploy. This is why an external persistent directory or an S3-compatible
+object store is required. The custom folder approach is a **pilot**, conditional on Hostinger
+allowing durable read/write from the managed Node process.
+
+Hostinger deployment docs: https://www.hostinger.com/support/how-to-deploy-a-nodejs-website-in-hostinger/
+Vendure plugin docs: https://docs.vendure.io/current/framework/reference/core-plugins/asset-server-plugin/asset-server-options
 
 ## Preconditions before real sales
 
