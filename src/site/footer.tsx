@@ -1,157 +1,84 @@
-import {getRouteLocale} from '@/platform/i18n/server';
-import {cacheLife, cacheTag} from 'next/cache';
-import {getTopCollections} from '@/features/collections/data';
-import Image from "next/image";
 import {NavigationLink} from '@/site/navigation/navigation-link';
-import {getTranslations} from 'next-intl/server';
+import {SkillverseBrand} from '@/site/brand/skillverse-brand';
 
+const currentYear = new Date().getFullYear();
 
-const COPYRIGHT_YEAR = 2026;
-
-async function Copyright() {
-    'use cache'
-    cacheLife('days');
-
-    const locale = await getRouteLocale();
-    const t = await getTranslations({locale, namespace: 'Footer'});
-
+export function Footer() {
     return (
-        <div>
-            &copy; {COPYRIGHT_YEAR} {t('copyright')}
-        </div>
-    )
-}
-
-export async function Footer() {
-    'use cache'
-    cacheLife('days');
-
-    const locale = await getRouteLocale();
-    cacheTag(`footer-${locale}`);
-
-    const t = await getTranslations({locale, namespace: 'Footer'});
-    const collections = await getTopCollections(locale);
-
-    return (
-        <footer className="border-t border-border mt-auto">
-            <div className="container mx-auto px-4 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div className="md:col-span-1">
-                        <NavigationLink href="/" className="inline-block mb-4">
-                            <Image src="/vendure.svg" alt="Vendure" width={40} height={27} className="h-6 w-auto dark:invert" />
-                        </NavigationLink>
-                        <p className="text-sm text-muted-foreground text-balance leading-relaxed">
-                            {t('description')}
-                        </p>
-                    </div>
-
-                    <div>
-                        <p className="text-sm font-semibold mb-4">{t('categories')}</p>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            {collections.map((collection) => (
-                                <li key={collection.id}>
-                                    <NavigationLink
-                                        href={`/collection/${collection.slug}`}
-                                        className="hover:text-foreground transition-colors"
-                                    >
-                                        {collection.name}
-                                    </NavigationLink>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    <div>
-                        <p className="text-sm font-semibold mb-4">{t('customer')}</p>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li>
-                                <NavigationLink
-                                    href="/search"
-                                    className="hover:text-foreground transition-colors"
-                                >
-                                    {t('shopAll')}
-                                </NavigationLink>
-                            </li>
-                            <li>
-                                <NavigationLink
-                                    href="/account/orders"
-                                    className="hover:text-foreground transition-colors"
-                                >
-                                    {t('orders')}
-                                </NavigationLink>
-                            </li>
-                            <li>
-                                <NavigationLink
-                                    href="/account/profile"
-                                    className="hover:text-foreground transition-colors"
-                                >
-                                    {t('account')}
-                                </NavigationLink>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <p className="text-sm font-semibold mb-4">{t('vendure')}</p>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li>
-                                <a
-                                    href="https://github.com/vendure-ecommerce"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-foreground transition-colors"
-                                >
-                                    {t('github')}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://docs.vendure.io"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-foreground transition-colors"
-                                >
-                                    {t('documentation')}
-                                </a>
-                            </li>
-                            <li>
-                                <a
-                                    href="https://github.com/vendure-ecommerce/vendure"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-foreground transition-colors"
-                                >
-                                    {t('sourceCode')}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+        <footer className="mt-auto border-t border-[#1b3458] bg-[#102140] text-white">
+            <div className="container mx-auto grid gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="space-y-5 sm:col-span-2 lg:col-span-1">
+                    <NavigationLink href="/" aria-label="Skillverse Global Shop home" className="inline-flex items-center">
+                        <SkillverseBrand inverse />
+                    </NavigationLink>
+                    <p className="max-w-sm text-sm leading-7 text-white/70">
+                        Bringing technology to life. Opening a world of possibility through robotics,
+                        AI and STEM education.
+                    </p>
+                    <a
+                        href="mailto:info@skillverse-global.com"
+                        className="inline-block text-sm font-medium text-[#a9c6f7] underline-offset-4 hover:underline"
+                    >
+                        info@skillverse-global.com
+                    </a>
                 </div>
 
-                {/* Bottom Section */}
-                <div
-                    className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-                    <Copyright/>
-                    <div className="flex items-center gap-2">
-                        <span>{t('poweredBy')}</span>
+                <div className="space-y-4">
+                    <h2 className="text-sm font-bold tracking-wide text-white">Explore the shop</h2>
+                    <nav aria-label="Shop links" className="flex flex-col gap-3 text-sm text-white/70">
+                        <NavigationLink href="/search" className="transition-colors hover:text-white">
+                            Browse products
+                        </NavigationLink>
+                        <a href="https://skillverse-global.com/products" className="transition-colors hover:text-white">
+                            Products &amp; kits
+                        </a>
+                        <a href="https://skillverse-global.com/solutions" className="transition-colors hover:text-white">
+                            STEM solutions
+                        </a>
+                    </nav>
+                </div>
+
+                <div className="space-y-4">
+                    <h2 className="text-sm font-bold tracking-wide text-white">Skillverse Global</h2>
+                    <nav aria-label="Company links" className="flex flex-col gap-3 text-sm text-white/70">
+                        <a href="https://skillverse-global.com/about" className="transition-colors hover:text-white">
+                            About us
+                        </a>
+                        <a href="https://skillverse-global.com/partners" className="transition-colors hover:text-white">
+                            Our partners
+                        </a>
+                        <a href="https://skillverse-global.com/projects" className="transition-colors hover:text-white">
+                            Projects
+                        </a>
+                        <a href="https://skillverse-global.com/contact" className="transition-colors hover:text-white">
+                            Contact us
+                        </a>
+                    </nav>
+                </div>
+
+                <div className="space-y-4">
+                    <h2 className="text-sm font-bold tracking-wide text-white">Get in touch</h2>
+                    <div className="flex flex-col gap-3 text-sm text-white/70">
+                        <span>Cairo, Egypt</span>
                         <a
-                            href="https://vendure.io"
+                            href="https://www.facebook.com/SkillVerse.globall/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="hover:text-foreground transition-colors"
+                            className="transition-colors hover:text-white"
                         >
-                            <Image src="/vendure.svg" alt="Vendure" width={40} height={27} className="h-4 w-auto dark:invert" />
+                            Facebook ↗
                         </a>
-                        <span>&</span>
-                        <a
-                            href="https://nextjs.org"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-foreground transition-colors"
-                        >
-                            <Image src="/next.svg" alt="Next.js" width={16} height={16} className="h-5 w-auto dark:invert" />
-                        </a>
+                        <p className="max-w-xs leading-6 text-xs text-white/60">
+                            Product availability, delivery and local selling terms are confirmed before ordering.
+                        </p>
                     </div>
+                </div>
+            </div>
+
+            <div className="border-t border-white/15">
+                <div className="container mx-auto flex flex-col justify-between gap-2 px-4 py-5 text-xs text-white/55 sm:flex-row">
+                    <span>© {currentYear} Skillverse Global. All rights reserved.</span>
+                    <span>Built around possibility.</span>
                 </div>
             </div>
         </footer>
