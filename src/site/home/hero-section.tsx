@@ -13,8 +13,9 @@ export async function HeroSection() {
             {/* Radial fade overlay */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,var(--color-primary)/8,transparent)]" />
 
-            <div className="container relative mx-auto px-4 py-28 md:py-40 lg:py-48">
+            <div className="container relative mx-auto px-4 py-24 md:py-32 lg:py-40">
                 <div className="max-w-4xl mx-auto text-center space-y-8">
+                    <p className="mx-auto w-fit rounded-full border border-primary/20 bg-primary/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-primary">Skillverse Global × INEX</p>
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
                         {t('title')}{" "}
                         <span className="text-primary">{t('titleHighlight')}</span>
@@ -23,7 +24,7 @@ export async function HeroSection() {
                         {t('subtitle')}
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-                        <Button render={<Link href="/search" />} nativeButton={false} size="lg" className="min-w-[200px] text-base">
+                        <Button render={<Link href="/#egypt-kits" />} nativeButton={false} size="lg" className="min-w-[200px] text-base">
                             {t('shopNow')}
                         </Button>
                         <Button render={<Link href="/search" />} nativeButton={false} variant="outline" size="lg" className="min-w-[200px] text-base">
