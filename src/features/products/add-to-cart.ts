@@ -8,6 +8,9 @@ import {mutate} from '@/platform/vendure/api';
 import {setAuthToken} from '@/platform/vendure/auth-token';
 
 export async function addToCart(variantId: string, quantity = 1) {
+    if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
+        return {success: false, error: 'Online ordering is not available yet'};
+    }
     const locale = await getLocale();
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Errors'});
