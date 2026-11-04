@@ -32,6 +32,8 @@ jobs:
         run: npm run check
       - name: Build server and worker
         run: npm run build
+      - name: Verify safe persistent asset upload path
+        run: node --test scripts/test-asset-directory.mjs
       - name: Build official Vendure Dashboard
         run: npm run dashboard:build
       - name: Verify Dashboard static assets
@@ -71,6 +73,7 @@ jobs:
       SUPERADMIN_USERNAME: ci_admin_only
       SUPERADMIN_PASSWORD: ci-only-admin-password-long-enough-123456
       PORT: "3077"
+      ASSET_UPLOAD_DIR: /tmp/skillverse-vendure-assets-first-boot
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -97,6 +100,8 @@ jobs:
             sleep 2
           done
           node --input-type=module -e "import mysql from 'mysql2/promise';const c=await mysql.createConnection({host:process.env.DB_HOST,user:process.env.DB_USERNAME,password:process.env.DB_PASSWORD,database:process.env.DB_NAME});const [[country]]=await c.query('SELECT COUNT(*) AS total FROM region');const [[admin]]=await c.query('SELECT COUNT(*) AS total FROM administrator');await c.end();console.log('Countries:',country.total,'Administrators:',admin.total);if(Number(country.total)!==3||Number(admin.total)<1)process.exit(1)"
+      - name: Verify external asset folder was initialized
+        run: test -d /tmp/skillverse-vendure-assets-first-boot
       - name: Stop isolated API
         if: always()
         run: |
