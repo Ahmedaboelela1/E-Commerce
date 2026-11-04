@@ -138,7 +138,8 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
     };
 
     const isInStock = selectedVariant && selectedVariant.stockLevel !== 'OUT_OF_STOCK';
-    const canAddToCart = selectedVariant && isInStock;
+    const orderingEnabled = process.env.NEXT_PUBLIC_ENABLE_CHECKOUT === 'true';
+    const canAddToCart = selectedVariant && isInStock && orderingEnabled;
 
     return (
         <div className="space-y-6">
@@ -211,33 +212,40 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                 </div>
             )}
 
-            {/* Add to Cart Button */}
-            <div className="pt-2 space-y-3">
-                <Button
-                    size="lg"
-                    className="w-full h-12 text-base font-semibold rounded-lg"
-                    disabled={!canAddToCart || isPending}
-                    onClick={handleAddToCart}
-                >
-                    {isAdded ? (
-                        <>
-                            <CheckCircle2 className="mr-2 h-5 w-5"/>
-                            {t('addedToCart')}
-                        </>
-                    ) : (
-                        <>
-                            <ShoppingCart className="mr-2 h-5 w-5"/>
-                            {isPending
-                                ? t('adding')
-                                : !selectedVariant && product.optionGroups.length > 0
-                                    ? t('selectOptions')
-                                    : !isInStock
-                                        ? t('outOfStock')
-                                        : t('addToCart')}
-                        </>
-                    )}
-                </Button>
-            </div>
+            {/* Catalog-first pilot: don't accept real orders before payment,
+                shipping, invoicing and verified inventory are configured. */}
+            {orderingEnabled ? (
+                <div className="pt-2 space-y-3">
+                    <Button
+                        size="lg"
+                        className="w-full h-12 text-base font-semibold rounded-lg"
+                        disabled={!canAddToCart || isPending}
+                        onClick={handleAddToCart}
+                    >
+                        {isAdded ? (
+                            <>
+                                <CheckCircle2 className="mr-2 h-5 w-5"/>
+                                {t('addedToCart')}
+                            </>
+                        ) : (
+                            <>
+                                <ShoppingCart className="mr-2 h-5 w-5"/>
+                                {isPending
+                                    ? t('adding')
+                                    : !selectedVariant && product.optionGroups.length > 0
+                                        ? t('selectOptions')
+                                        : !isInStock
+                                            ? t('outOfStock')
+                                            : t('addToCart')}
+                            </>
+                        )}
+                    </Button>
+                </div>
+            ) : (
+                <p className="pt-2 text-sm text-muted-foreground">
+                    {t('orderingComingSoon')}
+                </p>
+            )}
 
             {/* SKU */}
             {selectedVariant && (

@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
         dangerouslyAllowLocalIP: true,
         remotePatterns: [
             {
+                protocol: 'https',
+                hostname: 'api.skillverse-global.com',
+                pathname: '/assets/**',
+            },
+            {
                 hostname: 'readonlydemo.vendure.io',
             },
             {

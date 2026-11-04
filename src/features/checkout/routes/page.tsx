@@ -23,6 +23,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CheckoutPage() {
     const locale = await getRouteLocale();
+
+    // Catalog-only pilot: do not expose checkout before merchant/payment setup.
+    if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
+        return redirect({href: '/search', locale});
+    }
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Checkout'});
     const customer = await getActiveCustomer();
