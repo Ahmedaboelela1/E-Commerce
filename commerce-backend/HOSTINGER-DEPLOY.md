@@ -34,7 +34,7 @@ In Hostinger **Websites → Create site → Web App → GitHub Integration**:
 - Root directory: `commerce-backend` (choose only this subproject, not the entire Next.js app).
 - Framework: Node.js / Other if auto-detection does not identify Vendure.
 - Node.js version: 22 or newer.
-- Build command: `npm run build && npm run dashboard:build`
+- Build command: `npm run build` (one script now compiles Vendure server and Dashboard).
 - Output directory: `dist` (Hostinger may require this for the "Other" app type).
 - Entry file: `dist/index.js` when Hostinger requests one.
 - Start command if exposed: `npm run start`.
