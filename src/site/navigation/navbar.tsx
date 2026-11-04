@@ -1,4 +1,4 @@
-import Image from "next/image";
+import {SkillverseBrand} from "@/site/brand/skillverse-brand";
 import {NavigationLink} from '@/site/navigation/navigation-link';
 import {NavbarCollections} from '@/site/navigation/navbar/navbar-collections';
 import {NavbarCart} from '@/site/navigation/navbar/navbar-cart';
@@ -21,8 +21,8 @@ export function Navbar() {
                         <Suspense>
                             <MobileNavWrapper />
                         </Suspense>
-                        <NavigationLink href="/" className="text-xl font-bold">
-                            <Image src="/vendure.svg" alt="Vendure" width={40} height={27} className="h-6 w-auto dark:invert" />
+                        <NavigationLink href="/" aria-label="Skillverse Global Shop home" className="inline-flex items-center">
+                            <SkillverseBrand compact />
                         </NavigationLink>
                         <nav className="hidden md:flex items-center gap-6">
                             <Suspense>
