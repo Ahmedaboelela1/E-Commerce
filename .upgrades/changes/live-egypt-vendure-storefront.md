@@ -1,6 +1,10 @@
 ---
 type: minor
 areas:
+  - checkout
+  - currency
+  - products
+  - site
   - tooling
 ---
 
