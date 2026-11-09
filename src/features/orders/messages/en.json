@@ -2,7 +2,7 @@
   "OrderStatus": {
     "AddingItems": "Adding Items",
     "ArrangingPayment": "Arranging Payment",
-    "PaymentAuthorized": "Payment Authorized",
+    "PaymentAuthorized": "Awaiting phone confirmation / cash on delivery",
     "PaymentSettled": "Payment Settled",
     "PartiallyShipped": "Partially Shipped",
     "Shipped": "Shipped",
