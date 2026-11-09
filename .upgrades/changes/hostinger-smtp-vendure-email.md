@@ -11,7 +11,7 @@ Connect the existing Hostinger Email mailbox `info@skillverse-global.com` to Ven
 ## Invariants
 
 - Never store mailbox credentials in GitHub, static files, browser/public env variables or model chat.
-- `SMTP_ENABLED` defaults OFF; the plugin is loaded only once the owner supplies private credentials and opts in.
+- No SMTP_ENABLED toggle is needed; the plugin loads automatically only after the owner supplies both private SMTP credentials. Missing credentials leave the running API unchanged.
 - Hostinger's published SMTP settings: `smtp.hostinger.com`, port 465 SSL/TLS; fallback 587 STARTTLS.
 - Transactional templates (email verification, password reset, admin reset, email change, payment receipt) and COD order-request/customer-staff notices are bundled in compiled JS, not in disposable upload directories.
 - COD email notices say the order **needs telephone confirmation** and no cash has been collected.
@@ -21,7 +21,7 @@ Connect the existing Hostinger Email mailbox `info@skillverse-global.com` to Ven
 
 ## Integration guidance
 
-See `commerce-backend/HOSTINGER-SMTP.md`. Add `SMTP_ENABLED=true`, `SMTP_HOST=smtp.hostinger.com`, `SMTP_PORT=465`, `SMTP_USER=info@skillverse-global.com`, `SMTP_PASSWORD` (privately), and `ORDER_NOTIFICATION_EMAIL=info@skillverse-global.com` on the Vendure **API** website on Hostinger. Redeploy **backend only**, then test a fresh registration, verification token URL, reset password and email queue processing. Do not open checkout until separate PR #9 and all other go-live checks are complete.
+See `commerce-backend/HOSTINGER-SMTP.md`. Add `SMTP_HOST=smtp.hostinger.com`, `SMTP_PORT=465`, `SMTP_USER=info@skillverse-global.com`, `SMTP_PASSWORD` (privately), and `ORDER_NOTIFICATION_EMAIL=info@skillverse-global.com` on the Vendure **API** website on Hostinger. Redeploy **backend only**, then test a fresh registration, verification token URL, reset password and email queue processing. Do not open checkout until separate PR #9 and all other go-live checks are complete.
 
 ## Verification
 
