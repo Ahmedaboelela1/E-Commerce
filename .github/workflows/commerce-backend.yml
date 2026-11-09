@@ -29,11 +29,13 @@ jobs:
       - name: Verify staged catalog data
         run: node --test scripts/check-catalog.test.mjs
       - name: Install backend dependencies
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
       - name: TypeScript validation
         run: npm run check
       - name: Build server and worker
-        run: npm run build
+        run: npm run build:server
+      - name: Verify transactional email configuration, rendering and SMTP failures
+        run: node --test scripts/test-shop-email.mjs
       - name: Verify safe persistent asset upload path
         run: node --test scripts/test-asset-directory.mjs
       - name: Build official Vendure Dashboard
@@ -82,7 +84,7 @@ jobs:
         with:
           node-version: '22.16.0'
       - name: Install and build Vendure
-        run: npm install --no-audit --no-fund && npm run build
+        run: npm ci --no-audit --no-fund && npm run build
       - name: Boot API, migrate and populate countries
         run: |
           node dist/index.js > /tmp/skillverse-vendure-firstboot.log 2>&1 &
@@ -113,3 +115,7 @@ jobs:
           if [ -f /tmp/skillverse-vendure-firstboot.log ]; then
             tail -n 45 /tmp/skillverse-vendure-firstboot.log
           fi
+      - name: Verify verification/reset email delivery and persistent queue across restart
+        env:
+          VENDURE_EMAIL_TEST_PORT: '3306'
+        run: node --test scripts/test-shop-email-mysql.mjs
