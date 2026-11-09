@@ -34,7 +34,8 @@ export const egyptCashOnDeliveryHandler = new PaymentMethodHandler({
                 errorMessage: 'Cash on delivery is only available for the Egypt (EGP) store.',
             };
         }
-        if (!order.shippingAddress?.phoneNumber?.trim()) {
+        const digits = order.shippingAddress?.phoneNumber?.replace(/[^0-9]/g, '') || '';
+        if (digits.length < 10 || digits.length > 15) {
             return {
                 amount,
                 state: 'Declined' as const,
