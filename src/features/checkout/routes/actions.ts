@@ -1,11 +1,20 @@
 'use server';
 
-import {mutate} from '@/platform/vendure/api';
-import {SetOrderShippingAddressMutation, SetOrderBillingAddressMutation, SetOrderShippingMethodMutation, AddPaymentToOrderMutation, TransitionOrderToStateMutation, SetCustomerForOrderMutation} from '@/features/checkout/graphql';
+import {mutate, query} from '@/platform/vendure/api';
+import {SetOrderShippingAddressMutation, SetOrderBillingAddressMutation, SetOrderShippingMethodMutation, AddPaymentToOrderMutation, TransitionOrderToStateMutation} from '@/features/checkout/graphql';
 import {CreateCustomerAddressMutation} from '@/features/account/graphql';
 import {revalidatePath, updateTag} from 'next/cache';
 import {redirect} from '@/platform/i18n/navigation';
 import {getLocale} from 'next-intl/server';
+import {getActiveCustomer} from '@/features/account/customer';
+import {GetActiveOrderForCheckoutQuery} from '@/features/checkout/graphql';
+
+function requireCallbackPhone(number: string): void {
+    const count = (number || '').replace(/[^0-9]/g, '').length;
+    if (count < 10 || count > 15) {
+        throw new Error('Enter a valid mobile number so our team can confirm your order');
+    }
+}
 
 interface AddressInput {
     fullName: string;
@@ -23,6 +32,7 @@ export async function setShippingAddress(
     shippingAddress: AddressInput,
     useSameForBilling: boolean
 ) {
+    requireCallbackPhone(shippingAddress.phoneNumber);
     const shippingResult = await mutate(
         SetOrderShippingAddressMutation,
         {input: shippingAddress},
@@ -61,6 +71,7 @@ export async function setShippingMethod(shippingMethodId: string) {
 }
 
 export async function createCustomerAddress(address: AddressInput) {
+    requireCallbackPhone(address.phoneNumber);
     const result = await mutate(
         CreateCustomerAddressMutation,
         {input: address},
@@ -95,18 +106,31 @@ export async function transitionToArrangingPayment() {
 }
 
 export async function placeOrder(paymentMethodCode: string) {
+    if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
+        throw new Error('Ordering is not enabled yet');
+    }
+    if (paymentMethodCode !== 'cash-on-delivery') {
+        throw new Error('Card payments are not available yet');
+    }
+    const customer = await getActiveCustomer();
+    if (!customer) {
+        throw new Error('Please register and sign in before ordering');
+    }
+    const {data} = await query(GetActiveOrderForCheckoutQuery, {}, {useAuthToken: true});
+    const order = data.activeOrder;
+    if (!order?.lines?.length || !order.shippingAddress?.phoneNumber?.trim() || !order.shippingAddress.streetLine1?.trim()) {
+        // A missing delivery contact must not reach the payment step.
+        throw new Error('A delivery address and phone number are required for telephone confirmation');
+    }
+    requireCallbackPhone(order.shippingAddress.phoneNumber);
+    if (order.currencyCode !== 'EGP') {
+        throw new Error('Cash on delivery is available only for the Egypt store');
+    }
     // First, transition the order to ArrangingPayment state
     await transitionToArrangingPayment();
 
-    // Prepare metadata based on payment method
+    // COD creates an Authorized (uncollected) payment; no demo card metadata.
     const metadata: Record<string, unknown> = {};
-
-    // For standard payment, include the required fields
-    if (paymentMethodCode === 'standard-payment') {
-        metadata.shouldDecline = false;
-        metadata.shouldError = false;
-        metadata.shouldErrorOnSettle = false;
-    }
 
     // Add payment to the order
     const result = await mutate(
@@ -152,31 +176,12 @@ export type SetCustomerForOrderResult =
     | { success: false; errorCode: 'UNKNOWN'; message: string };
 
 export async function setCustomerForOrder(
-    input: GuestCustomerInput
+    _input: GuestCustomerInput
 ): Promise<SetCustomerForOrderResult> {
-    const result = await mutate(
-        SetCustomerForOrderMutation,
-        { input },
-        { useAuthToken: true }
-    );
-
-    const response = result.data.setCustomerForOrder;
-
-    switch (response.__typename) {
-        case 'Order': {
-            const locale = await getLocale();
-            revalidatePath(`/${locale}/checkout`);
-            return { success: true };
-        }
-        case 'AlreadyLoggedInError':
-            return { success: true };
-        case 'EmailAddressConflictError':
-            return { success: false, errorCode: 'EMAIL_CONFLICT', message: response.message };
-        case 'GuestCheckoutError':
-            return { success: false, errorCode: 'GUEST_CHECKOUT_DISABLED', message: response.message };
-        case 'NoActiveOrderError':
-            return { success: false, errorCode: 'NO_ACTIVE_ORDER', message: response.message };
-        default:
-            return { success: false, errorCode: 'UNKNOWN', message: 'Unknown error' };
-    }
+    // Guest checkout is permanently disabled for Skillverse Egypt.
+    return {
+        success: false,
+        errorCode: 'GUEST_CHECKOUT_DISABLED',
+        message: 'Please create a verified account and sign in before ordering',
+    };
 }

@@ -23,9 +23,9 @@ import {useTranslations} from 'next-intl';
 function createRegistrationSchema(t: ReturnType<typeof useTranslations<'Auth'>>) {
     return z.object({
         emailAddress: z.string().email(t('emailValidation')),
-        firstName: z.string().optional(),
-        lastName: z.string().optional(),
-        phoneNumber: z.string().optional(),
+        firstName: z.string().trim().min(1, t('firstNameRequired')),
+        lastName: z.string().trim().min(1, t('lastNameRequired')),
+        phoneNumber: z.string().trim().refine((value) => /^\+?[0-9 ()-]{10,20}$/.test(value) && value.replace(/\D/g, '').length >= 10, t('phoneValidation')),
         password: z.string().min(8, t('passwordMinLength')),
         confirmPassword: z.string(),
     }).refine((data) => data.password === data.confirmPassword, {
@@ -64,9 +64,9 @@ export function RegistrationForm({ redirectTo }: RegistrationFormProps) {
         startTransition(async () => {
             const formData = new FormData();
             formData.append('emailAddress', data.emailAddress);
-            if (data.firstName) formData.append('firstName', data.firstName);
-            if (data.lastName) formData.append('lastName', data.lastName);
-            if (data.phoneNumber) formData.append('phoneNumber', data.phoneNumber);
+            formData.append('firstName', data.firstName);
+            formData.append('lastName', data.lastName);
+            formData.append('phoneNumber', data.phoneNumber);
             formData.append('password', data.password);
             if (redirectTo) {
                 formData.append('redirectTo', redirectTo);
@@ -156,7 +156,7 @@ export function RegistrationForm({ redirectTo }: RegistrationFormProps) {
                                     <FormControl>
                                         <Input
                                             type="tel"
-                                            placeholder="+1 (555) 000-0000"
+                                            placeholder="01012345678"
                                             disabled={isPending}
                                             {...field}
                                         />

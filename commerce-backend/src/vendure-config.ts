@@ -7,10 +7,15 @@ import {
 import {AssetServerPlugin} from '@vendure/asset-server-plugin';
 import {DashboardPlugin} from '@vendure/dashboard/plugin';
 import {getAssetUploadDirectory} from './asset-upload-directory';
+import {egyptCashOnDeliveryHandler} from './egypt-cash-on-delivery';
+import {EmailPlugin} from '@vendure/email-plugin';
+import {readShopEmailSettings} from './email-settings';
+import {createShopEmailOptions} from './shop-email';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const PORT = Number(process.env.PORT || 3000);
 const corsOrigins = process.env.CORS_ORIGINS?.split(',').map(x => x.trim()).filter(Boolean) ?? [];
+const emailSettings = readShopEmailSettings();
 
 export const config: VendureConfig = {
     defaultLanguageCode: LanguageCode.en,
@@ -48,7 +53,7 @@ export const config: VendureConfig = {
     },
     paymentOptions: {
         // No dummy payment provider and no real gateway until local merchant verification.
-        paymentMethodHandlers: [],
+        paymentMethodHandlers: [egyptCashOnDeliveryHandler],
     },
     customFields: {
         Product: [
@@ -62,6 +67,7 @@ export const config: VendureConfig = {
         ],
     },
     plugins: [
+        ...(emailSettings ? [EmailPlugin.init(createShopEmailOptions(emailSettings))] : []),
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({useDatabaseForBuffer: true}),
         DefaultSearchPlugin.init({bufferUpdates: false, indexStockStatus: true}),

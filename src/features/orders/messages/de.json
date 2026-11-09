@@ -2,7 +2,7 @@
   "OrderStatus": {
     "AddingItems": "Artikel hinzufügen",
     "ArrangingPayment": "Zahlung wird vorbereitet",
-    "PaymentAuthorized": "Zahlung autorisiert",
+    "PaymentAuthorized": "Warten auf telefonische Bestätigung / Nachnahme",
     "PaymentSettled": "Zahlung abgeschlossen",
     "PartiallyShipped": "Teilweise versendet",
     "Shipped": "Versendet",
@@ -12,9 +12,9 @@
   },
   "OrderConfirmation": {
     "pageTitle": "Bestellbestätigung",
-    "orderConfirmed": "Bestellung bestätigt!",
-    "thankYou": "Vielen Dank für Ihre Bestellung. Ihre Bestellnummer lautet",
-    "emailConfirmation": "Wir senden Ihnen eine E-Mail mit Ihren Bestelldetails und Tracking-Informationen.",
+    "orderConfirmed": "Bestellanfrage eingegangen",
+    "thankYou": "Ihre Bestellanfragenummer lautet",
+    "emailConfirmation": "Unser Team wird Sie vor dem Versand anrufen, um die Bestellung zu bestätigen. Es wurde noch keine Zahlung eingezogen.",
     "orderSummary": "Bestellübersicht",
     "qty": "Menge: {quantity}",
     "total": "Gesamt",

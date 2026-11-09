@@ -16,6 +16,7 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
   const t = useTranslations('Checkout');
   const { order, paymentMethods, selectedPaymentMethodCode, isGuest } = useCheckout();
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const selectedPaymentMethod = paymentMethods.find(
     (method) => method.code === selectedPaymentMethodCode
@@ -25,6 +26,7 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
     if (!selectedPaymentMethodCode) return;
 
     setLoading(true);
+    setSubmitError(null);
     try {
       await placeOrderAction(selectedPaymentMethodCode);
     } catch (error) {
@@ -32,6 +34,7 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
         throw error;
       }
       console.error('Error placing order:', error);
+      setSubmitError(error instanceof Error ? error.message : t('unexpectedError'));
       setLoading(false);
     }
   };
@@ -159,6 +162,8 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
         </div>
       </div>
 
+      <p className="text-sm text-muted-foreground">{t('phoneConfirmationNote')}</p>
+      {submitError && <p role="alert" className="text-sm text-destructive">{submitError}</p>}
       <Button
         onClick={handlePlaceOrder}
         disabled={loading || !order.shippingAddress || !order.shippingLines?.length || !selectedPaymentMethodCode}

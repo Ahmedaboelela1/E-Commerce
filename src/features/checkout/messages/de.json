@@ -80,6 +80,9 @@
     "toBeCalculated": "Wird noch berechnet",
     "total": "Gesamt",
     "item": "Artikel",
-    "items": "Artikel"
+    "items": "Artikel",
+    "visaComingSoon": "Visa / Mastercard — demnächst",
+    "visaNotAvailable": "Kartenzahlung ist derzeit deaktiviert. Es erfolgt keine Online-Zahlung.",
+    "phoneConfirmationNote": "Ihre Bestellung wird geprüft. Unser Team ruft Sie vor dem Versand an, um die Bestellung zu bestätigen."
   }
 }
