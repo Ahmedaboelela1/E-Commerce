@@ -15,7 +15,7 @@
     "emailAddressLabel": "Email Address",
     "firstNameLabel": "First Name",
     "lastNameLabel": "Last Name",
-    "phoneNumberLabel": "Phone Number (Optional)",
+    "phoneNumberLabel": "Mobile phone number *",
     "passwordLabel": "Password",
     "confirmPasswordLabel": "Confirm Password",
     "passwordMinLength": "Password must be at least 8 characters",
@@ -48,7 +48,10 @@
     "newPassword": "New Password",
     "confirmPassword": "Confirm Password",
     "resetPassword": "Reset password",
-    "resettingPassword": "Resetting password..."
+    "resettingPassword": "Resetting password...",
+    "phoneValidation": "Enter a valid phone number for your order confirmation",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required"
   },
   "Verify": {
     "invalidLink": "Invalid Verification Link",
