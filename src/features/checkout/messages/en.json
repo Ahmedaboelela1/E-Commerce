@@ -80,6 +80,9 @@
     "toBeCalculated": "To be calculated",
     "total": "Total",
     "item": "item",
-    "items": "items"
+    "items": "items",
+    "visaComingSoon": "Visa / Mastercard — coming soon",
+    "visaNotAvailable": "Card payments are currently disabled; no online payment will be collected.",
+    "phoneConfirmationNote": "Your order request will be reviewed. Our team will call your registered phone number to confirm before shipping."
   }
 }
