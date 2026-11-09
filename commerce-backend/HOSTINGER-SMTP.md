@@ -24,7 +24,6 @@ Verify mailbox sending and receiving in Hostinger Webmail before testing Vendure
 In hPanel, select **api.skillverse-global.com → Node.js app → Environment Variables**, not `shop.skillverse-global.com`.
 
 ```dotenv
-SMTP_ENABLED=true
 SMTP_HOST=smtp.hostinger.com
 SMTP_PORT=465
 SMTP_USER=info@skillverse-global.com
@@ -37,8 +36,8 @@ RUN_JOBS_IN_SERVER=true
 
 - **Never commit `SMTP_PASSWORD` to GitHub or reveal it in conversation or screenshots.**
 - Existing backend DB and Super Admin variables stay unchanged.
-- When `SMTP_ENABLED` is absent or `false`, the EmailPlugin is not loaded; the customer shop remains catalog-only until the tests pass.
-- Setting `SMTP_ENABLED=true` without valid `SMTP_USER` and `SMTP_PASSWORD` **causes intentional startup validation failure**, to prevent silent registration failures. Only turn it on once the secrets have been added.
+- There is **no SMTP_ENABLED variable**. SMTP starts automatically when both `SMTP_USER` and `SMTP_PASSWORD` exist in the API website environment. The customer shop stays catalog-only until the tests pass.
+- Missing SMTP credentials leave the email integration disabled rather than crashing the live backend. Invalid SMTP connection settings may still cause email delivery failures, so test the mailbox before taking real registrations.
 - Emails are generated from bundled MJML templates compiled into `dist`, so they don't depend on the temporary Hostinger hbuilds directory.
 - No public development `/mailbox` route is enabled, and debug logs must stay off.
 
