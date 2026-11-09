@@ -6,7 +6,7 @@ areas:
 
 ## Intent
 
-Connect the existing Hostinger Email mailbox `info@skillverse-global.com` to Vendure 3.8 via secure SMTP while keeping customer checkout disabled until a live registration/email test succeeds.
+Connect the existing Hostinger Email mailbox `ahmed@skillverse-global.com` with `info@skillverse-global.com` as a Reply-To alias to Vendure 3.8 via secure SMTP while keeping customer checkout disabled until a live registration/email test succeeds.
 
 ## Invariants
 
@@ -21,7 +21,7 @@ Connect the existing Hostinger Email mailbox `info@skillverse-global.com` to Ven
 
 ## Integration guidance
 
-See `commerce-backend/HOSTINGER-SMTP.md`. Add `SMTP_HOST=smtp.hostinger.com`, `SMTP_PORT=465`, `SMTP_USER=info@skillverse-global.com`, `SMTP_PASSWORD` (privately), and `ORDER_NOTIFICATION_EMAIL=info@skillverse-global.com` on the Vendure **API** website on Hostinger. Redeploy **backend only**, then test a fresh registration, verification token URL, reset password and email queue processing. Do not open checkout until separate PR #9 and all other go-live checks are complete.
+See `commerce-backend/HOSTINGER-SMTP.md`. Hostinger alias clarification: use `SMTP_USER=ahmed@skillverse-global.com` (actual mailbox), `SMTP_REPLY_TO=info@skillverse-global.com` (alias), and `ORDER_NOTIFICATION_EMAIL=info@skillverse-global.com`. Add `SMTP_HOST=smtp.hostinger.com`, `SMTP_PORT=465`, `SMTP_USER=ahmed@skillverse-global.com`, `SMTP_PASSWORD` (privately), and `ORDER_NOTIFICATION_EMAIL=info@skillverse-global.com` on the Vendure **API** website on Hostinger. Redeploy **backend only**, then test a fresh registration, verification token URL, reset password and email queue processing. Do not open checkout until separate PR #9 and all other go-live checks are complete.
 
 ## Verification
 
