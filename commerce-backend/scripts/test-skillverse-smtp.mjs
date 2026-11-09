@@ -60,7 +60,9 @@ test('COD email says request pending call, not paid or dispatched', async () => 
 
 test('SMTP is opt-in and never exposes credentials or dev mailbox in production', () => {
     const plugin = fs.readFileSync('src/skillverse-smtp-plugin.ts', 'utf8');
-    assert.match(plugin, /SMTP_ENABLED !== 'true'/);
+    assert.match(plugin, /SMTP_USER\?\.trim\(\)/);
+    assert.match(plugin, /SMTP_PASSWORD\?\.trim\(\)/);
+    assert.doesNotMatch(plugin, /process\.env\.SMTP_ENABLED/);
     assert.match(plugin, /smtp\.hostinger\.com/);
     assert.match(plugin, /port === 465/);
     assert.match(plugin, /port === 587/);
