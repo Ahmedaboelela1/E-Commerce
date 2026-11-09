@@ -58,6 +58,17 @@ test('COD email says request pending call, not paid or dispatched', async () => 
     assert.match(staff, /before confirmation/i);
 });
 
+test('Hostinger alias is used only as Reply-To, never SMTP identity', () => {
+    const handlers = fs.readFileSync('src/skillverse-email-handlers.ts', 'utf8');
+    const transport = fs.readFileSync('src/skillverse-smtp-plugin.ts', 'utf8');
+    assert.match(handlers, /SMTP_REPLY_TO/);
+    assert.match(handlers, /setOptionalAddressFields/);
+    assert.match(transport, /auth: \{user, pass: password\}/);
+    const config = fs.readFileSync('.env.example', 'utf8');
+    assert.match(config, /SMTP_USER=ahmed@skillverse-global.com/);
+    assert.match(config, /SMTP_REPLY_TO=info@skillverse-global.com/);
+});
+
 test('SMTP is opt-in and never exposes credentials or dev mailbox in production', () => {
     const plugin = fs.readFileSync('src/skillverse-smtp-plugin.ts', 'utf8');
     assert.match(plugin, /SMTP_USER\?\.trim\(\)/);
