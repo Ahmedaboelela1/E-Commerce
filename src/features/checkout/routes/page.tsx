@@ -60,8 +60,11 @@ export default async function CheckoutPage() {
 
     const addresses = addressesRes.data.activeCustomer?.addresses || [];
     const shippingMethods = shippingMethodsRes.data.eligibleShippingMethods || [];
+    // The Visa gateway is not integrated. Only show our explicit Egypt COD method.
     const paymentMethods =
-        paymentMethodsRes.data.eligiblePaymentMethods?.filter((m) => m.isEligible) || [];
+        paymentMethodsRes.data.eligiblePaymentMethods?.filter(
+            (m) => m.isEligible && m.code === 'cash-on-delivery'
+        ) || [];
 
     return (
         <div className="container mx-auto px-4 py-8">
