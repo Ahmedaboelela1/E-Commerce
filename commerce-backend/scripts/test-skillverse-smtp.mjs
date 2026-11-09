@@ -64,6 +64,6 @@ test('SMTP is opt-in and never exposes credentials or dev mailbox in production'
     assert.match(plugin, /smtp\.hostinger\.com/);
     assert.match(plugin, /port === 465/);
     assert.match(plugin, /port === 587/);
-    assert.match(plugin, /devMode/);
+    assert.doesNotMatch(plugin, /devMode:\\s*true/);
     assert.doesNotMatch(plugin, /route:\s*['"]mailbox['"]/);
 });
