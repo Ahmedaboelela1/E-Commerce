@@ -80,7 +80,7 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
                       ? t('free')
                       : (method.priceWithTax / 100).toLocaleString(intlLocale, {
                           style: 'currency',
-                          currency: 'USD',
+                          currency: order.currencyCode,
                         })}
                   </p>
                 </div>
