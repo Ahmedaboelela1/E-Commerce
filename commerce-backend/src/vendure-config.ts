@@ -7,6 +7,7 @@ import {
 import {AssetServerPlugin} from '@vendure/asset-server-plugin';
 import {DashboardPlugin} from '@vendure/dashboard/plugin';
 import {getAssetUploadDirectory} from './asset-upload-directory';
+import {egyptCashOnDeliveryHandler} from './egypt-cash-on-delivery';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const PORT = Number(process.env.PORT || 3000);
@@ -48,7 +49,7 @@ export const config: VendureConfig = {
     },
     paymentOptions: {
         // No dummy payment provider and no real gateway until local merchant verification.
-        paymentMethodHandlers: [],
+        paymentMethodHandlers: [egyptCashOnDeliveryHandler],
     },
     customFields: {
         Product: [
