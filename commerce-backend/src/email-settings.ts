@@ -46,10 +46,8 @@ export function readShopEmailSettings(env: NodeJS.ProcessEnv = process.env): Sho
     }
     const user = email(env.SMTP_USER, 'SMTP_USER');
     const fromAddress = email(env.EMAIL_FROM_ADDRESS || 'info@skillverse-global.com', 'EMAIL_FROM_ADDRESS');
-    // Hostinger documents alias sending only in Webmail, not external SMTP apps.
-    if (host.toLowerCase() === 'smtp.hostinger.com' && user.toLowerCase() !== fromAddress.toLowerCase()) {
-        throw new Error('Hostinger SMTP requires the sender mailbox itself. Create the info mailbox; its ahmed alias is not an SMTP login.');
-    }
+    // Like WRG's mailer, authenticate with the real mailbox and keep the visible
+    // sender separate. The SMTP provider authorizes the mailbox's alias at send time.
     const password = env.SMTP_PASSWORD || '';
     if (!password.trim() || /^(REPLACE_|YOUR_|<)/i.test(password)) throw new Error('SMTP_PASSWORD must be set privately in the hosting environment.');
     const fromName = env.EMAIL_FROM_NAME?.trim() || 'Skillverse Global';

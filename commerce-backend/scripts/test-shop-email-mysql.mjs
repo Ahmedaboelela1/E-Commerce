@@ -29,7 +29,7 @@ test('real Vendure verification/reset emails use the durable SQL queue across re
         SUPERADMIN_USERNAME:'email-ci@example.invalid',SUPERADMIN_PASSWORD:'synthetic-ci-admin-password-12345678',
         COOKIE_SECRET:'synthetic-ci-cookie-secret-at-least-32-characters',HOSTINGER_INITIALIZE_COUNTRIES:'YES_NEW_EMPTY_DATABASE',
         ASSET_UPLOAD_DIR:'/tmp/skillverse-email-ci-assets-'+port,EMAIL_ENABLED:'true',SMTP_HOST:'127.0.0.1',SMTP_PORT:String(smtp.port),
-        SMTP_SECURE:'false',SMTP_USER:'info@skillverse-global.com',SMTP_PASSWORD:'synthetic-ci-email-password',
+        SMTP_SECURE:'false',SMTP_USER:'ahmed@skillverse-global.com',SMTP_PASSWORD:'synthetic-ci-email-password',
         EMAIL_FROM_ADDRESS:'info@skillverse-global.com',EMAIL_ADMIN_TO:'ops@example.invalid',
         STOREFRONT_PUBLIC_URL:'https://shop.example.invalid',BACKEND_PUBLIC_URL:'https://api.example.invalid'};
     let channelToken='';
@@ -96,6 +96,7 @@ test('real Vendure verification/reset emails use the durable SQL queue across re
     const settled=await query('mutation($id:ID!){settlePayment(id:$id){__typename ... on Payment{state} ... on ErrorResult{message}}}',{id:inspected.data.order.payments[0].id},adminToken,true);assert.equal(settled.data.settlePayment.state,'Settled');
     await waitFor(async()=>{const [[n]]=await control.query('SELECT COUNT(*) AS n FROM '+database+'.job_record WHERE queueName=? AND state<>?',['send-email','COMPLETED']);return Number(n.n)===0;},'Emails did not finish');
     assert.equal(smtp.messages.length,4,'cash collection must not send a duplicate initial request acknowledgement');
+    assert.ok(smtp.authUsers.length>0);assert.ok(smtp.authUsers.every(user=>user==='ahmed@skillverse-global.com'));
 
     const [jobs]=await control.query('SELECT state,attempts FROM '+database+'.job_record WHERE queueName=?',['send-email']);
     assert.ok(jobs.every(j=>j.state==='COMPLETED'));assert.ok(jobs.some(j=>Number(j.attempts)>1),'temporary SMTP rejection must retry through the real SQL queue');

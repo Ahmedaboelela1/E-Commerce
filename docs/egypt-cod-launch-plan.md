@@ -18,7 +18,7 @@
 
 ## Mandatory go-live gates
 
-- Configure and **end-to-end test transactional email sending** in Vendure, including registration verification, resend verification, password reset and the customer's order acknowledgement. The backend now has an opt-in EmailPlugin and SMTP configuration; follow `docs/shop-transactional-email.md`, including the real info mailbox requirement. Leave `authOptions.requireVerification=true` and checkout disabled until actual delivery is verified.
+- Configure and **end-to-end test transactional email sending** in Vendure, including registration verification, resend verification, password reset and the customer's order acknowledgement. The backend now has an opt-in EmailPlugin and SMTP configuration; follow `docs/shop-transactional-email.md` to authenticate as ahmed and send using its existing info alias. Leave `authOptions.requireVerification=true` and checkout disabled until actual delivery is verified.
 - Correct image storage: set the persistent `ASSET_UPLOAD_DIR`, reupload missing INEX product pictures, and test after another redeploy.
 - Confirm **real** stock counts and stock locations; do not accept orders for zero-stock variants unless a genuine preorder policy is implemented.
 - Add an Egypt Channel **Shipping Method** with a real approved rate and destination eligibility; check taxes and whether listed EGP prices include tax.

@@ -12,10 +12,10 @@ Add opt-in transactional email for account verification, password reset, address
 
 ## Invariants
 
-- Email is disabled unless explicitly configured. Missing credentials, invalid TLS settings or Hostinger alias/login mismatch fail visibly when enabled. Verification stays required and checkout stays disabled pending launch readiness.
+- Email is disabled unless explicitly configured. Missing credentials or invalid TLS settings fail visibly when enabled. Verification stays required and checkout stays disabled pending launch readiness.
 - No email delivery changes payment, confirmation or fulfillment state. COD emails say that no cash has been collected, and shipment follows manual telephone confirmation.
 - Authentication messages go only to the account address, with correct encoded storefront/Dashboard token links. Staff receive a separate order alert, never a copy of account tokens.
-- Hostinger requires an actual info mailbox for SMTP; do not silently send with ahmed as the visible From address or assume its alias works in external applications.
+- Authenticate using the real ahmed mailbox and display its configured info alias, matching WRG's separation of SMTP credentials and sender. Verify provider acceptance and inbox delivery; never silently substitute a different From address.
 
 ## Integration guidance
 

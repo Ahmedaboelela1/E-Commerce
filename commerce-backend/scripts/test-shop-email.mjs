@@ -10,17 +10,18 @@ const {RequestContext,Channel,User,NativeAuthenticationMethod,EntityHydrator,
 const {EmailProcessor}=require('@vendure/email-plugin/lib/src/email-processor');
 const {readShopEmailSettings}=require('../dist/email-settings.js');
 const {createShopEmailOptions}=require('../dist/shop-email.js');
-const base={EMAIL_ENABLED:'true',APP_ENV:'production',SMTP_USER:'info@skillverse-global.com',SMTP_PASSWORD:'isolated-test-only',
+const base={EMAIL_ENABLED:'true',APP_ENV:'production',SMTP_USER:'ahmed@skillverse-global.com',SMTP_PASSWORD:'isolated-test-only',
     EMAIL_FROM_ADDRESS:'info@skillverse-global.com',EMAIL_ADMIN_TO:'ops@example.invalid',
     STOREFRONT_PUBLIC_URL:'https://shop.example.invalid',BACKEND_PUBLIC_URL:'https://api.example.invalid'};
 
-test('SMTP is opt-in and validates Hostinger sender, TLS, trusted links and headers without exposing secrets',()=>{
+test('SMTP is opt-in and supports a separate mailbox login and sender while validating TLS, links and headers',()=>{
     assert.equal(readShopEmailSettings({}),undefined);
     assert.equal(readShopEmailSettings({...base,EMAIL_ENABLED:'false'}),undefined);
     const settings=readShopEmailSettings(base);
     assert.equal(settings.host,'smtp.hostinger.com');assert.equal(settings.port,465);assert.equal(settings.secure,true);
+    assert.equal(settings.user,'ahmed@skillverse-global.com');assert.equal(settings.fromAddress,'info@skillverse-global.com');
     const tls=readShopEmailSettings({...base,SMTP_PORT:'587',SMTP_SECURE:'false'});assert.equal(tls.requireTLS,true);
-    for(const change of [{SMTP_USER:'ahmed@skillverse-global.com'},{SMTP_PASSWORD:''},
+    for(const change of [{SMTP_USER:'not-an-email'},{SMTP_PASSWORD:''},
         {SMTP_PASSWORD:'REPLACE_ME'},{SMTP_PORT:'25'},{SMTP_PORT:'465',SMTP_SECURE:'false'},
         {STOREFRONT_PUBLIC_URL:'https://shop.example.invalid@evil.test/path'},
         {STOREFRONT_PUBLIC_URL:'http://shop.example.invalid'},
@@ -71,6 +72,7 @@ test('real handlers, MJML rendering and SMTP deliver correct account links and s
         }
     }
     assert.equal(smtp.messages.length,6);
+    assert.ok(smtp.authUsers.length>0);assert.ok(smtp.authUsers.every(user=>user==='ahmed@skillverse-global.com'));
     const verification=options.handlers.find(h=>h.type==='email-verification');
     const german=ctx('de');const localized=await verification.handle(new AccountRegistrationEvent(german,account),await options.globalTemplateVars(german,injector),injector);
     assert.equal(new URL(localized.templateVars.actionUrl).pathname,'/de/verify');

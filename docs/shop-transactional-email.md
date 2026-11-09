@@ -5,18 +5,17 @@
 The desired visible sender is **Skillverse Global <info@skillverse-global.com>**.
 Staff alerts go separately to **ahmed@skillverse-global.com**. Replies go to info.
 
-The owner confirmed that Hostinger Email currently has an ahmed mailbox and an
-info alias. Hostinger documents alias sending **in Webmail only**; it is not a
-supported sender identity for an external SMTP application. To use the info
-address in these automated messages, arrange an **independent info mailbox** in
-hPanel, preserving the existing ahmed mailbox and its messages. Coordinate the
-alias-to-mailbox change with Hostinger; this code does not delete aliases or
-create/buy mailboxes. Optionally configure incoming info mail forwarding to
-ahmed after the mailbox is working.
+The owner confirmed that Hostinger Email has an ahmed mailbox and an info alias,
+and reports that WRG sites already send using aliases. Follow the same separation
+as WRG's mailer: authenticate with the real mailbox, ahmed, and set the visible
+From and Reply-To to info. Do not create a new info mailbox or change the alias.
 
-Do not put the ahmed password into an info SMTP login. If using Hostinger SMTP,
-the application rejects mismatched SMTP_USER and EMAIL_FROM_ADDRESS. There is
-no silent fallback which shows a different sender to customers.
+WRG's `jordan-notification-mailer.js` passes SMTP_USER to Nodemailer's auth and
+sets the sender independently. Its `docs/jordan-registration-access-and-email.md`
+documents an osama mailbox login with info as the sender. The store likewise
+allows these addresses to differ; the SMTP provider decides whether the mailbox
+is authorized to send using its alias. No silent sender substitution is made.
+Check actual delivery and headers on this domain before opening orders.
 
 Provider references:
 - https://www.hostinger.com/support/how-to-send-emails-from-an-email-alias-using-hostinger-mail-web-app/
@@ -24,7 +23,7 @@ Provider references:
 
 ## Backend variables (api.skillverse-global.com only)
 
-After the info mailbox is ready, set these on the **Vendure API backend** in
+Set these on the **Vendure API backend** in
 Hostinger Environment Variables. Keep existing database/session/asset settings.
 Put the actual password only in the private SMTP_PASSWORD field, never in chat,
 the storefront variables, Git or a committed .env file.
@@ -34,8 +33,8 @@ EMAIL_ENABLED=true
 SMTP_HOST=smtp.hostinger.com
 SMTP_PORT=465
 SMTP_SECURE=true
-SMTP_USER=info@skillverse-global.com
-SMTP_PASSWORD=<info mailbox password, entered privately in hPanel>
+SMTP_USER=ahmed@skillverse-global.com
+SMTP_PASSWORD=<ahmed mailbox password, entered privately in hPanel>
 EMAIL_FROM_ADDRESS=info@skillverse-global.com
 EMAIL_FROM_NAME=Skillverse Global
 EMAIL_ADMIN_TO=ahmed@skillverse-global.com
@@ -81,8 +80,9 @@ automatic phone-confirmed status, automatic shipment or settlement.
 
 ## Verification before opening orders
 
-1. Confirm info can authenticate to SMTP as its own mailbox and that SPF/DKIM
-   records match Hostinger's email dashboard. This change does not edit DNS.
+1. Confirm ahmed authenticates to SMTP and Hostinger accepts its configured info
+   alias as the sender. Check SPF/DKIM against the email dashboard; this change
+   does not edit DNS or mailbox settings.
 2. Keep checkout disabled. Register an agreed test customer; inspect From and
    Reply-To in the received mail, activate the account and sign in. Confirm token
    links use the shop domain. Test password reset and resend verification.
@@ -96,5 +96,6 @@ automatic phone-confirmed status, automatic shipment or settlement.
    the recipient inbox/spam too. Staff should monitor Orders directly.
 
 Local automated tests use disposable MySQL and a loopback SMTP capture server.
+They verify authentication as ahmed while messages show info in From/Reply-To.
 They do not connect to Hostinger SMTP, send real mail, change mailboxes or prove
 that the managed Hostinger process stays awake while idle.
