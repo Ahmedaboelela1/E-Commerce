@@ -14,17 +14,26 @@ export async function registerAction(prevState: { error?: string } | undefined, 
     const password = formData.get('password') as string;
     const redirectTo = formData.get('redirectTo') as string | null;
 
+    // Registration is the first step of the phone-confirmed Egypt checkout.
+    // Server-side validation prevents bypassing the browser form.
     if (!emailAddress || !password) {
         return {error: t('emailPasswordRequired')};
+    }
+    if (!firstName?.trim() || !lastName?.trim()) {
+        return {error: 'First and last name are required'};
+    }
+    const phone = phoneNumber?.trim() || '';
+    if (!/^\\+?[0-9 ()-]{10,20}$/.test(phone) || phone.replace(/\\D/g, '').length < 10) {
+        return {error: 'Enter a valid phone number so we can confirm your order'};
     }
 
 
     const result = await mutate(RegisterCustomerAccountMutation, {
         input: {
             emailAddress,
-            firstName: firstName || undefined,
-            lastName: lastName || undefined,
-            phoneNumber: phoneNumber || undefined,
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            phoneNumber: phone,
             password,
         }
     });
