@@ -1,13 +1,12 @@
 'use server';
 
-import {mutate} from '@/platform/vendure/api';
-import {SetOrderShippingAddressMutation, SetOrderBillingAddressMutation, SetOrderShippingMethodMutation, AddPaymentToOrderMutation, TransitionOrderToStateMutation, SetCustomerForOrderMutation} from '@/features/checkout/graphql';
+import {mutate, query} from '@/platform/vendure/api';
+import {SetOrderShippingAddressMutation, SetOrderBillingAddressMutation, SetOrderShippingMethodMutation, AddPaymentToOrderMutation, TransitionOrderToStateMutation} from '@/features/checkout/graphql';
 import {CreateCustomerAddressMutation} from '@/features/account/graphql';
 import {revalidatePath, updateTag} from 'next/cache';
 import {redirect} from '@/platform/i18n/navigation';
 import {getLocale} from 'next-intl/server';
 import {getActiveCustomer} from '@/features/account/customer';
-import {query} from '@/platform/vendure/api';
 import {GetActiveOrderForCheckoutQuery} from '@/features/checkout/graphql';
 
 interface AddressInput {
