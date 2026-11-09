@@ -9,15 +9,18 @@ import {skillverseEmailHandlers} from './skillverse-email-handlers';
  * Production variables are held in hPanel for api.skillverse-global.com only.
  */
 export function getSkillverseEmailPlugins() {
-    if (process.env.SMTP_ENABLED !== 'true') {
+    // No additional SMTP_ENABLED toggle is required in Hostinger. The email
+    // integration starts automatically after both mailbox credentials exist.
+    // Keep the production API online when the account has not yet been wired.
+    const user = process.env.SMTP_USER?.trim() || '';
+    const password = process.env.SMTP_PASSWORD?.trim() || '';
+    const isRealSecret = (value: string) => Boolean(value) && !/^(?:REPLACE_|YOUR_|<)/i.test(value);
+    if (!user || !isRealSecret(password)) {
         if (process.env.APP_ENV !== 'dev') {
-            console.warn('Transactional email is OFF (SMTP_ENABLED is not true); customer registration cannot be launched.');
+            console.warn('Transactional email not configured: add SMTP_USER and SMTP_PASSWORD to the API website environment; checkout remains disabled.');
         }
         return [];
     }
-
-    const user = process.env.SMTP_USER!;
-    const password = process.env.SMTP_PASSWORD!;
     const port = Number(process.env.SMTP_PORT || 465);
     const storefront = (process.env.STOREFRONT_PUBLIC_URL || '').replace(/\/$/, '');
     const backend = (process.env.BACKEND_PUBLIC_URL || '').replace(/\/$/, '');
