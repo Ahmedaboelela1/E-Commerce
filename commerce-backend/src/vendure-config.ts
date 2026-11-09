@@ -7,6 +7,7 @@ import {
 import {AssetServerPlugin} from '@vendure/asset-server-plugin';
 import {DashboardPlugin} from '@vendure/dashboard/plugin';
 import {getAssetUploadDirectory} from './asset-upload-directory';
+import {getSkillverseEmailPlugins} from './skillverse-smtp-plugin';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const PORT = Number(process.env.PORT || 3000);
@@ -70,6 +71,7 @@ export const config: VendureConfig = {
             assetUploadDir: getAssetUploadDirectory(),
             assetUrlPrefix: process.env.ASSET_URL_PREFIX || undefined,
         }),
+        ...getSkillverseEmailPlugins(),
         DashboardPlugin.init({
             route: 'dashboard',
             appDir: IS_DEV

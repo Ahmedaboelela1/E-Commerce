@@ -34,6 +34,8 @@ jobs:
         run: npm run build
       - name: Verify safe persistent asset upload path
         run: node --test scripts/test-asset-directory.mjs
+      - name: Check bundled SMTP templates and customer/staff email semantics
+        run: node --test scripts/test-skillverse-smtp.mjs
       - name: Build official Vendure Dashboard
         run: npm run dashboard:build
       - name: Verify Dashboard static assets
