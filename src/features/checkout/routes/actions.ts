@@ -9,6 +9,13 @@ import {getLocale} from 'next-intl/server';
 import {getActiveCustomer} from '@/features/account/customer';
 import {GetActiveOrderForCheckoutQuery} from '@/features/checkout/graphql';
 
+function requireCallbackPhone(number: string): void {
+    const count = (number || '').replace(/[^0-9]/g, '').length;
+    if (count < 10 || count > 15) {
+        throw new Error('Enter a valid mobile number so our team can confirm your order');
+    }
+}
+
 interface AddressInput {
     fullName: string;
     streetLine1: string;
@@ -25,6 +32,7 @@ export async function setShippingAddress(
     shippingAddress: AddressInput,
     useSameForBilling: boolean
 ) {
+    requireCallbackPhone(shippingAddress.phoneNumber);
     const shippingResult = await mutate(
         SetOrderShippingAddressMutation,
         {input: shippingAddress},
@@ -63,6 +71,7 @@ export async function setShippingMethod(shippingMethodId: string) {
 }
 
 export async function createCustomerAddress(address: AddressInput) {
+    requireCallbackPhone(address.phoneNumber);
     const result = await mutate(
         CreateCustomerAddressMutation,
         {input: address},
@@ -110,8 +119,10 @@ export async function placeOrder(paymentMethodCode: string) {
     const {data} = await query(GetActiveOrderForCheckoutQuery, {}, {useAuthToken: true});
     const order = data.activeOrder;
     if (!order?.lines?.length || !order.shippingAddress?.phoneNumber?.trim() || !order.shippingAddress.streetLine1?.trim()) {
+        // A missing delivery contact must not reach the payment step.
         throw new Error('A delivery address and phone number are required for telephone confirmation');
     }
+    requireCallbackPhone(order.shippingAddress.phoneNumber);
     if (order.currencyCode !== 'EGP') {
         throw new Error('Cash on delivery is available only for the Egypt store');
     }
