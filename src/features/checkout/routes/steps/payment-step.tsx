@@ -34,7 +34,7 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
       <h3 className="font-semibold">{t('selectPaymentMethod')}</h3>
 
       <RadioGroup value={selectedPaymentMethodCode || ''} onValueChange={setSelectedPaymentMethodCode}>
-        {paymentMethods.map((method) => (
+        {paymentMethods.filter((method) => method.code === 'cash-on-delivery').map((method) => (
           <Label key={method.code} htmlFor={method.code} className="cursor-pointer">
             <Card className="p-4">
               <div className="flex items-center gap-3">
@@ -51,6 +51,15 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
           </Label>
         ))}
       </RadioGroup>
+
+      <div className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground" aria-disabled="true">
+        <div className="flex items-center gap-2 font-medium">
+          <CreditCard className="h-5 w-5" />
+          {t('visaComingSoon')}
+        </div>
+        <p className="mt-1">{t('visaNotAvailable')}</p>
+      </div>
+      <p className="text-sm text-muted-foreground">{t('phoneConfirmationNote')}</p>
 
       <Button
         onClick={handleContinue}
