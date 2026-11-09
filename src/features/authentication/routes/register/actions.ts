@@ -23,7 +23,7 @@ export async function registerAction(prevState: { error?: string } | undefined, 
         return {error: 'First and last name are required'};
     }
     const phone = phoneNumber?.trim() || '';
-    if (!/^\\+?[0-9 ()-]{10,20}$/.test(phone) || phone.replace(/\\D/g, '').length < 10) {
+    if (!/^\+?[0-9 ()-]{10,20}$/.test(phone) || phone.replace(/\D/g, '').length < 10) {
         return {error: 'Enter a valid phone number so we can confirm your order'};
     }
 
