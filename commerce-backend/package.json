@@ -23,7 +23,8 @@
     "@vendure/asset-server-plugin": "3.8.0",
     "mysql2": "^3.15.2",
     "dotenv": "^17.2.3",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "@vendure/email-plugin": "3.8.0"
   },
   "devDependencies": {
     "@vendure/cli": "3.8.0",
