@@ -15,13 +15,14 @@ interface PaymentStepProps {
 export default function PaymentStep({ onComplete }: PaymentStepProps) {
   const t = useTranslations('Checkout');
   const { paymentMethods, selectedPaymentMethodCode, setSelectedPaymentMethodCode } = useCheckout();
+  const codMethods = paymentMethods.filter((method) => method.code === 'cash-on-delivery');
 
   const handleContinue = () => {
     if (!selectedPaymentMethodCode) return;
     onComplete();
   };
 
-  if (paymentMethods.length === 0) {
+  if (codMethods.length === 0) {
     return (
       <div className="text-center py-8">
         <p className="text-muted-foreground">{t('noPaymentMethods')}</p>
@@ -34,7 +35,7 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
       <h3 className="font-semibold">{t('selectPaymentMethod')}</h3>
 
       <RadioGroup value={selectedPaymentMethodCode || ''} onValueChange={setSelectedPaymentMethodCode}>
-        {paymentMethods.filter((method) => method.code === 'cash-on-delivery').map((method) => (
+        {codMethods.map((method) => (
           <Label key={method.code} htmlFor={method.code} className="cursor-pointer">
             <Card className="p-4">
               <div className="flex items-center gap-3">
