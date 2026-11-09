@@ -2,7 +2,7 @@ import net from 'node:net';
 
 /** Loopback-only SMTP fixture. No message leaves the test machine. */
 export async function smtpCapture({rejectFirst = false} = {}) {
-    const messages = [], connections = new Set();
+    const messages = [], authUsers = [], connections = new Set();
     let remainingFailures = rejectFirst ? 1 : 0;
     const server = net.createServer(socket => {
         connections.add(socket); socket.on('close', () => connections.delete(socket));
@@ -21,7 +21,11 @@ export async function smtpCapture({rejectFirst = false} = {}) {
                         lines = []; recipients = [];
                     } else lines.push(line.startsWith('..') ? line.slice(1) : line);
                 } else if (/^EHLO|^HELO/i.test(line)) socket.write('250-localhost\r\n250 AUTH PLAIN\r\n');
-                else if (/^AUTH /i.test(line)) socket.write('235 Authentication successful\r\n');
+                else if (/^AUTH PLAIN /i.test(line)) {
+                    // Retain only the username, never the password from the AUTH payload.
+                    authUsers.push(Buffer.from(line.slice(11),'base64').toString('utf8').split('\0')[1]);
+                    socket.write('235 Authentication successful\r\n');
+                }
                 else if (/^MAIL FROM:/i.test(line)) { recipients = []; socket.write('250 OK\r\n'); }
                 else if (/^RCPT TO:/i.test(line)) { recipients.push(line.slice(8).trim()); socket.write('250 OK\r\n'); }
                 else if (/^DATA$/i.test(line)) { data = true; socket.write('354 End with a dot\r\n'); }
@@ -32,5 +36,5 @@ export async function smtpCapture({rejectFirst = false} = {}) {
         socket.on('error', () => {});
     });
     await new Promise(resolve => server.listen(0,'127.0.0.1',resolve));
-    return {port:server.address().port,messages,async close(){for(const socket of connections)socket.destroy();await new Promise(resolve=>server.close(resolve));}};
+    return {port:server.address().port,messages,authUsers,async close(){for(const socket of connections)socket.destroy();await new Promise(resolve=>server.close(resolve));}};
 }
