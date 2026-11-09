@@ -65,8 +65,8 @@ const templates: Record<string, string> = {
     `),
     // The default Vendure order-confirmation event fires when the payment is
     // *settled*. COD requests instead use order-request-received below.
-    'order-confirmation': layout('Cash payment recorded', `
-        <mj-text>The payment for order <strong>#{{ order.code }}</strong> has been recorded.</mj-text>
+    'order-confirmation': layout('Payment received', `
+        <mj-text>Payment for order <strong>#{{ order.code }}</strong> has been recorded as received.</mj-text>
         <mj-text>Amount: <strong>{{ formatMoney order.totalWithTax order.currencyCode 'en' }}</strong></mj-text>
         <mj-text>Thank you for choosing Skillverse Global.</mj-text>
     `),
