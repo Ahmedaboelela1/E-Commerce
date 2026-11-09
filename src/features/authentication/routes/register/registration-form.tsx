@@ -25,7 +25,7 @@ function createRegistrationSchema(t: ReturnType<typeof useTranslations<'Auth'>>)
         emailAddress: z.string().email(t('emailValidation')),
         firstName: z.string().trim().min(1, t('firstNameRequired')),
         lastName: z.string().trim().min(1, t('lastNameRequired')),
-        phoneNumber: z.string().trim().refine((value) => /^\\+?[0-9 ()-]{10,20}$/.test(value) && value.replace(/\\D/g, '').length >= 10, t('phoneValidation')),
+        phoneNumber: z.string().trim().refine((value) => /^\+?[0-9 ()-]{10,20}$/.test(value) && value.replace(/\D/g, '').length >= 10, t('phoneValidation')),
         password: z.string().min(8, t('passwordMinLength')),
         confirmPassword: z.string(),
     }).refine((data) => data.password === data.confirmPassword, {
