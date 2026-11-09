@@ -12,9 +12,9 @@
   },
   "OrderConfirmation": {
     "pageTitle": "Order Confirmation",
-    "orderConfirmed": "Order Confirmed!",
-    "thankYou": "Thank you for your order. Your order number is",
-    "emailConfirmation": "We'll send you an email with your order details and tracking information.",
+    "orderConfirmed": "Order request received",
+    "thankYou": "Your order request number is",
+    "emailConfirmation": "Our team will call you to confirm the order before shipping. No payment has been collected.",
     "orderSummary": "Order Summary",
     "qty": "Qty: {quantity}",
     "total": "Total",
