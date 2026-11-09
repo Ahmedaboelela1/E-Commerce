@@ -6,6 +6,9 @@ import {CreateCustomerAddressMutation} from '@/features/account/graphql';
 import {revalidatePath, updateTag} from 'next/cache';
 import {redirect} from '@/platform/i18n/navigation';
 import {getLocale} from 'next-intl/server';
+import {getActiveCustomer} from '@/features/account/customer';
+import {query} from '@/platform/vendure/api';
+import {GetActiveOrderForCheckoutQuery} from '@/features/checkout/graphql';
 
 interface AddressInput {
     fullName: string;
@@ -95,18 +98,29 @@ export async function transitionToArrangingPayment() {
 }
 
 export async function placeOrder(paymentMethodCode: string) {
+    if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
+        throw new Error('Ordering is not enabled yet');
+    }
+    if (paymentMethodCode !== 'cash-on-delivery') {
+        throw new Error('Card payments are not available yet');
+    }
+    const customer = await getActiveCustomer();
+    if (!customer) {
+        throw new Error('Please register and sign in before ordering');
+    }
+    const {data} = await query(GetActiveOrderForCheckoutQuery, {}, {useAuthToken: true});
+    const order = data.activeOrder;
+    if (!order?.lines?.length || !order.shippingAddress?.phoneNumber?.trim() || !order.shippingAddress.streetLine1?.trim()) {
+        throw new Error('A delivery address and phone number are required for telephone confirmation');
+    }
+    if (order.currencyCode !== 'EGP') {
+        throw new Error('Cash on delivery is available only for the Egypt store');
+    }
     // First, transition the order to ArrangingPayment state
     await transitionToArrangingPayment();
 
-    // Prepare metadata based on payment method
+    // COD creates an Authorized (uncollected) payment; no demo card metadata.
     const metadata: Record<string, unknown> = {};
-
-    // For standard payment, include the required fields
-    if (paymentMethodCode === 'standard-payment') {
-        metadata.shouldDecline = false;
-        metadata.shouldError = false;
-        metadata.shouldErrorOnSettle = false;
-    }
 
     // Add payment to the order
     const result = await mutate(
@@ -154,6 +168,8 @@ export type SetCustomerForOrderResult =
 export async function setCustomerForOrder(
     input: GuestCustomerInput
 ): Promise<SetCustomerForOrderResult> {
+    // No guest checkout, even if this legacy server action is called directly.
+    return {success: false, errorCode: 'GUEST_CHECKOUT_DISABLED', message: 'Create an account and sign in before checkout'};
     const result = await mutate(
         SetCustomerForOrderMutation,
         { input },
