@@ -24,4 +24,25 @@ export function assertRuntimeEnvironment(): void {
         }
         if (!process.env.CORS_ORIGINS?.trim()) throw new Error('CORS_ORIGINS required in production.');
     }
+
+    if (process.env.SMTP_ENABLED === 'true') {
+        // Never output the values; these are separate from the Hostinger login.
+        for (const key of ['SMTP_USER', 'SMTP_PASSWORD']) {
+            const value = process.env[key]?.trim();
+            if (!value || /^(?:REPLACE_|YOUR_|<)/i.test(value)) {
+                throw new Error(key + ' must be configured in the API backend secrets before enabling SMTP.');
+            }
+        }
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(process.env.SMTP_USER!)) {
+            throw new Error('SMTP_USER must be the complete Hostinger mailbox email address.');
+        }
+        if (![465, 587].includes(Number(process.env.SMTP_PORT || '465'))) {
+            throw new Error('SMTP_PORT must be 465 (SSL/TLS) or 587 (STARTTLS).');
+        }
+        if (!process.env.STOREFRONT_PUBLIC_URL?.startsWith('https://') &&
+            process.env.APP_ENV !== 'dev') {
+            throw new Error('STOREFRONT_PUBLIC_URL must be HTTPS for email verification links.');
+        }
+
+    }
 }
