@@ -28,10 +28,14 @@ export default async function CheckoutPage() {
     if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
         return redirect({href: '/search', locale});
     }
+    // Skillverse accepts orders from registered, verified, signed-in users only.
+    const registeredCustomer = await getActiveCustomer();
+    if (!registeredCustomer) {
+        return redirect({href: '/sign-in?redirectTo=/checkout', locale});
+    }
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Checkout'});
-    const customer = await getActiveCustomer();
-    const isGuest = !customer;
+    const isGuest = false;
 
     const [orderRes, addressesRes, countries, shippingMethodsRes, paymentMethodsRes] =
         await Promise.all([
