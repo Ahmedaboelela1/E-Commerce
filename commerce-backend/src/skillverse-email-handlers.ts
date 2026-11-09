@@ -32,8 +32,12 @@ export const staffOrderRequestHandler = new EmailEventListener('order-request-ad
     .setSubject('Skillverse Egypt - Call to confirm order #{{ order.code }}')
     .setTemplateVars(event => ({order: event.order}));
 
+// An alias is not an SMTP identity on Hostinger. Authenticate/send from
+// the actual mailbox while directing customer replies to the info@ alias.
+const replyTo = () => ({replyTo: process.env.SMTP_REPLY_TO || 'info@skillverse-global.com'});
+
 export const skillverseEmailHandlers = [
     ...defaultEmailHandlers,
     customerOrderRequestHandler,
     staffOrderRequestHandler,
-];
+].map(handler => handler.setOptionalAddressFields(replyTo));
