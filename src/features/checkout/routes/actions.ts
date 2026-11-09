@@ -166,33 +166,12 @@ export type SetCustomerForOrderResult =
     | { success: false; errorCode: 'UNKNOWN'; message: string };
 
 export async function setCustomerForOrder(
-    input: GuestCustomerInput
+    _input: GuestCustomerInput
 ): Promise<SetCustomerForOrderResult> {
-    // No guest checkout, even if this legacy server action is called directly.
-    return {success: false, errorCode: 'GUEST_CHECKOUT_DISABLED', message: 'Create an account and sign in before checkout'};
-    const result = await mutate(
-        SetCustomerForOrderMutation,
-        { input },
-        { useAuthToken: true }
-    );
-
-    const response = result.data.setCustomerForOrder;
-
-    switch (response.__typename) {
-        case 'Order': {
-            const locale = await getLocale();
-            revalidatePath(`/${locale}/checkout`);
-            return { success: true };
-        }
-        case 'AlreadyLoggedInError':
-            return { success: true };
-        case 'EmailAddressConflictError':
-            return { success: false, errorCode: 'EMAIL_CONFLICT', message: response.message };
-        case 'GuestCheckoutError':
-            return { success: false, errorCode: 'GUEST_CHECKOUT_DISABLED', message: response.message };
-        case 'NoActiveOrderError':
-            return { success: false, errorCode: 'NO_ACTIVE_ORDER', message: response.message };
-        default:
-            return { success: false, errorCode: 'UNKNOWN', message: 'Unknown error' };
-    }
+    // Guest checkout is permanently disabled for Skillverse Egypt.
+    return {
+        success: false,
+        errorCode: 'GUEST_CHECKOUT_DISABLED',
+        message: 'Please create a verified account and sign in before ordering',
+    };
 }
