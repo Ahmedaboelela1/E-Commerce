@@ -2,7 +2,7 @@
 
 **Status: code ready to review, not connected to the real mailbox until the owner enters private settings on Hostinger and tests end-to-end.**
 
-The customer mailbox exists already: **info@skillverse-global.com**. Do not create another email account, disable verification, paste its password into GitHub or ChatGPT, or use the Hostinger hPanel login password.
+The real Hostinger mailbox is **ahmed@skillverse-global.com**. **info@skillverse-global.com** is an alias pointing to the same inbox, NOT an independent mailbox. Do not create another email account, disable verification, paste its password into GitHub or ChatGPT, or use the Hostinger hPanel login password.
 
 ## 1. Read Hostinger's live mailbox SMTP settings
 
@@ -11,13 +11,23 @@ In hPanel → **Emails** → **Manage** for `skillverse-global.com` → **Connec
 - SMTP Host: `smtp.hostinger.com`
 - Port: **465**
 - Encryption: **SSL/TLS**
-- Username: **info@skillverse-global.com**
+- Username: **ahmed@skillverse-global.com** (the actual mailbox, NOT the info@ alias)
 - Password: the mailbox's actual password, entered in **private Hostinger Environment Variables** only
 - If port 465 fails, try port **587 with STARTTLS** (this code automatically selects requireTLS=true on 587).
 
 Source: https://www.hostinger.com/support/1575756-how-to-get-email-account-configuration-details-for-hostinger-email/
 
 Verify mailbox sending and receiving in Hostinger Webmail before testing Vendure.
+
+## Hostinger alias limitation
+
+Hostinger documents sending from an alias in its own Webmail **only**, not from an external SMTP app. For Vendure, authenticate and send with the real mailbox `ahmed@skillverse-global.com`; use `SMTP_REPLY_TO=info@skillverse-global.com` so customer responses return to the company alias (same inbox). You may set `ORDER_NOTIFICATION_EMAIL=info@skillverse-global.com` to receive order alerts.
+
+The sender visible in the customer's email will be **Skillverse Global <ahmed@skillverse-global.com>**, not info@. To send automatically with **info@ in the From header**, create a **separate, actual** info@ mailbox on Hostinger (not necessary for the current stage).
+
+Hostinger sources:
+- https://www.hostinger.com/support/how-to-send-emails-from-an-email-alias-using-hostinger-mail-web-app/
+- https://www.hostinger.com/support/1575756-how-to-get-email-account-configuration-details-for-hostinger-email/
 
 ## 2. Add variables on the **API BACKEND** application
 
@@ -26,8 +36,9 @@ In hPanel, select **api.skillverse-global.com → Node.js app → Environment Va
 ```dotenv
 SMTP_HOST=smtp.hostinger.com
 SMTP_PORT=465
-SMTP_USER=info@skillverse-global.com
+SMTP_USER=ahmed@skillverse-global.com
 SMTP_PASSWORD=<mailbox-password-set-privately-in-hPanel>
+SMTP_REPLY_TO=info@skillverse-global.com
 ORDER_NOTIFICATION_EMAIL=info@skillverse-global.com
 STOREFRONT_PUBLIC_URL=https://shop.skillverse-global.com
 BACKEND_PUBLIC_URL=https://api.skillverse-global.com
