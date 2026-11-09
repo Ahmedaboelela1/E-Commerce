@@ -24,6 +24,8 @@ jobs:
           node-version: '22.16.0'
       - name: Validate provision script syntax
         run: node --check scripts/provision-egypt.mjs
+      - name: Validate Egypt cash on delivery safety
+        run: node --test scripts/check-cod-checkout.test.mjs
       - name: Verify staged catalog data
         run: node --test scripts/check-catalog.test.mjs
       - name: Install backend dependencies
