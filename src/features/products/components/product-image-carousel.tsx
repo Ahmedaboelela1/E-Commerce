@@ -37,7 +37,7 @@ export function ProductImageCarousel({ images }: ProductImageCarouselProps) {
             {/* Main Image */}
             <div className="relative aspect-square bg-muted rounded-xl overflow-hidden group cursor-crosshair">
                 <Image
-                    src={images[currentIndex].source}
+                    src={images[currentIndex].preview || images[currentIndex].source}
                     alt={`Product image ${currentIndex + 1}`}
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-500"
