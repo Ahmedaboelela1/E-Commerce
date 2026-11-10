@@ -2,7 +2,7 @@
   "OrderStatus": {
     "AddingItems": "Adding Items",
     "ArrangingPayment": "Arranging Payment",
-    "PaymentAuthorized": "Awaiting phone confirmation / cash on delivery",
+    "PaymentAuthorized": "Awaiting confirmation / payment verification",
     "PaymentSettled": "Payment Settled",
     "PartiallyShipped": "Partially Shipped",
     "Shipped": "Shipped",
@@ -14,12 +14,14 @@
     "pageTitle": "Order Confirmation",
     "orderConfirmed": "Order request received",
     "thankYou": "Your order request number is",
-    "emailConfirmation": "Our team will call you to confirm the order before shipping. No payment has been collected.",
+    "emailConfirmation": "Our team will call you to confirm the order before shipping. Offline payment is confirmed manually.",
     "orderSummary": "Order Summary",
     "qty": "Qty: {quantity}",
     "total": "Total",
     "shippingAddress": "Shipping Address",
     "continueShopping": "Continue Shopping",
-    "viewOrders": "View Orders"
+    "viewOrders": "View Orders",
+    "transferInstructions": "InstaPay / Bank Transfer",
+    "transferVerificationNote": "Use {code} as your transfer reference and contact us afterwards. Payment awaits staff verification before shipping."
   }
 }

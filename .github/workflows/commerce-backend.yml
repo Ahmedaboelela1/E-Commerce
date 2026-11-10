@@ -36,6 +36,8 @@ jobs:
         run: npm run build:server
       - name: Verify transactional email configuration, rendering and SMTP failures
         run: node --test scripts/test-shop-email.mjs
+      - name: Verify manual transfer and governorate delivery rules
+        run: node --test scripts/test-egypt-offline-payments.mjs
       - name: Verify safe persistent asset upload path
         run: node --test scripts/test-asset-directory.mjs
       - name: Build official Vendure Dashboard

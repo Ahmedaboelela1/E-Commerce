@@ -52,6 +52,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
   const [dialogOpen, setDialogOpen] = useState(addresses.length === 0 && !isGuest);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [addressError, setAddressError] = useState<string | null>(null);
   const [useSameForBilling, setUseSameForBilling] = useState(true);
 
   const getDefaultFormValues = (): Partial<AddressFormData> => {
@@ -86,6 +87,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
   const handleSelectExistingAddress = async () => {
     if (!selectedAddressId) return;
 
+    setAddressError(null);
     setLoading(true);
     try {
       const selectedAddress = addresses.find(a => a.id === selectedAddressId);
@@ -106,7 +108,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
       router.refresh();
       onComplete();
     } catch (error) {
-      console.error('Error setting address:', error);
+      setAddressError(error instanceof Error ? error.message : t('unexpectedError'));
     } finally {
       setLoading(false);
     }
@@ -129,13 +131,14 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
   };
 
   const onSubmitGuestAddress = async (data: AddressFormData) => {
+    setAddressError(null);
     setLoading(true);
     try {
       await setShippingAddress(data, useSameForBilling);
       router.refresh();
       onComplete();
     } catch (error) {
-      console.error('Error setting address:', error);
+      setAddressError(error instanceof Error ? error.message : t('unexpectedError'));
     } finally {
       setLoading(false);
     }
@@ -144,6 +147,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
   if (isGuest) {
     return (
       <div className="space-y-6">
+        {addressError && <p role="alert" className="text-sm text-destructive">{addressError}</p>}
         <form onSubmit={handleSubmit(onSubmitGuestAddress)}>
           <FieldGroup>
             <div className="grid grid-cols-2 gap-4">
@@ -187,8 +191,8 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
               <Field>
                 <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
                 <Input
-                  id="province"
-                  {...register('province')}
+                  id="province" placeholder={t('governorateExample')}
+                  {...register('province', { required: t('governorateRequired') })}
                 />
                 <FieldError>{errors.province?.message}</FieldError>
               </Field>
@@ -257,6 +261,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
   return (
     <div className="space-y-6">
+      {addressError && <p role="alert" className="text-sm text-destructive">{addressError}</p>}
       {addresses.length > 0 && (
         <div className="space-y-4">
           <h3 className="font-semibold">{t('selectSavedAddress')}</h3>
@@ -364,8 +369,8 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
                       <Field>
                         <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
                         <Input
-                          id="province"
-                          {...register('province')}
+                          id="province" placeholder={t('governorateExample')}
+                          {...register('province', { required: t('governorateRequired') })}
                         />
                         <FieldError>{errors.province?.message}</FieldError>
                       </Field>
@@ -481,8 +486,8 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
                   <Field>
                     <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
                     <Input
-                      id="province"
-                      {...register('province')}
+                      id="province" placeholder={t('governorateExample')}
+                      {...register('province', { required: t('governorateRequired') })}
                     />
                     <FieldError>{errors.province?.message}</FieldError>
                   </Field>

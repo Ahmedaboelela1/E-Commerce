@@ -55,8 +55,10 @@ test('real Vendure verification/reset emails use the durable SQL queue across re
     await query('mutation($input:CreateTaxRateInput!){createTaxRate(input:$input){id}}',{input:{name:'CI zero tax',enabled:true,value:0,categoryId:tax.data.createTaxCategory.id,zoneId:setup.data.zones.items.find(z=>z.name==='Egypt').id}},adminToken,true);
     const product=await query('mutation($input:CreateProductInput!){createProduct(input:$input){id}}',{input:{enabled:true,translations:[{languageCode:'en',name:'CI robot',slug:'ci-robot',description:'Isolated test product'}]}},adminToken,true);
     const variant=await query('mutation($input:[CreateProductVariantInput!]!){createProductVariants(input:$input){id}}',{input:[{productId:product.data.createProduct.id,sku:'CI-ROBOT',price:10000,taxCategoryId:tax.data.createTaxCategory.id,trackInventory:'TRUE',stockLevels:[{stockLocationId:stock.id,stockOnHand:5}],translations:[{languageCode:'en',name:'CI robot'}]}]},adminToken,true);
-    const shipping=await query('mutation($input:CreateShippingMethodInput!){createShippingMethod(input:$input){id}}',{input:{code:'ci-manual-delivery',fulfillmentHandler:'manual-fulfillment',checker:{code:'default-shipping-eligibility-checker',arguments:[{name:'orderMinimum',value:'0'}]},calculator:{code:'default-shipping-calculator',arguments:[{name:'rate',value:'2500'},{name:'includesTax',value:'auto'},{name:'taxRate',value:'0'}]},translations:[{languageCode:'en',name:'CI manual delivery',description:'Test fixture only'}]}},adminToken,true);
+    const shipping=await query('mutation($input:CreateShippingMethodInput!){createShippingMethod(input:$input){id}}',{input:{code:'ci-cairo-delivery',fulfillmentHandler:'manual-fulfillment',checker:{code:'egypt-governorate',arguments:[{name:'governorate',value:'cairo'}]},calculator:{code:'default-shipping-calculator',arguments:[{name:'rate',value:'11500'},{name:'includesTax',value:'include'},{name:'taxRate',value:'0'}]},translations:[{languageCode:'en',name:'CI Cairo delivery',description:'Test fixture only'}]}},adminToken,true);
+    const alexShipping=await query('mutation($input:CreateShippingMethodInput!){createShippingMethod(input:$input){id}}',{input:{code:'ci-alex-delivery',fulfillmentHandler:'manual-fulfillment',checker:{code:'egypt-governorate',arguments:[{name:'governorate',value:'alexandria'}]},calculator:{code:'default-shipping-calculator',arguments:[{name:'rate',value:'17500'},{name:'includesTax',value:'include'},{name:'taxRate',value:'0'}]},translations:[{languageCode:'en',name:'CI Alexandria delivery',description:'Synthetic rate, not a production price'}]}},adminToken,true);
     await query('mutation($input:CreatePaymentMethodInput!){createPaymentMethod(input:$input){id}}',{input:{code:'cash-on-delivery',enabled:true,handler:{code:'cash-on-delivery',arguments:[]},translations:[{languageCode:'en',name:'CI COD',description:'Test fixture only'}]}},adminToken,true);
+    await query('mutation($input:CreatePaymentMethodInput!){createPaymentMethod(input:$input){id}}',{input:{code:'bank-transfer',enabled:true,handler:{code:'bank-transfer',arguments:[]},translations:[{languageCode:'en',name:'CI InstaPay / Bank Transfer',description:'CI beneficiary / bank details — test fixture only'}]}},adminToken,true);
 
     const signup=await query('mutation($input:RegisterCustomerInput!){ registerCustomerAccount(input:$input){ __typename ... on Success{success} ... on ErrorResult{message} } }',{input:{emailAddress:'customer@example.invalid',password:'customer-ci-password-12345',firstName:'CI',lastName:'Customer',phoneNumber:'01012345678'}});
     assert.equal(signup.data.registerCustomerAccount.__typename,'Success');
@@ -81,7 +83,11 @@ test('real Vendure verification/reset emails use the durable SQL queue across re
     const customerToken=after.token;assert.ok(customerToken);
     const added=await query('mutation($id:ID!){addItemToOrder(productVariantId:$id,quantity:1){__typename ... on Order{id code} ... on ErrorResult{message}}}',{id:variant.data.createProductVariants[0].id},customerToken);
     assert.equal(added.data.addItemToOrder.__typename,'Order',JSON.stringify(added.data));const order=added.data.addItemToOrder;
-    const addressed=await query('mutation($input:CreateAddressInput!){setOrderShippingAddress(input:$input){__typename ... on ErrorResult{message}}}',{input:{fullName:'CI Customer',streetLine1:'CI test street',city:'Cairo',countryCode:'EG',phoneNumber:'01012345678'}},customerToken);assert.equal(addressed.data.setOrderShippingAddress.__typename,'Order');
+    const addressed=await query('mutation($input:CreateAddressInput!){setOrderShippingAddress(input:$input){__typename ... on ErrorResult{message}}}',{input:{fullName:'CI Customer',streetLine1:'CI test street',city:'Cairo',province:'Cairo',countryCode:'EG',phoneNumber:'01012345678'}},customerToken);assert.equal(addressed.data.setOrderShippingAddress.__typename,'Order');
+    const eligible=await query('{eligibleShippingMethods{id priceWithTax}}',{},customerToken);
+    assert.deepEqual(eligible.data.eligibleShippingMethods.map(m=>[m.id,m.priceWithTax]),[[shipping.data.createShippingMethod.id,11500]]);
+    const wrongGovernorate=await query('mutation($id:ID!){setOrderShippingMethod(shippingMethodId:[$id]){__typename ... on ErrorResult{message}}}',{id:alexShipping.data.createShippingMethod.id},customerToken);
+    assert.notEqual(wrongGovernorate.data.setOrderShippingMethod.__typename,'Order','a crafted request must not choose another governorate rate');
     const delivery=await query('mutation($id:ID!){setOrderShippingMethod(shippingMethodId:[$id]){__typename ... on ErrorResult{message}}}',{id:shipping.data.createShippingMethod.id},customerToken);assert.equal(delivery.data.setOrderShippingMethod.__typename,'Order');
     const transitioned=await query('mutation{transitionOrderToState(state:"ArrangingPayment"){__typename ... on ErrorResult{message}}}',{},customerToken);assert.equal(transitioned.data.transitionOrderToState.__typename,'Order',JSON.stringify(transitioned.data));
     const placed=await query('mutation{addPaymentToOrder(input:{method:"cash-on-delivery",metadata:{}}){__typename ... on Order{state payments{id state method}} ... on ErrorResult{message}}}',{},customerToken);
@@ -96,6 +102,36 @@ test('real Vendure verification/reset emails use the durable SQL queue across re
     const settled=await query('mutation($id:ID!){settlePayment(id:$id){__typename ... on Payment{state} ... on ErrorResult{message}}}',{id:inspected.data.order.payments[0].id},adminToken,true);assert.equal(settled.data.settlePayment.state,'Settled');
     await waitFor(async()=>{const [[n]]=await control.query('SELECT COUNT(*) AS n FROM '+database+'.job_record WHERE queueName=? AND state<>?',['send-email','COMPLETED']);return Number(n.n)===0;},'Emails did not finish');
     assert.equal(smtp.messages.length,4,'cash collection must not send a duplicate initial request acknowledgement');
+    // Editing a governorate's rate affects a new cart, never the existing order.
+    await query('mutation($input:UpdateShippingMethodInput!){updateShippingMethod(input:$input){id}}',{input:{id:shipping.data.createShippingMethod.id,translations:[{languageCode:'en',name:'CI Cairo delivery',description:'Test fixture only'}],calculator:{code:'default-shipping-calculator',arguments:[{name:'rate',value:'14500'},{name:'includesTax',value:'include'},{name:'taxRate',value:'0'}]}}},adminToken,true);
+    const oldOrder=await query('query($id:ID!){order(id:$id){shippingWithTax totalWithTax}}',{id:order.id},adminToken,true);
+    assert.equal(oldOrder.data.order.shippingWithTax,11500);assert.equal(oldOrder.data.order.totalWithTax,21500);
+    // A second real order uses a manual transfer and the Arabic governorate name.
+    const bankAdded=await query('mutation($id:ID!){addItemToOrder(productVariantId:$id,quantity:1){__typename ... on Order{id code} ... on ErrorResult{message}}}',{id:variant.data.createProductVariants[0].id},customerToken);
+    assert.equal(bankAdded.data.addItemToOrder.__typename,'Order');const bankOrder=bankAdded.data.addItemToOrder;
+    await query('mutation($input:CreateAddressInput!){setOrderShippingAddress(input:$input){__typename ... on ErrorResult{message}}}',{input:{fullName:'CI Customer',streetLine1:'CI bank order street',city:'Unknown',province:'not-a-governorate',countryCode:'EG',phoneNumber:'01012345678'}},customerToken);
+    const unknownEligible=await query('{eligibleShippingMethods{id}}',{},customerToken);assert.equal(unknownEligible.data.eligibleShippingMethods.length,0,'an unknown governorate must not receive a fabricated flat rate');
+    await query('mutation($input:CreateAddressInput!){setOrderShippingAddress(input:$input){__typename ... on ErrorResult{message}}}',{input:{fullName:'CI Customer',streetLine1:'CI bank order street',city:'Cairo',province:'القاهرة',countryCode:'EG',phoneNumber:'01012345678'}},customerToken);
+    const arabicEligible=await query('{eligibleShippingMethods{id priceWithTax}}',{},customerToken);
+    assert.deepEqual(arabicEligible.data.eligibleShippingMethods.map(m=>[m.id,m.priceWithTax]),[[shipping.data.createShippingMethod.id,14500]]);
+    await query('mutation($id:ID!){setOrderShippingMethod(shippingMethodId:[$id]){__typename ... on ErrorResult{message}}}',{id:shipping.data.createShippingMethod.id},customerToken);
+    await query('mutation{transitionOrderToState(state:"ArrangingPayment"){__typename ... on ErrorResult{message}}}',{},customerToken);
+    const bankPlaced=await query('mutation{addPaymentToOrder(input:{method:"bank-transfer",metadata:{public:{paymentInstructions:"malicious override"}}}){__typename ... on Order{state totalWithTax shippingWithTax payments{id state method metadata}} ... on ErrorResult{message}}}',{},customerToken);
+    assert.equal(bankPlaced.data.addPaymentToOrder.__typename,'Order',JSON.stringify(bankPlaced.data));
+    const bankResult=bankPlaced.data.addPaymentToOrder;
+    assert.equal(bankResult.state,'PaymentAuthorized');assert.equal(bankResult.shippingWithTax,14500);assert.equal(bankResult.totalWithTax,24500);
+    assert.equal(bankResult.payments[0].state,'Authorized');
+    assert.match(bankResult.payments[0].metadata.public.paymentInstructions,/CI beneficiary/);
+    assert.equal(bankResult.payments[0].metadata.transferVerification,undefined,'private metadata is not exposed in Shop API');
+    await waitFor(()=>smtp.messages.length===6,'Transfer customer/admin emails were not delivered');
+    const bankEmails=smtp.messages.slice(4);assert.ok(bankEmails.some(m=>m.recipients.join(',').includes('customer@example.invalid')));assert.ok(bankEmails.some(m=>m.recipients.join(',').includes('ops@example.invalid')));
+    for(const message of bankEmails){const raw=message.raw.replace(/=\r\n/g,'').replace(/=3D/g,'=');assert.match(raw,/Bank Transfer|bank transfer|InstaPay/i);assert.ok(!raw.includes('malicious override'));}
+    const pendingBank=await query('query($id:ID!){order(id:$id){state payments{id state metadata} fulfillments{id}}}',{id:bankOrder.id},adminToken,true);
+    assert.equal(pendingBank.data.order.fulfillments.length,0);assert.equal(pendingBank.data.order.payments[0].metadata.transferVerification,'pending');
+    const bankSettled=await query('mutation($id:ID!){settlePayment(id:$id){__typename ... on Payment{state metadata} ... on ErrorResult{message}}}',{id:bankResult.payments[0].id},adminToken,true);
+    assert.equal(bankSettled.data.settlePayment.state,'Settled');assert.equal(bankSettled.data.settlePayment.metadata.transferVerification,'verified');
+    await waitFor(async()=>{const [[n]]=await control.query('SELECT COUNT(*) AS n FROM '+database+'.job_record WHERE queueName=? AND state<>?',['send-email','COMPLETED']);return Number(n.n)===0;},'Bank emails did not finish');
+    assert.equal(smtp.messages.length,6,'manual verification must not resend the initial acknowledgement');
     assert.ok(smtp.authUsers.length>0);assert.ok(smtp.authUsers.every(user=>user==='ahmed@skillverse-global.com'));
 
     const [jobs]=await control.query('SELECT state,attempts FROM '+database+'.job_record WHERE queueName=?',['send-email']);

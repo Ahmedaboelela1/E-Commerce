@@ -137,6 +137,7 @@ export const GetOrderDetailQuery = graphql(`
                 amount
                 state
                 transactionId
+                metadata
                 createdAt
             }
             lines {

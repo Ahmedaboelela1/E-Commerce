@@ -10,6 +10,7 @@ import {getRouteLocale} from '@/platform/i18n/server';
 import {getTranslations} from 'next-intl/server';
 import {query} from '@/platform/vendure/api';
 import {graphql} from '@/platform/vendure/graphql';
+import {getTransferInstructions} from '@/features/checkout/offline-payments';
 
 const GetOrderByCodeQuery = graphql(`
     query GetOrderByCode($code: String!) {
@@ -19,6 +20,11 @@ const GetOrderByCodeQuery = graphql(`
             state
             totalWithTax
             currencyCode
+            payments {
+                method
+                state
+                metadata
+            }
             lines {
                 id
                 productVariant {
@@ -65,6 +71,7 @@ export async function OrderConfirmation({paramsPromise}: OrderConfirmationProps)
     if (!order) {
         notFound();
     }
+    const transferInstructions = getTransferInstructions(order.payments);
 
     return (
         <div className="container mx-auto px-4 py-16">
@@ -84,6 +91,16 @@ export async function OrderConfirmation({paramsPromise}: OrderConfirmationProps)
                         {t('emailConfirmation')}
                     </p>
                 </div>
+
+                {transferInstructions && (
+                    <Card className="mb-6">
+                        <CardHeader><CardTitle>{t('transferInstructions')}</CardTitle></CardHeader>
+                        <CardContent>
+                            <p className="whitespace-pre-wrap text-sm">{transferInstructions}</p>
+                            <p className="mt-3 text-sm text-muted-foreground">{t('transferVerificationNote', {code: order.code})}</p>
+                        </CardContent>
+                    </Card>
+                )}
 
                 <Card className="mb-6">
                     <CardHeader>

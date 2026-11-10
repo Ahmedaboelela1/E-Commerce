@@ -55,18 +55,22 @@ export function createShopEmailOptions(settings: ShopEmailSettings): EmailPlugin
             await injector.get(EntityHydrator).hydrate(event.ctx, event.order, {
                 relations: ['customer', 'payments', 'lines.productVariant', 'shippingLines.shippingMethod'],
             });
-            if (!event.order.customer?.emailAddress || !event.order.payments?.some(payment =>
-                payment.method === 'cash-on-delivery' && payment.state === 'Authorized')) {
-                throw new Error('COD notification requires an authorized cash-on-delivery request and a customer.');
+            const payment = event.order.payments?.find(payment =>
+                ['cash-on-delivery', 'bank-transfer'].includes(payment.method) && payment.state === 'Authorized');
+            if (!event.order.customer?.emailAddress || !payment) {
+                throw new Error('Order notification requires an authorized offline payment and a customer.');
             }
-            return {order: event.order};
+            return {order: event.order, payment};
         })
         .setRecipient(event => admin ? settings.adminAddress : event.data.order.customer!.emailAddress)
         .setFrom(from).setOptionalAddressFields(replyTo)
-        .setSubject(admin ? 'New COD request #{{orderCode}} — call before shipping' : 'Order request #{{orderCode}} — awaiting phone confirmation')
+        .setSubject(admin ? 'New order request #{{orderCode}} — call before shipping' : 'Order request #{{orderCode}} — awaiting phone confirmation')
         .setTemplateVars((event, globals) => {
             const order = event.data.order;
             return {
+                isBankTransfer: event.data.payment.method === 'bank-transfer',
+                paymentInstructions: event.data.payment.method === 'bank-transfer'
+                    ? String(event.data.payment.metadata?.public?.paymentInstructions || '') : '',
                 orderCode: order.code,
                 customerName: [order.customer?.firstName, order.customer?.lastName].filter(Boolean).join(' '),
                 customerEmail: order.customer!.emailAddress,
@@ -81,11 +85,14 @@ export function createShopEmailOptions(settings: ShopEmailSettings): EmailPlugin
                 adminOrderUrl: new URL(`/dashboard/orders/${encodeURIComponent(String(order.id))}`, settings.backendUrl).href,
             };
         })
-        .setPlainTextBody((_event, vars) => `${admin ? 'New COD request — call before shipping' : 'Order request received — we will call you'}\n` +
+        .setPlainTextBody((_event, vars) => `${admin ? 'New order request — call before shipping' : 'Order request received — we will call you'}\n` +
             `رقم الطلب: ${vars.orderCode}\n${vars.customerName}\nPhone / الهاتف: ${vars.phone}\n` +
             (admin ? `Email: ${vars.customerEmail}\nAddress: ${vars.address}\n` : '') +
-            `Total / الإجمالي: ${vars.orderTotal}\nShipping is arranged manually after phone confirmation. No cash has been collected.\n` +
-            `الشحن يدوي بعد التأكيد التليفوني. لم يتم تحصيل أي مبلغ.\n${admin ? vars.adminOrderUrl : vars.orderUrl}`)
+            `Total / الإجمالي: ${vars.orderTotal}\nShipping is arranged manually after phone confirmation.\n` +
+            (vars.isBankTransfer
+                ? `Bank transfer / InstaPay: awaiting manual verification. Use order ${vars.orderCode} as reference.\n${vars.paymentInstructions}\nالتحويل بانتظار مراجعة الإدارة؛ لا يعتبر مدفوعًا قبل التحقق.\n`
+                : 'No cash has been collected. الشحن يدوي بعد التأكيد التليفوني. لم يتم تحصيل أي مبلغ.\n') +
+            `${admin ? vars.adminOrderUrl : vars.orderUrl}`)
         .setMetadata(event => ({kind: admin ? 'cod-admin-alert' : 'cod-order-request', orderId: event.order.id}));
 
     return {
