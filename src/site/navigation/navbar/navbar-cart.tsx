@@ -9,10 +9,6 @@ export async function NavbarCart() {
     cacheTag('cart');
     cacheTag('active-order');
 
-    if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
-        return null;
-    }
-
     const orderResult = await query(GetActiveOrderQuery, undefined, {
         useAuthToken: true,
         tags: ['cart'],

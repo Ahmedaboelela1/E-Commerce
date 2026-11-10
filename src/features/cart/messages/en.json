@@ -11,6 +11,7 @@
     "calculatedAtCheckout": "Calculated at checkout",
     "total": "Total",
     "proceedToCheckout": "Proceed to Checkout",
+    "checkoutComingSoon": "Your cart is a draft. Checkout is not open yet; no order has been submitted.",
     "secureCheckout": "Secure Checkout",
     "promotionCode": "Promotion Code",
     "enterDiscountCode": "Enter your discount code below",

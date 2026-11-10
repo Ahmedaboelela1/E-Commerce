@@ -18,6 +18,7 @@ type ActiveOrder = {
 
 export async function OrderSummary({activeOrder}: { activeOrder: ActiveOrder }) {
     const t = await getTranslations('Cart');
+    const checkoutEnabled = process.env.NEXT_PUBLIC_ENABLE_CHECKOUT === 'true';
     return (
         <div className="border rounded-xl p-6 bg-card sticky top-24 shadow-sm">
             <h2 className="text-xl font-bold mb-4">{t('orderSummary')}</h2>
@@ -60,12 +61,20 @@ export async function OrderSummary({activeOrder}: { activeOrder: ActiveOrder }) 
                 </div>
             </div>
 
-            <Button render={<Link href="/checkout" />} nativeButton={false} className="w-full" size="lg">{t('proceedToCheckout')}</Button>
-
-            <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-muted-foreground">
-                <Lock className="h-3 w-3" />
-                <span>{t('secureCheckout')}</span>
-            </div>
+            {checkoutEnabled ? (
+                <>
+                    <Button render={<Link href="/checkout" />} nativeButton={false} className="w-full" size="lg">{t('proceedToCheckout')}</Button>
+                    <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-muted-foreground">
+                        <Lock className="h-3 w-3" />
+                        <span>{t('secureCheckout')}</span>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <Button disabled className="w-full" size="lg" aria-describedby="checkout-unavailable">{t('proceedToCheckout')}</Button>
+                    <p id="checkout-unavailable" className="mt-3 text-sm text-muted-foreground">{t('checkoutComingSoon')}</p>
+                </>
+            )}
 
             <Button render={<Link href="/" />} nativeButton={false} variant="outline" className="w-full mt-3">{t('continueShopping')}</Button>
         </div>
