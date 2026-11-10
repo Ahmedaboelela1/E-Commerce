@@ -9,12 +9,14 @@ import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Field, FieldLabel, FieldError, FieldGroup } from '@/components/ui/field';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from '@/platform/i18n/navigation';
 import { useCheckout } from '../checkout-provider';
 import { setShippingAddress, createCustomerAddress } from '../actions';
 import { CountrySelect } from '@/components/ui/country-select';
+import {GovernorateSelect} from '@/components/ui/governorate-select';
+import {getEgyptGovernorate} from '@/config/egypt-governorates';
 import {useTranslations} from 'next-intl';
 
 interface ShippingAddressStepProps {
@@ -83,6 +85,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
   const { register, handleSubmit, formState: { errors }, reset, control } = useForm<AddressFormData>({
     defaultValues: getDefaultFormValues()
   });
+  const countryCode = useWatch({control, name: 'countryCode'});
 
   const handleSelectExistingAddress = async () => {
     if (!selectedAddressId) return;
@@ -190,9 +193,24 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
               <Field>
                 <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
-                <Input
-                  id="province" placeholder={t('governorateExample')}
-                  {...register('province', { required: t('governorateRequired') })}
+                <Controller
+                  name="province"
+                  control={control}
+                  rules={{
+                    required: t('governorateRequired'),
+                    validate: value => countryCode !== 'EG' || !!getEgyptGovernorate(value) || t('governorateRequired'),
+                  }}
+                  render={({field}) => countryCode === 'EG' ? (
+                    <GovernorateSelect
+                      {...field}
+                      id="province"
+                      placeholder={t('selectGovernorate')}
+                      disabled={loading || saving}
+                      aria-invalid={!!errors.province}
+                    />
+                  ) : (
+                    <Input {...field} value={field.value || ''} id="province" disabled={loading || saving} />
+                  )}
                 />
                 <FieldError>{errors.province?.message}</FieldError>
               </Field>
@@ -368,9 +386,24 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
                       <Field>
                         <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
-                        <Input
-                          id="province" placeholder={t('governorateExample')}
-                          {...register('province', { required: t('governorateRequired') })}
+                        <Controller
+                          name="province"
+                          control={control}
+                          rules={{
+                            required: t('governorateRequired'),
+                            validate: value => countryCode !== 'EG' || !!getEgyptGovernorate(value) || t('governorateRequired'),
+                          }}
+                          render={({field}) => countryCode === 'EG' ? (
+                            <GovernorateSelect
+                              {...field}
+                              id="province"
+                              placeholder={t('selectGovernorate')}
+                              disabled={loading || saving}
+                              aria-invalid={!!errors.province}
+                            />
+                          ) : (
+                            <Input {...field} value={field.value || ''} id="province" disabled={loading || saving} />
+                          )}
                         />
                         <FieldError>{errors.province?.message}</FieldError>
                       </Field>
@@ -485,9 +518,24 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
                   <Field>
                     <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
-                    <Input
-                      id="province" placeholder={t('governorateExample')}
-                      {...register('province', { required: t('governorateRequired') })}
+                    <Controller
+                      name="province"
+                      control={control}
+                      rules={{
+                        required: t('governorateRequired'),
+                        validate: value => countryCode !== 'EG' || !!getEgyptGovernorate(value) || t('governorateRequired'),
+                      }}
+                      render={({field}) => countryCode === 'EG' ? (
+                        <GovernorateSelect
+                          {...field}
+                          id="province"
+                          placeholder={t('selectGovernorate')}
+                          disabled={loading || saving}
+                          aria-invalid={!!errors.province}
+                        />
+                      ) : (
+                        <Input {...field} value={field.value || ''} id="province" disabled={loading || saving} />
+                      )}
                     />
                     <FieldError>{errors.province?.message}</FieldError>
                   </Field>

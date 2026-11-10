@@ -3,9 +3,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Field, FieldLabel, FieldError, FieldGroup } from '@/components/ui/field';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import { Loader2 } from 'lucide-react';
 import { CountrySelect } from '@/components/ui/country-select';
+import {GovernorateSelect} from '@/components/ui/governorate-select';
+import {getEgyptGovernorate} from '@/config/egypt-governorates';
 import {useTranslations} from 'next-intl';
 
 interface Country {
@@ -67,6 +69,8 @@ export function AddressForm({ countries, address, onSubmit, onCancel, isSubmitti
     }
   });
 
+  const countryCode = useWatch({control, name: 'countryCode'});
+
   const handleFormSubmit = async (data: AddressFormData) => {
     await onSubmit(address ? { ...data, id: address.id } : data);
   };
@@ -117,10 +121,24 @@ export function AddressForm({ countries, address, onSubmit, onCancel, isSubmitti
 
           <Field>
             <FieldLabel htmlFor="province">{t('stateProvince')}</FieldLabel>
-            <Input
-              id="province"
-              {...register('province', { required: t('stateProvinceRequired') })}
-              disabled={isSubmitting}
+            <Controller
+              name="province"
+              control={control}
+              rules={{
+                required: t('stateProvinceRequired'),
+                validate: value => countryCode !== 'EG' || !!getEgyptGovernorate(value) || t('stateProvinceRequired'),
+              }}
+              render={({field}) => countryCode === 'EG' ? (
+                <GovernorateSelect
+                  {...field}
+                  id="province"
+                  placeholder={t('selectGovernorate')}
+                  disabled={isSubmitting}
+                  aria-invalid={!!errors.province}
+                />
+              ) : (
+                <Input {...field} value={field.value || ''} id="province" disabled={isSubmitting} />
+              )}
             />
             <FieldError>{errors.province?.message}</FieldError>
           </Field>
