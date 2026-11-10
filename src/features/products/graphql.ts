@@ -30,6 +30,11 @@ export const GetProductDetailQuery = graphql(`
             name
             description
             slug
+            featuredAsset {
+                id
+                preview
+                source
+            }
             assets {
                 id
                 preview

@@ -65,7 +65,7 @@ export async function generateMetadata({
 
     const description = truncateDescription(product.description);
     const fallbackDescription = t('shopProductAt', {name: product.name, siteName: SITE_NAME});
-    const ogImage = product.assets?.[0]?.preview;
+    const ogImage = product.featuredAsset?.preview || product.assets?.[0]?.preview;
     const ogLocale = toOgLocale(locale);
     const productPath = `/product/${product.slug}`;
 
@@ -119,6 +119,11 @@ export default async function ProductDetailPage({
     // Hide options that belong to a shared option group but have no variant on
     // this product (Vendure 3.6 shared/global option groups).
     const productForDisplay = {...product, optionGroups: getDisplayOptionGroups(product)};
+    // Use the same cover as the catalog, including after replacing an old asset.
+    const featuredAsset = product.featuredAsset;
+    const productImages = featuredAsset
+        ? [featuredAsset, ...product.assets.filter(asset => asset.id !== featuredAsset.id)]
+        : product.assets;
 
     return (
         <>
@@ -149,7 +154,7 @@ export default async function ProductDetailPage({
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                     {/* Left Column: Image Carousel */}
                     <div className="lg:sticky lg:top-20 lg:self-start">
-                        <ProductImageCarousel images={product.assets} />
+                        <ProductImageCarousel images={productImages} />
                     </div>
 
                     {/* Right Column: Product Info */}
