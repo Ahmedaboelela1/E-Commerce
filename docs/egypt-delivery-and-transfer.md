@@ -67,10 +67,9 @@ automatic verification. COD settlement remains after physical cash collection.
 
 - Deploy **both** API and storefront from the compatible updated main revision.
   No new dependencies or database migration are required.
-- This change does not modify the production payment/shipping records or checkout
-  environment setting. Configure records through Dashboard as above. If checkout
-  is still closed, the owner-authorized switch is `NEXT_PUBLIC_ENABLE_CHECKOUT=true`
-  on the **shop**, followed by a storefront rebuild/redeploy.
+- Configure the production payment/shipping records through Dashboard as above.
+  Checkout is enabled in the updated storefront code following the owner's request;
+  the old `NEXT_PUBLIC_ENABLE_CHECKOUT` gate is retired. Redeploy the shop to apply it.
 - Verify two governorates produce their own approved rates, changing province
   updates eligible shipping, and the final total includes the displayed shipping.
 - Test COD and transfer separately: separate customer/staff mail, pending payment,

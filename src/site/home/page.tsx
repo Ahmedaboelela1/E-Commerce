@@ -50,7 +50,7 @@ export default async function Home() {
 
             {/* Starter claims of fast delivery and best prices are not verified.
                 Do not show them until actual Egypt merchant terms exist. */}
-            {process.env.NEXT_PUBLIC_ENABLE_CHECKOUT === 'true' && (
+            {process.env.NEXT_PUBLIC_SHOW_STORE_POLICIES === 'true' && (
                 <>
                 <section className="py-16 md:py-24 bg-muted/30">
                     <div className="container mx-auto px-4">

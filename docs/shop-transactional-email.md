@@ -55,8 +55,8 @@ the same email settings. Keep the worker and API sender configuration consistent
 
 No new database migration is needed. Deploy backend code and dependencies from
 this change. The full repository also includes the pending account-required COD
-storefront changes; deploy the matching storefront code while keeping
-NEXT_PUBLIC_ENABLE_CHECKOUT=false. Enabling email does not enable checkout or
+storefront changes; deploy the matching storefront code. The owner has authorized
+checkout activation and its old launch flag is retired. Email settings do not
 activate/create any payment or shipping method.
 
 ## Messages

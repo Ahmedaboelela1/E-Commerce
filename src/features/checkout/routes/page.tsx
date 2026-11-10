@@ -25,10 +25,6 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function CheckoutPage() {
     const locale = await getRouteLocale();
 
-    // Catalog-only pilot: do not expose checkout before merchant/payment setup.
-    if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
-        return redirect({href: '/search', locale});
-    }
     // Skillverse accepts orders from registered, verified, signed-in users only.
     const registeredCustomer = await getActiveCustomer();
     if (!registeredCustomer) {
