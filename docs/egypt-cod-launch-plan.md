@@ -4,6 +4,11 @@
 
 ## Customer flow
 
+Draft carts and the Add to Cart button are available before checkout opens.
+They do not submit a COD request, send order emails or collect payment. While
+NEXT_PUBLIC_ENABLE_CHECKOUT=false, the cart explains that checkout is closed
+and its checkout button is disabled. Stock availability still applies.
+
 1. Browse INEX catalog in `skillverse-eg` with prices in EGP, add an in-stock product.
 2. Proceed to checkout. Anonymous visitors are redirected to `/sign-in?redirectTo=/checkout` and can navigate to registration. A verified registered account is required; guest checkout is disabled by the storefront and the backend COD handler.
 3. Registration requires first and last name, email, phone number and password. Vendure `requireVerification=true` remains enabled — customer must receive and click a verification email and then log in.
@@ -30,7 +35,7 @@
 
 ## Deployment safety
 
-The backend registers a COD PaymentMethodHandler, but does **not** automatically create a live PaymentMethod in the database. The order pages remain disabled while `NEXT_PUBLIC_ENABLE_CHECKOUT=false`. No real customer, payment or shipping data are seeded by these changes. Both `shop.skillverse-global.com` and `api.skillverse-global.com` must use the compatible updated GitHub code before testing.
+The backend registers a COD PaymentMethodHandler, but does **not** automatically create a live PaymentMethod in the database. Checkout remains disabled while `NEXT_PUBLIC_ENABLE_CHECKOUT=false`; browsing and editing draft carts remain available. No real customer, payment or shipping data are seeded by these changes. Both `shop.skillverse-global.com` and `api.skillverse-global.com` must use the compatible updated GitHub code before testing.
 
 Vendure's two-step payment lifecycle deliberately permits an `Authorized` state with no funds collected; settlement is a later admin action following physical cash receipt.
 

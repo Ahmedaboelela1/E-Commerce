@@ -8,9 +8,8 @@ import {mutate} from '@/platform/vendure/api';
 import {setAuthToken} from '@/platform/vendure/auth-token';
 
 export async function addToCart(variantId: string, quantity = 1) {
-    if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
-        return {success: false, error: 'Online ordering is not available yet'};
-    }
+    // A cart is a draft: adding items does not submit an order or take payment.
+    // Checkout and payment remain guarded in the checkout feature.
     const locale = await getLocale();
     const currencyCode = await getActiveCurrencyCode();
     const t = await getTranslations({locale, namespace: 'Errors'});

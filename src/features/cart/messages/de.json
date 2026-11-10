@@ -11,6 +11,7 @@
     "calculatedAtCheckout": "Wird an der Kasse berechnet",
     "total": "Gesamt",
     "proceedToCheckout": "Zur Kasse",
+    "checkoutComingSoon": "Ihr Warenkorb ist ein Entwurf. Der Checkout ist noch nicht geöffnet; es wurde keine Bestellung aufgegeben.",
     "secureCheckout": "Sicherer Checkout",
     "promotionCode": "Gutscheincode",
     "enterDiscountCode": "Geben Sie Ihren Rabattcode unten ein",
