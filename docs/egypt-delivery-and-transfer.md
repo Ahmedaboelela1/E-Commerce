@@ -30,7 +30,8 @@ screen. New cart calculations use the current rate; placed orders retain their
 existing totals unless an administrator explicitly edits them. The integration
 test verifies this with synthetic rates, not production prices.
 
-Customers must enter their governorate in the address. The checker accepts the
+Customers select their governorate from the 27-option dropdown in checkout and
+saved-address forms. Existing Arabic/English values are recognized. The checker accepts the
 27 governorates in Arabic or English, including common spelling variants, but
 rejects other countries/channels/currencies and mismatched governorates. Unknown
 or unconfigured governorates have no quote; they are not charged an assumed rate.

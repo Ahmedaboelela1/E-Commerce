@@ -86,6 +86,7 @@
     "phoneConfirmationNote": "Your order request will be reviewed. Our team will call your registered phone number to confirm before shipping.",
     "governorateRequired": "Enter your governorate to calculate delivery",
     "transferVerificationNote": "Use your order number as the transfer reference. Payment awaits manual verification; contact us after transferring. Shipping follows phone confirmation and verified receipt.",
-    "governorateExample": "Cairo / القاهرة"
+    "governorateExample": "Cairo / القاهرة",
+    "selectGovernorate": "Select governorate / اختر المحافظة"
   }
 }

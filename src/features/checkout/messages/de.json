@@ -86,6 +86,7 @@
     "phoneConfirmationNote": "Ihre Bestellung wird geprüft. Unser Team ruft Sie vor dem Versand an, um die Bestellung zu bestätigen.",
     "governorateRequired": "Geben Sie Ihr Gouvernement zur Berechnung der Lieferung an",
     "transferVerificationNote": "Verwenden Sie Ihre Bestellnummer als Verwendungszweck. Die Zahlung wird manuell geprüft; kontaktieren Sie uns nach der Überweisung. Versand nach telefonischer Bestätigung und Zahlungseingang.",
-    "governorateExample": "Cairo / القاهرة"
+    "governorateExample": "Cairo / القاهرة",
+    "selectGovernorate": "Gouvernement auswählen / اختر المحافظة"
   }
 }
