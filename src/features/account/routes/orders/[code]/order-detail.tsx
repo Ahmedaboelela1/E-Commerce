@@ -14,6 +14,7 @@ import {formatDate} from '@/platform/i18n/format';
 import {useLocale, useTranslations} from 'next-intl';
 import type {ResultOf} from '@/platform/vendure/graphql';
 import type {GetOrderDetailQuery} from '@/features/account/graphql';
+import {getTransferInstructions} from '@/features/checkout/offline-payments';
 
 type OrderByCode = NonNullable<ResultOf<typeof GetOrderDetailQuery>['orderByCode']>;
 type OrderLineItem = OrderByCode['lines'][number];
@@ -34,6 +35,7 @@ export function OrderDetail({orderPromise}: OrderDetailProps) {
     if (!order) {
         return null;
     }
+    const transferInstructions = getTransferInstructions(order.payments);
 
     return (
         <div>
@@ -180,8 +182,11 @@ export function OrderDetail({orderPromise}: OrderDetailProps) {
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="text-muted-foreground">{t('paymentStatus')}</span>
-                                            <Badge variant="secondary" className="text-xs">{payment.state}</Badge>
+                                            <Badge variant="secondary" className="text-xs">{payment.method === 'bank-transfer' && payment.state === 'Authorized' ? t('bankTransferPending') : payment.state}</Badge>
                                         </div>
+                                        {payment.method === 'bank-transfer' && transferInstructions && (
+                                            <p className="whitespace-pre-wrap rounded-lg bg-muted p-3">{transferInstructions}</p>
+                                        )}
                                         {payment.transactionId && (
                                             <div className="flex justify-between">
                                                 <span className="text-muted-foreground">{t('transactionId')}</span>

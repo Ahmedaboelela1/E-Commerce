@@ -108,6 +108,7 @@
       "errorMessage": "Bitte versuchen Sie es später erneut oder kontaktieren Sie den Support, wenn das Problem weiterhin besteht.",
       "verifying": "E-Mail wird bestätigt...",
       "verifyingDesc": "Bitte warten Sie, während wir Ihre E-Mail-Adresse bestätigen."
-    }
+    },
+    "bankTransferPending": "Überweisungsprüfung ausstehend"
   }
 }

@@ -2,7 +2,7 @@
   "OrderStatus": {
     "AddingItems": "Artikel hinzufügen",
     "ArrangingPayment": "Zahlung wird vorbereitet",
-    "PaymentAuthorized": "Warten auf telefonische Bestätigung / Nachnahme",
+    "PaymentAuthorized": "Bestätigung / Zahlungsprüfung ausstehend",
     "PaymentSettled": "Zahlung abgeschlossen",
     "PartiallyShipped": "Teilweise versendet",
     "Shipped": "Versendet",
@@ -14,12 +14,14 @@
     "pageTitle": "Bestellbestätigung",
     "orderConfirmed": "Bestellanfrage eingegangen",
     "thankYou": "Ihre Bestellanfragenummer lautet",
-    "emailConfirmation": "Unser Team wird Sie vor dem Versand anrufen, um die Bestellung zu bestätigen. Es wurde noch keine Zahlung eingezogen.",
+    "emailConfirmation": "Unser Team ruft Sie vor dem Versand zur Bestätigung an. Offline-Zahlungen werden manuell bestätigt.",
     "orderSummary": "Bestellübersicht",
     "qty": "Menge: {quantity}",
     "total": "Gesamt",
     "shippingAddress": "Lieferadresse",
     "continueShopping": "Weiter einkaufen",
-    "viewOrders": "Bestellungen ansehen"
+    "viewOrders": "Bestellungen ansehen",
+    "transferInstructions": "InstaPay / Banküberweisung",
+    "transferVerificationNote": "Geben Sie {code} als Verwendungszweck an und kontaktieren Sie uns danach. Die Zahlung wird vor dem Versand manuell geprüft."
   }
 }

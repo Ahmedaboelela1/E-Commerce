@@ -8,6 +8,7 @@ import {redirect} from '@/platform/i18n/navigation';
 import {getLocale} from 'next-intl/server';
 import {getActiveCustomer} from '@/features/account/customer';
 import {GetActiveOrderForCheckoutQuery} from '@/features/checkout/graphql';
+import {isOfflinePaymentMethod} from '@/features/checkout/offline-payments';
 
 function requireCallbackPhone(number: string): void {
     const count = (number || '').replace(/[^0-9]/g, '').length;
@@ -33,6 +34,9 @@ export async function setShippingAddress(
     useSameForBilling: boolean
 ) {
     requireCallbackPhone(shippingAddress.phoneNumber);
+    if (shippingAddress.countryCode === 'EG' && !shippingAddress.province?.trim()) {
+        throw new Error('Enter your governorate so we can calculate the delivery price');
+    }
     const shippingResult = await mutate(
         SetOrderShippingAddressMutation,
         {input: shippingAddress},
@@ -109,7 +113,7 @@ export async function placeOrder(paymentMethodCode: string) {
     if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
         throw new Error('Ordering is not enabled yet');
     }
-    if (paymentMethodCode !== 'cash-on-delivery') {
+    if (!isOfflinePaymentMethod(paymentMethodCode)) {
         throw new Error('Card payments are not available yet');
     }
     const customer = await getActiveCustomer();
@@ -129,7 +133,7 @@ export async function placeOrder(paymentMethodCode: string) {
     // First, transition the order to ArrangingPayment state
     await transitionToArrangingPayment();
 
-    // COD creates an Authorized (uncollected) payment; no demo card metadata.
+    // Offline payments await cash collection or manual transfer verification.
     const metadata: Record<string, unknown> = {};
 
     // Add payment to the order

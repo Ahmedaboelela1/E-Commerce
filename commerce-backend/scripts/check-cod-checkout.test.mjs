@@ -13,8 +13,8 @@ test('COD is an unpaid authorization and guards guest checkout', () => {
     assert.match(handler, /ctx.apiType !== 'admin'/);
 });
 
-test('Vendure backend registers only actual offline method without Visa', () => {
+test('Vendure backend registers offline methods without Visa', () => {
     const config = fs.readFileSync('src/vendure-config.ts','utf8');
-    assert.match(config, /paymentMethodHandlers: \[egyptCashOnDeliveryHandler\]/);
+    assert.match(config, /paymentMethodHandlers: \[egyptCashOnDeliveryHandler, egyptBankTransferHandler\]/);
     assert.match(config, /requireVerification: true/);
 });

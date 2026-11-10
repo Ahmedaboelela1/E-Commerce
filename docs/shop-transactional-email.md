@@ -66,12 +66,13 @@ activate/create any payment or shipping method.
 - Customer password reset: /en/reset-password?token=... .
 - Email address change: new address only, /en/account/verify-email?token=... .
 - Administrator password reset: the Dashboard reset page on the API domain.
-- Egypt COD order request: sent on the initial ArrangingPayment →
-  PaymentAuthorized transition only, with an Authorized cash-on-delivery payment
+- Egypt offline order request: sent on the initial ArrangingPayment →
+  PaymentAuthorized transition only, with an Authorized cash-on-delivery or bank-transfer payment
   in the skillverse-eg EGP channel. Customer receives the code, items and total;
   staff separately receive contact/address details and the authenticated Dashboard
   order link. Both messages explicitly describe telephone confirmation and manual
-  shipping. No receipt of cash or shipment is claimed. Later settlement/modification
+  shipping. Bank requests include the snapshotted public receiving instructions
+  and order reference, explicitly awaiting manual verification. No receipt of payment or shipment is claimed. Later settlement/modification
   does not resend this initial acknowledgement.
 
 Templates compile with the server and include HTML and plain text. Customer

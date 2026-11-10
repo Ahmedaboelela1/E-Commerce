@@ -35,7 +35,7 @@
     "streetAddress": "Straße *",
     "apartment": "Wohnung, Suite usw.",
     "city": "Stadt *",
-    "stateProvince": "Bundesland/Kanton",
+    "stateProvince": "Gouvernement *",
     "postalCode": "Postleitzahl *",
     "country": "Land *",
     "phoneNumber": "Telefonnummer *",
@@ -83,6 +83,9 @@
     "items": "Artikel",
     "visaComingSoon": "Visa / Mastercard — demnächst",
     "visaNotAvailable": "Kartenzahlung ist derzeit deaktiviert. Es erfolgt keine Online-Zahlung.",
-    "phoneConfirmationNote": "Ihre Bestellung wird geprüft. Unser Team ruft Sie vor dem Versand an, um die Bestellung zu bestätigen."
+    "phoneConfirmationNote": "Ihre Bestellung wird geprüft. Unser Team ruft Sie vor dem Versand an, um die Bestellung zu bestätigen.",
+    "governorateRequired": "Geben Sie Ihr Gouvernement zur Berechnung der Lieferung an",
+    "transferVerificationNote": "Verwenden Sie Ihre Bestellnummer als Verwendungszweck. Die Zahlung wird manuell geprüft; kontaktieren Sie uns nach der Überweisung. Versand nach telefonischer Bestätigung und Zahlungseingang.",
+    "governorateExample": "Cairo / القاهرة"
   }
 }

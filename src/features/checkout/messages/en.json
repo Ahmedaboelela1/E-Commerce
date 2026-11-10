@@ -35,7 +35,7 @@
     "streetAddress": "Street Address *",
     "apartment": "Apartment, suite, etc.",
     "city": "City *",
-    "stateProvince": "State/Province",
+    "stateProvince": "Governorate *",
     "postalCode": "Postal Code *",
     "country": "Country *",
     "phoneNumber": "Phone Number *",
@@ -83,6 +83,9 @@
     "items": "items",
     "visaComingSoon": "Visa / Mastercard — coming soon",
     "visaNotAvailable": "Card payments are currently disabled; no online payment will be collected.",
-    "phoneConfirmationNote": "Your order request will be reviewed. Our team will call your registered phone number to confirm before shipping."
+    "phoneConfirmationNote": "Your order request will be reviewed. Our team will call your registered phone number to confirm before shipping.",
+    "governorateRequired": "Enter your governorate to calculate delivery",
+    "transferVerificationNote": "Use your order number as the transfer reference. Payment awaits manual verification; contact us after transferring. Shipping follows phone confirmation and verified receipt.",
+    "governorateExample": "Cairo / القاهرة"
   }
 }

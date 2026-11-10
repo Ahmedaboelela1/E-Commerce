@@ -11,6 +11,7 @@ import {CheckoutProvider} from './checkout-provider';
 import {noIndexRobots} from '@/config/metadata';
 import {getActiveCustomer} from '@/features/account/customer';
 import {getAvailableCountriesCached} from '@/features/checkout/countries';
+import {isOfflinePaymentMethod} from '@/features/checkout/offline-payments';
 
 export async function generateMetadata(): Promise<Metadata> {
     const locale = await getRouteLocale();
@@ -60,10 +61,10 @@ export default async function CheckoutPage() {
 
     const addresses = addressesRes.data.activeCustomer?.addresses || [];
     const shippingMethods = shippingMethodsRes.data.eligibleShippingMethods || [];
-    // The Visa gateway is not integrated. Only show our explicit Egypt COD method.
+    // Only show the configured offline methods; card gateways remain unavailable.
     const paymentMethods =
         paymentMethodsRes.data.eligiblePaymentMethods?.filter(
-            (m) => m.isEligible && m.code === 'cash-on-delivery'
+            (m) => m.isEligible && isOfflinePaymentMethod(m.code)
         ) || [];
 
     return (

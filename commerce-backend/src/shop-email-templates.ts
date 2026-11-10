@@ -18,12 +18,19 @@ const templates: Record<string, string> = {
     'email-address-change': action('Verify your new email', 'Confirm this email address for your account.', 'أكّد عنوان بريدك الإلكتروني الجديد لحسابك.'),
     'admin-password-reset': action('Reset administrator password', 'Use the Dashboard to reset your administrator password.', 'استخدم لوحة الإدارة لتعيين كلمة مرور جديدة لحساب الإدارة.'),
     'cod-order-request': layout(`<mj-text font-size="20px">Order request received / استلمنا طلبك</mj-text>
-        <mj-text>Hello {{customerName}}. Our team will call {{phone}} to confirm availability and delivery. Shipping is arranged manually after your confirmation. No payment has been collected.</mj-text>
-        <mj-text align="right"><div dir="rtl">أهلًا {{customerName}}. هنتواصل معاك على {{phone}} لتأكيد الطلب والتوافر والتوصيل. تجهيز الشحن يدوي بعد التأكيد. لم يتم تحصيل أي مبلغ.</div></mj-text>
+        <mj-text>Hello {{customerName}}. Our team will call {{phone}} to confirm availability and delivery. Shipping is arranged manually after your confirmation.</mj-text>
+        <mj-text align="right"><div dir="rtl">أهلًا {{customerName}}. هنتواصل معاك على {{phone}} لتأكيد الطلب والتوافر والتوصيل. تجهيز الشحن يدوي بعد التأكيد.</div></mj-text>
+        {{#if isBankTransfer}}
+        <mj-text>InstaPay / Bank Transfer: awaiting manual verification. Use order {{orderCode}} as the transfer reference. Contact us after transferring; the order is not marked paid until staff verify receipt.</mj-text>
+        <mj-text align="right"><div dir="rtl">التحويل بانتظار المراجعة. استخدم رقم الطلب كمرجع وتواصل معنا بعد التحويل؛ تأكيد التحصيل يتم بعد مراجعة وصول المبلغ.</div></mj-text>
+        <mj-text><div style="white-space:pre-wrap">{{paymentInstructions}}</div></mj-text>
+        {{else}}<mj-text>No payment has been collected. / لم يتم تحصيل أي مبلغ.</mj-text>{{/if}}
         ${summary}<mj-button href="{{orderUrl}}" background-color="#087e55">View your order / عرض الطلب</mj-button>`),
-    'cod-admin-alert': layout(`<mj-text font-size="20px">New COD request / طلب جديد للدفع عند الاستلام</mj-text>
-        <mj-text>Call the customer and record the outcome in Order History / Notes. Arrange shipping manually only after confirmation; record payment settlement only after receiving cash.</mj-text>
-        <mj-text align="right"><div dir="rtl">اتصل بالعميل وسجل نتيجة المكالمة في ملاحظات الطلب. الشحن يدوي بعد التأكيد، والتحصيل يتسجل بعد استلام الفلوس فقط.</div></mj-text>
+    'cod-admin-alert': layout(`<mj-text font-size="20px">New order request / طلب جديد</mj-text>
+        <mj-text>Call the customer and record the outcome in Order History / Notes. Arrange shipping manually only after confirmation.</mj-text>
+        {{#if isBankTransfer}}
+        <mj-text>InstaPay / Bank Transfer: verify actual receipt before settling payment. A customer statement or screenshot alone does not confirm receipt. الشحن بعد تأكيد الطلب والتحقق من وصول التحويل.</mj-text>
+        {{else}}<mj-text>Cash on delivery: record settlement only after receiving cash. التحصيل يتسجل بعد استلام الفلوس فقط.</mj-text>{{/if}}
         <mj-text>Customer / العميل: {{customerName}}<br/>Email / البريد: {{customerEmail}}<br/>Phone / الهاتف: {{phone}}<br/>Address / العنوان: {{address}}</mj-text>
         ${summary}<mj-button href="{{adminOrderUrl}}" background-color="#087e55">Open order in Dashboard / فتح الطلب في الإدارة</mj-button>`),
 };

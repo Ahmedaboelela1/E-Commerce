@@ -2,12 +2,14 @@ import 'dotenv/config';
 import path from 'node:path';
 import {
     DefaultJobQueuePlugin, DefaultSchedulerPlugin, DefaultSearchPlugin,
-    VendureConfig, LanguageCode,
+    VendureConfig, LanguageCode, defaultShippingEligibilityChecker,
 } from '@vendure/core';
 import {AssetServerPlugin} from '@vendure/asset-server-plugin';
 import {DashboardPlugin} from '@vendure/dashboard/plugin';
 import {getAssetUploadDirectory} from './asset-upload-directory';
 import {egyptCashOnDeliveryHandler} from './egypt-cash-on-delivery';
+import {egyptBankTransferHandler} from './egypt-bank-transfer';
+import {egyptGovernorateShippingChecker} from './egypt-governorate-shipping';
 import {EmailPlugin} from '@vendure/email-plugin';
 import {readShopEmailSettings} from './email-settings';
 import {createShopEmailOptions} from './shop-email';
@@ -53,8 +55,9 @@ export const config: VendureConfig = {
     },
     paymentOptions: {
         // No dummy payment provider and no real gateway until local merchant verification.
-        paymentMethodHandlers: [egyptCashOnDeliveryHandler],
+        paymentMethodHandlers: [egyptCashOnDeliveryHandler, egyptBankTransferHandler],
     },
+    shippingOptions: {shippingEligibilityCheckers: [defaultShippingEligibilityChecker, egyptGovernorateShippingChecker]},
     customFields: {
         Product: [
             {name: 'supplierUrl', type: 'string', public: true, nullable: true},
