@@ -138,7 +138,6 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
     };
 
     const isInStock = selectedVariant && selectedVariant.stockLevel !== 'OUT_OF_STOCK';
-    const checkoutEnabled = process.env.NEXT_PUBLIC_ENABLE_CHECKOUT === 'true';
     const canAddToCart = selectedVariant && isInStock;
 
     return (
@@ -212,7 +211,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                 </div>
             )}
 
-            {/* Draft carts remain available while order submission is closed. */}
+            {/* Vendure validates stock when adding to a cart. */}
             <div className="pt-2 space-y-3">
                 <Button
                     size="lg"
@@ -239,11 +238,6 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                     )}
                 </Button>
             </div>
-            {!checkoutEnabled && (
-                <p className="pt-2 text-sm text-muted-foreground">
-                    {t('orderingComingSoon')}
-                </p>
-            )}
 
             {/* SKU */}
             {selectedVariant && (

@@ -4,10 +4,11 @@
 
 ## Customer flow
 
-Draft carts and the Add to Cart button are available before checkout opens.
-They do not submit a COD request, send order emails or collect payment. While
-NEXT_PUBLIC_ENABLE_CHECKOUT=false, the cart explains that checkout is closed
-and its checkout button is disabled. Stock availability still applies.
+The owner authorized checkout activation. The cart now links to checkout without
+the old NEXT_PUBLIC_ENABLE_CHECKOUT launch gate. Cart additions remain drafts;
+only submitting checkout creates an offline order request. Stock, authentication,
+shipping and payment checks still apply. Sample policy sections remain hidden
+unless NEXT_PUBLIC_SHOW_STORE_POLICIES=true is deliberately configured.
 
 1. Browse INEX catalog in `skillverse-eg` with prices in EGP, add an in-stock product.
 2. Proceed to checkout. Anonymous visitors are redirected to `/sign-in?redirectTo=/checkout` and can navigate to registration. A verified registered account is required; guest checkout is disabled by the storefront and the backend COD handler.
@@ -31,11 +32,11 @@ and its checkout button is disabled. Stock availability still applies.
 - Confirm the legal seller, invoices, Egyptian consumer/returns/privacy policies, secure handling of phone/address/customer data and consent for order-related calls.
 - Set up reliable administration alerts for new orders, and test Jobs/restarts under Hostinger Business's limitations. Staff must monitor Orders even if an email is delayed.
 - Test the full flow in a **staging channel** with a newly registered customer, valid mobile, email verification, cart, successful COD request, admin phone-call note, cancellation, stock adjustments, and recording cash collection on receipt. Verify no card collection and no misleading 'Payment Settled' state on request.
-- Only then configure `NEXT_PUBLIC_ENABLE_CHECKOUT=true` on the **shop** Node.js site and redeploy. Do not change that environment setting just because GitHub CI passed.
+- Deploy the owner-authorized checkout activation to the shop; the legacy `NEXT_PUBLIC_ENABLE_CHECKOUT` flag is no longer used. Verify the complete order flow on the actual deployment.
 
 ## Deployment safety
 
-The backend registers COD and bank-transfer handlers, but does **not** automatically create live PaymentMethods in the database. Checkout remains disabled while `NEXT_PUBLIC_ENABLE_CHECKOUT=false`; browsing and editing draft carts remain available. No real customer, payment or shipping data are seeded by these changes. Both `shop.skillverse-global.com` and `api.skillverse-global.com` must use the compatible updated GitHub code before testing.
+The backend registers COD and bank-transfer handlers, but does **not** automatically create live PaymentMethods in the database. Checkout is enabled in the current code after the owner's activation request; legacy `NEXT_PUBLIC_ENABLE_CHECKOUT` hosting values no longer disable it. No real customer, payment or shipping data are seeded by these changes. Both `shop.skillverse-global.com` and `api.skillverse-global.com` must use the compatible updated GitHub code before testing.
 
 Vendure's two-step payment lifecycle deliberately permits an `Authorized` state with no funds collected; settlement is a later admin action following physical cash receipt.
 

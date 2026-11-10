@@ -165,8 +165,8 @@ export default async function ProductDetailPage({
             </div>
 
             {/* Store policies in the starter are sample text. Hide them until
-                actual Egypt shipping/returns terms and checkout are configured. */}
-            {process.env.NEXT_PUBLIC_ENABLE_CHECKOUT === 'true' && (
+                actual Egypt shipping/returns terms are published. */}
+            {process.env.NEXT_PUBLIC_SHOW_STORE_POLICIES === 'true' && (
                 <>
                 {/* Shipping & Trust Badges */}
                 <section className="py-8 mt-8 border-y border-border/50">

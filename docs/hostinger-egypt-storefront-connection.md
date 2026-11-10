@@ -11,7 +11,7 @@ VENDURE_SHOP_API_URL=https://api.skillverse-global.com/shop-api
 VENDURE_CHANNEL_TOKEN=<copy the actual token from Vendure Admin → Settings → Channels → skillverse-eg>
 NEXT_PUBLIC_SITE_URL=https://shop.skillverse-global.com
 NEXT_PUBLIC_SITE_NAME=Skillverse Global Shop
-NEXT_PUBLIC_ENABLE_CHECKOUT=false
+NEXT_PUBLIC_SHOW_STORE_POLICIES=false
 ```
 
 - **Copy the actual Channel Token**, not just `skillverse-eg` (the Code field). The two can differ. It is a channel selector, **not** the Super Admin password.
@@ -37,7 +37,7 @@ Inside the Vendure Dashboard, use **skillverse-eg** in the channel selector and 
 - Find `POP-BOT32i Soccer Robot Kit`, inspect its image, price and product detail page at `/en/product/pop-bot32i-soccer-robot-kit`.
 - EGP prices are drawn from the Egypt Channel; a leftover USD currency cookie from the demo is ignored.
 - The homepage now fetches the channel's actual products rather than hardcoding a demo `electronics` collection.
-- For the pilot, **checkout remains disabled**. No real payment/shipping integration is present and stock quantity is still zero.
+- Checkout is enabled in the current code following the owner's request. Actual governorate delivery and offline payment methods must be configured in Dashboard, and stock must reflect the physically confirmed quantity.
 
 If the storefront shows demo products, confirm which Hostinger website received the updated variables and that the new Next.js deployment completed successfully.
 
@@ -47,7 +47,7 @@ If the shop gets a Next.js image error, check the image preview URL is served un
 
 ## Before enabling checkout
 
-A later workstream must confirm: legally responsible seller, verified inventory, shipping methods/rates, Egypt tax setup, real payments or cash-on-delivery method, email verification and notifications, public terms and returns, plus reliable background job processing. Only then set `NEXT_PUBLIC_ENABLE_CHECKOUT=true` and redeploy the storefront.
+A later workstream must confirm: legally responsible seller, verified inventory, shipping methods/rates, Egypt tax setup, real payments or cash-on-delivery method, email verification and notifications, public terms and returns, plus reliable background job processing. The owner-authorized checkout activation is now part of the storefront code; the legacy `NEXT_PUBLIC_ENABLE_CHECKOUT` gate is retired. Redeploy and verify the complete checkout flow with the real settings.
 
 The official Vendure Shop API uses HTTP POST GraphQL requests and the `vendure-token` header. Visiting the API URL directly in a browser with GET is not a valid product API test.
 

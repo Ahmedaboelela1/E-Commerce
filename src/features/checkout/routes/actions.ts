@@ -110,9 +110,6 @@ export async function transitionToArrangingPayment() {
 }
 
 export async function placeOrder(paymentMethodCode: string) {
-    if (process.env.NEXT_PUBLIC_ENABLE_CHECKOUT !== 'true') {
-        throw new Error('Ordering is not enabled yet');
-    }
     if (!isOfflinePaymentMethod(paymentMethodCode)) {
         throw new Error('Card payments are not available yet');
     }
