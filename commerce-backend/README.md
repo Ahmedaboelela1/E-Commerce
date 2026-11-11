@@ -1,5 +1,7 @@
 # Skillverse Global Commerce Backend (Vendure 3.8)
 
+Bundles, comparisons, school quotations, return cases, product resources and opt-in customer notifications: [SHOP-GROWTH.md](../SHOP-GROWTH.md).
+
 New order operations, private transfer proofs, invoices, inventory alerts, reports and social features: see [SHOP-OPERATIONS.md](../SHOP-OPERATIONS.md) for behavior, deployment and the consolidated owner checklist.
 
 The Next.js storefront remains in the repository root and is deployed independently to Hostinger. This folder is a **separate Vendure server application**, with a background Worker and the official **React Dashboard**, which cannot be deployed just by pointing Hostinger's Next.js deployment at the repo root.

@@ -1,8 +1,12 @@
 'use client';
+import {useLiveVariant} from '@/features/commerce/live-variant';
+import {StockWatchButton} from '@/features/commerce/stock-watch';
+import {CompareButton} from '@/features/commerce/comparison';
 
 import {useState, useMemo, useTransition} from 'react';
 import {useSearchParams} from 'next/navigation';
 import {usePathname, useRouter} from '@/platform/i18n/navigation';
+import {SchoolQuoteLink} from '@/features/commerce/shop-menu';
 import {Button} from '@/components/ui/button';
 import {Label} from '@/components/ui/label';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
@@ -152,8 +156,11 @@ export function ProductInfo({
         });
     };
 
+    const liveVariant = useLiveVariant(selectedVariant?.id);
     const isInStock =
-        selectedVariant && selectedVariant.stockLevel !== 'OUT_OF_STOCK';
+        selectedVariant &&
+        (liveVariant?.available ??
+            selectedVariant.stockLevel !== 'OUT_OF_STOCK');
     const canAddToCart = selectedVariant && isInStock;
 
     return (
@@ -169,8 +176,13 @@ export function ProductInfo({
                 {selectedVariant && (
                     <p className="text-3xl font-bold tracking-tight text-primary mt-4">
                         <Price
-                            value={selectedVariant.priceWithTax}
-                            currencyCode={currencyCode}
+                            value={
+                                liveVariant?.priceWithTax ??
+                                selectedVariant.priceWithTax
+                            }
+                            currencyCode={
+                                liveVariant?.currencyCode ?? currencyCode
+                            }
                         />
                     </p>
                 )}
@@ -261,6 +273,13 @@ export function ProductInfo({
                 </Button>
             </div>
 
+            {selectedVariant && !isInStock && (
+                <StockWatchButton variantId={selectedVariant.id} />
+            )}
+            <div className="flex flex-wrap items-center gap-3">
+                <CompareButton productId={product.id} />
+                <SchoolQuoteLink />
+            </div>
             {/* SKU */}
             <div className="flex items-start gap-3 rounded-xl bg-muted/60 p-4 text-xs leading-6 text-muted-foreground">
                 <Phone className="mt-1 size-4 shrink-0 text-primary" />

@@ -1,3 +1,4 @@
+import {ComparisonProvider} from '@/features/commerce/comparison';
 import type {Metadata, Viewport} from "next";
 import {locale as rootLocale} from "next/root-params";
 import {hasLocale, NextIntlClientProvider} from "next-intl";
@@ -100,12 +101,12 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
             >
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <ThemeProvider>
-                        <CommerceProvider>
+                        <CommerceProvider><ComparisonProvider>
                         <Navbar />
                         {children}
                         <Footer/>
                         <Toaster/>
-                        </CommerceProvider>
+                        </ComparisonProvider></CommerceProvider>
                     </ThemeProvider>
                 </NextIntlClientProvider>
             </body>

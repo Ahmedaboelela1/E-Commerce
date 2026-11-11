@@ -1,3 +1,4 @@
+import {ShopMenu} from '@/features/commerce/shop-menu';
 import {SkillverseBrand} from "@/site/brand/skillverse-brand";
 import {NavigationLink} from '@/site/navigation/navigation-link';
 import {NavbarCollections} from '@/site/navigation/navbar/navbar-collections';
@@ -26,9 +27,8 @@ export function Navbar() {
                             <SkillverseBrand compact />
                         </NavigationLink>
                         <nav className="hidden md:flex items-center gap-6">
-                            <Suspense>
-                                <NavbarCollections/>
-                            </Suspense>
+                            <ShopMenu/>
+                            <div className="hidden 2xl:flex"><Suspense><NavbarCollections/></Suspense></div>
                         </nav>
                     </div>
                     <div className="flex shrink-0 items-center gap-1 sm:gap-2 lg:gap-3">

@@ -111,6 +111,9 @@
     },
     "bankTransferPending": "Überweisungsprüfung ausstehend",
     "selectGovernorate": "Gouvernement auswählen / اختر المحافظة",
-    "wishlist": "Merkliste"
+    "wishlist": "Merkliste",
+    "quotes": "Angebote",
+    "returns": "Rückgaben & Umtausch",
+    "notifications": "E-Mail-Einstellungen"
   }
 }

@@ -1,4 +1,5 @@
 'use client';
+import {CompareButton} from '@/features/commerce/comparison';
 
 import {ArrowUpRight, PackageOpen} from 'lucide-react';
 import {useTranslations} from 'next-intl';
@@ -80,6 +81,7 @@ export function ProductTile({
                     </div>
                 </div>
             </Link>
+            <div className="px-3 pb-3"><CompareButton productId={product.id}/></div>
             <div className="absolute right-4 top-4 sm:right-5 sm:top-5">
                 <WishlistButton productId={product.id} compact />
             </div>
