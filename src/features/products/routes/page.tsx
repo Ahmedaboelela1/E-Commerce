@@ -232,12 +232,7 @@ export default async function ProductDetailPage({
             )}
 
             <div className="container mx-auto px-4 pb-12"><ProductReviews productId={product.id}/></div>
-            {primaryCollection && (
-                <RelatedProducts
-                    collectionSlug={primaryCollection.slug}
-                    currentProductId={product.id}
-                />
-            )}
+            <RelatedProducts key={product.id} currentProductId={product.id}/>
         </>
     );
 }

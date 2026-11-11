@@ -79,3 +79,18 @@ export const GetProductDetailQuery = graphql(`
         }
     }
 `);
+
+export const GetRelatedProductContextQuery = graphql(`
+    query GetRelatedProductContext($id: ID!) {
+        product(id: $id) {
+            id
+            collections { id breadcrumbs { id } }
+        }
+    }
+`);
+
+export const GetRelatedProductsQuery = graphql(`
+    query GetRelatedProducts($input: SearchInput!) {
+        search(input: $input) { items { ...ProductCard } }
+    }
+`, [ProductCardFragment]);

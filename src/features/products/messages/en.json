@@ -58,6 +58,9 @@
     "productDetails": "Product details",
     "orderHelp": "Your order will be confirmed by phone. Delivery is arranged manually after confirmation.",
     "catalogError": "The catalog is taking longer to load. Please retry or browse all products.",
-    "retryCatalog": "Retry"
+    "retryCatalog": "Retry",
+    "exploreMoreProducts": "Explore more products",
+    "relatedProductsIntro": "More products from the same collection.",
+    "exploreMoreProductsIntro": "Discover other products in our shop."
   }
 }
