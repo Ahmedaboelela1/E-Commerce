@@ -125,3 +125,7 @@ jobs:
         env:
           VENDURE_EMAIL_TEST_PORT: '3306'
         run: node --test scripts/test-shop-operations-mysql.mjs
+      - name: Verify bundles, quotes, stock subscriptions, returns and consented cart reminders
+        env:
+          VENDURE_EMAIL_TEST_PORT: '3306'
+        run: node --test scripts/test-shop-growth-mysql.mjs

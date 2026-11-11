@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import {ShopGrowthPlugin} from './growth/growth.plugin';
 import path from 'node:path';
 import {
     DefaultJobQueuePlugin, DefaultSchedulerPlugin, DefaultSearchPlugin,
@@ -73,6 +74,7 @@ export const config: VendureConfig = {
     },
     plugins: [
         ShopOperationsPlugin,
+        ShopGrowthPlugin,
         ...(emailSettings ? [EmailPlugin.init(createShopEmailOptions(emailSettings))] : []),
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({useDatabaseForBuffer: true}),

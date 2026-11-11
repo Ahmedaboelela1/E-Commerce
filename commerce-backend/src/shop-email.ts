@@ -1,3 +1,4 @@
+import {GrowthMailEvent} from './growth/mail.service';
 import {
     AccountRegistrationEvent, AdministratorPasswordResetEvent, EntityHydrator,
     IdentifierChangeRequestEvent, OrderStateTransitionEvent, PasswordResetEvent,
@@ -106,7 +107,12 @@ export function createShopEmailOptions(settings: ShopEmailSettings): EmailPlugin
                 .setRecipient(event=>event.recipient).setFrom(from).setOptionalAddressFields(replyTo)
                 .setSubject('Low stock / مخزون منخفض — {{sku}}')
                 .setTemplateVars(event=>({sku:event.sku,available:event.available,threshold:event.threshold}))
-                .setPlainTextBody((_event,vars)=>`Low stock / مخزون منخفض: ${vars.sku}\nAvailable: ${vars.available}\nThreshold: ${vars.threshold}`)],
+                .setPlainTextBody((_event,vars)=>`Low stock / مخزون منخفض: ${vars.sku}\nAvailable: ${vars.available}\nThreshold: ${vars.threshold}`),
+            new EmailEventListener('shop-growth-mail').on(GrowthMailEvent)
+                .setRecipient(event=>event.recipient).setFrom(from).setOptionalAddressFields(replyTo)
+                .setSubject('{{subject}}')
+                .setTemplateVars(event=>({subject:event.subject,body:event.body}))
+                .setPlainTextBody((_event,vars)=>vars.body)],
         templateLoader: new ShopEmailTemplateLoader(),
         globalTemplateVars: async ctx => ({supportEmail: settings.fromAddress, locale: ctx.languageCode === 'de' ? 'de' : 'en'}),
     };

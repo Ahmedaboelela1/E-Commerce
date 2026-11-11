@@ -1,3 +1,4 @@
+import {ShopLinks} from '@/features/commerce/shop-menu';
 import {ResultOf} from '@/platform/vendure/graphql';
 import {ProductCard} from './components/product-card';
 import {Pagination} from './components/pagination';
@@ -36,7 +37,7 @@ export async function ProductGrid({
     }
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6"><ShopLinks/>
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/70 bg-muted/30 px-4 py-3">
                 <p className="text-sm text-muted-foreground">
                     {t('productCount', {count: searchResult.totalItems})}

@@ -104,6 +104,7 @@ const fulfillmentGate: FulfillmentProcess<never> = {
 
 @VendurePlugin({
     imports: [PluginCommonModule],
+    exports: [OrderOperationsService],
     compatibility: '^3.8.0',
     entities: operationsEntities,
     providers: [

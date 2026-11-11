@@ -13,6 +13,7 @@ const summary = `<mj-text>Order / رقم الطلب: <strong>{{orderCode}}</stro
     {{#each items}}<tr><td>{{name}}</td><td>{{quantity}}</td><td>{{total}}</td></tr>{{/each}}</mj-table>
     <mj-text>Delivery / التوصيل: {{shippingTotal}}<br/>Total / الإجمالي: <strong>{{orderTotal}}</strong></mj-text>`;
 const templates: Record<string, string> = {
+    'shop-growth-mail':layout('<mj-text><pre style="white-space:pre-wrap;font-family:Arial,sans-serif">{{body}}</pre></mj-text>'),
     'low-stock-alert': layout(`<mj-text font-size="20px">Low stock / مخزون منخفض</mj-text>
         <mj-text>SKU: {{sku}}<br/>Available / المتاح: {{available}}<br/>Alert threshold / حد التنبيه: {{threshold}}</mj-text>
         <mj-text>Review physical stock and reorder in Dashboard. / راجع المخزون الفعلي وحدّث الكميات من لوحة الإدارة.</mj-text>`),

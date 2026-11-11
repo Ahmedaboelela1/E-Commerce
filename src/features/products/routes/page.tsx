@@ -1,3 +1,4 @@
+import {ProductHelp} from '@/features/commerce/product-help';
 import type { Metadata } from 'next';
 import { Link } from '@/platform/i18n/navigation';
 import { query } from '@/platform/vendure/api';
@@ -164,6 +165,8 @@ export default async function ProductDetailPage({
                     </div>
                 </div>
             </div>
+
+            <div className="container mx-auto max-w-7xl px-5"><ProductHelp productId={product.id}/></div>
 
             {/* Store policies in the starter are sample text. Hide them until
                 actual Egypt shipping/returns terms are published. */}

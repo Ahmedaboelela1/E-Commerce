@@ -111,6 +111,9 @@
     },
     "bankTransferPending": "Awaiting transfer verification",
     "selectGovernorate": "Select governorate / اختر المحافظة",
-    "wishlist": "Wishlist"
+    "wishlist": "Wishlist",
+    "quotes": "Quotations",
+    "returns": "Returns & exchanges",
+    "notifications": "Email preferences"
   }
 }

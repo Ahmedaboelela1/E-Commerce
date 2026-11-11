@@ -13,6 +13,7 @@ import {
     SheetTitle,
     SheetClose,
 } from '@/components/ui/sheet';
+import {ShopLinks} from '@/features/commerce/shop-menu';
 import {useTranslations} from 'next-intl';
 
 interface Collection {
@@ -54,6 +55,7 @@ export function MobileNav({collections}: MobileNavProps) {
                 </SheetHeader>
 
                 <div className="flex flex-col gap-6 px-4 pb-6">
+                    <ShopLinks onNavigate={handleLinkClick}/>
                     {/* Search */}
                     <form onSubmit={handleSearch} className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
