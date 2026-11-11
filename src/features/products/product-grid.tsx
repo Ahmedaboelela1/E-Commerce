@@ -28,13 +28,6 @@ export async function ProductGrid({
     const searchResult = result.data.search;
     const totalPages = Math.ceil(searchResult.totalItems / take);
 
-    if (!searchResult.items.length) {
-        return (
-            <div className="text-center py-16 rounded-2xl border border-dashed bg-muted/20">
-                <p className="text-muted-foreground">{t('noProductsFound')}</p>
-            </div>
-        );
-    }
 
     return (
         <div className="space-y-6"><ShopLinks/>
@@ -45,14 +38,14 @@ export async function ProductGrid({
                 <SortDropdown />
             </div>
 
-            <div className="grid grid-cols-2 items-stretch gap-3 sm:gap-5 lg:grid-cols-3">
+            {!searchResult.items.length?<div className="rounded-2xl border border-dashed bg-muted/20 py-16 text-center"><p className="text-muted-foreground">{t('noProductsFound')}</p></div>:<div className="grid grid-cols-2 items-stretch gap-3 sm:gap-5 lg:grid-cols-3">
                 {searchResult.items.map((product, i) => (
                     <ProductCard
                         key={'product-grid-item' + i}
                         product={product}
                     />
                 ))}
-            </div>
+            </div>}
 
             {totalPages > 1 && (
                 <Pagination currentPage={currentPage} totalPages={totalPages} />

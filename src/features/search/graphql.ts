@@ -22,3 +22,12 @@ export const SearchProductsQuery = graphql(`
         }
     }
 `, [ProductCardFragment]);
+
+export const GetFilterCollectionsQuery = graphql(`
+    query GetFilterCollections($options: CollectionListOptions) {
+        collections(options: $options) {
+            totalItems
+            items { id name slug breadcrumbs { id name } }
+        }
+    }
+`);

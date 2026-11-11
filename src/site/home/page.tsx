@@ -1,3 +1,5 @@
+import {RecentlyViewedProducts} from '@/features/products/recently-viewed';
+import {getActiveChannel} from '@/platform/vendure/channel';
 import type {Metadata} from "next";
 import {Suspense} from "react";
 import {getRouteLocale} from "@/platform/i18n/server";
@@ -40,6 +42,7 @@ const featureKeys = [
 export default async function Home() {
     const locale = await getRouteLocale();
     const t = await getTranslations({locale, namespace: 'Home'});
+    const channel = await getActiveChannel();
 
     return (
         <div className="min-h-screen">
@@ -47,6 +50,7 @@ export default async function Home() {
             <Suspense>
                 <FeaturedProducts/>
             </Suspense>
+            <RecentlyViewedProducts channelId={channel.id} currencyCode={channel.defaultCurrencyCode}/>
 
             {/* Starter claims of fast delivery and best prices are not verified.
                 Do not show them until actual Egypt merchant terms exist. */}

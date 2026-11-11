@@ -94,3 +94,11 @@ export const GetRelatedProductsQuery = graphql(`
         search(input: $input) { items { ...ProductCard } }
     }
 `, [ProductCardFragment]);
+
+export const GetViewedProductQuery = graphql(`
+    query GetViewedProduct($id: ID!) {
+        product(id: $id) {
+            id name slug featuredAsset { preview } variants { priceWithTax }
+        }
+    }
+`);

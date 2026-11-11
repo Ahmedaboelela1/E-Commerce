@@ -9,7 +9,10 @@
   "Filters": {
     "title": "Filter",
     "clearAll": "Alle löschen",
-    "filtersButton": "Filter"
+    "filtersButton": "Filter",
+    "category": "Kategorie",
+    "allCategories": "Alle Kategorien",
+    "inStockOnly": "Nur verfügbare Produkte"
   },
   "Search": {
     "title": "Suche",
@@ -17,6 +20,9 @@
     "resultsFor": "Suchergebnisse für \"{query}\"",
     "resultsTitle": "Suchergebnisse für \"{query}\"",
     "metaDescription": "Produkte für \"{query}\" bei {siteName} finden",
-    "metaCatalogDescription": "Durchsuchen Sie unseren Produktkatalog bei {siteName}"
+    "metaCatalogDescription": "Durchsuchen Sie unseren Produktkatalog bei {siteName}",
+    "searchLabel": "Diesen Katalog durchsuchen",
+    "searchPlaceholder": "Produkte nach Namen suchen…",
+    "searchButton": "Suchen"
   }
 }

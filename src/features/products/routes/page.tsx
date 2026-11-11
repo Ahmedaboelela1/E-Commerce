@@ -1,3 +1,5 @@
+import {RecentlyViewedProducts, TrackViewedProduct} from '@/features/products/recently-viewed';
+import {getActiveChannel} from '@/platform/vendure/channel';
 import {ProductHelp} from '@/features/commerce/product-help';
 import type { Metadata } from 'next';
 import { Link } from '@/platform/i18n/navigation';
@@ -120,6 +122,7 @@ export default async function ProductDetailPage({
 
     // Hide options that belong to a shared option group but have no variant on
     // this product (Vendure 3.6 shared/global option groups).
+    const channel = await getActiveChannel();
     const productForDisplay = {...product, optionGroups: getDisplayOptionGroups(product)};
     // Use the same cover as the catalog, including after replacing an old asset.
     const featuredAsset = product.featuredAsset;
@@ -129,6 +132,7 @@ export default async function ProductDetailPage({
 
     return (
         <>
+            <TrackViewedProduct productId={product.id} channelId={channel.id}/>
             <div className="container mx-auto max-w-7xl px-5 pb-12 pt-8 mt-16">
                 {/* Breadcrumb Navigation */}
                 <Breadcrumb className="mb-6">
@@ -232,7 +236,8 @@ export default async function ProductDetailPage({
             )}
 
             <div className="container mx-auto px-4 pb-12"><ProductReviews productId={product.id}/></div>
-            <RelatedProducts key={product.id} currentProductId={product.id}/>
+            <RelatedProducts key={`${product.id}-${locale}-${currencyCode}`} currentProductId={product.id}/>
+            <RecentlyViewedProducts key={`${channel.id}-${locale}-${currencyCode}`} channelId={channel.id} currentProductId={product.id} currencyCode={currencyCode}/>
         </>
     );
 }

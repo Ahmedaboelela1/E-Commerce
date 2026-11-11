@@ -1,53 +1,79 @@
+export type CatalogParams = {[key: string]: string | string[] | undefined};
+export type CatalogSort = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
+export const sortMapping: Record<
+    CatalogSort,
+    {name?: 'ASC' | 'DESC'; price?: 'ASC' | 'DESC'}
+> = {
+    'name-asc': {name: 'ASC'},
+    'name-desc': {name: 'DESC'},
+    'price-asc': {price: 'ASC'},
+    'price-desc': {price: 'DESC'},
+};
+export const firstParam = (value: string | string[] | undefined) =>
+    Array.isArray(value) ? value[0] || '' : value || '';
+export const getCatalogSort = (
+    value: string | string[] | undefined,
+): CatalogSort => {
+    const input = firstParam(value);
+    return Object.hasOwn(sortMapping, input)
+        ? (input as CatalogSort)
+        : 'name-asc';
+};
+export function selectedFacetIds(value: string | string[] | undefined) {
+    return [
+        ...new Set(
+            (Array.isArray(value) ? value : [value]).filter(
+                (id): id is string =>
+                    typeof id === 'string' && /^[1-9]\d{0,15}$/.test(id),
+            ),
+        ),
+    ].slice(0, 32);
+}
+export function getCurrentPage(searchParams: CatalogParams) {
+    const page = Number(firstParam(searchParams.page));
+    return Number.isSafeInteger(page) && page >= 1 && page <= 10000 ? page : 1;
+}
 export interface SearchInputParams {
     term?: string;
     collectionSlug?: string;
     take: number;
     skip: number;
     groupByProduct: boolean;
-    sort: { name?: 'ASC' | 'DESC'; price?: 'ASC' | 'DESC' };
-    facetValueFilters?: Array<{ and: string }>;
+    sort: {name?: 'ASC' | 'DESC'; price?: 'ASC' | 'DESC'};
+    facetValueFilters?: Array<{and: string} | {or: string[]}>;
+    inStock?: boolean;
 }
-
-interface BuildSearchInputOptions {
-    searchParams: { [key: string]: string | string[] | undefined };
+export function buildSearchInput({
+    searchParams,
+    collectionSlug,
+    facetGroups = {},
+}: {
+    searchParams: CatalogParams;
     collectionSlug?: string;
-}
-
-export function buildSearchInput({ searchParams, collectionSlug }: BuildSearchInputOptions): SearchInputParams {
-    const page = Number(searchParams.page) || 1;
-    const take = 12;
-    const skip = (page - 1) * take;
-    const sort = (searchParams.sort as string) || 'name-asc';
-    const searchTerm = searchParams.q as string;
-
-    // Extract facet value IDs from search params
-    const facetValueIds = searchParams.facets
-        ? Array.isArray(searchParams.facets)
-            ? searchParams.facets
-            : [searchParams.facets]
-        : [];
-
-    // Map sort parameter to Vendure SearchResultSortParameter
-    const sortMapping: Record<string, { name?: 'ASC' | 'DESC'; price?: 'ASC' | 'DESC' }> = {
-        'name-asc': { name: 'ASC' },
-        'name-desc': { name: 'DESC' },
-        'price-asc': { price: 'ASC' },
-        'price-desc': { price: 'DESC' },
-    };
-
+    facetGroups?: Record<string, string>;
+}): SearchInputParams {
+    const term = firstParam(searchParams.q).trim().slice(0, 200),
+        collection =
+            collectionSlug || firstParam(searchParams.collection).slice(0, 200);
+    const grouped = new Map<string, string[]>();
+    for (const id of selectedFacetIds(searchParams.facets)) {
+        const key = facetGroups[id] || 'value:' + id;
+        grouped.set(key, [...(grouped.get(key) || []), id]);
+    }
     return {
-        ...(searchTerm && { term: searchTerm }),
-        ...(collectionSlug && { collectionSlug }),
-        take,
-        skip,
+        ...(term ? {term} : {}),
+        ...(collection ? {collectionSlug: collection} : {}),
+        take: 12,
+        skip: (getCurrentPage(searchParams) - 1) * 12,
         groupByProduct: true,
-        sort: sortMapping[sort] || sortMapping['name-asc'],
-        ...(facetValueIds.length > 0 && {
-            facetValueFilters: facetValueIds.map(id => ({ and: id }))
-        })
+        sort: sortMapping[getCatalogSort(searchParams.sort)],
+        ...(firstParam(searchParams.stock) === '1' ? {inStock: true} : {}),
+        ...(grouped.size
+            ? {
+                  facetValueFilters: [...grouped.values()].map((ids) =>
+                      ids.length === 1 ? {and: ids[0]} : {or: ids},
+                  ),
+              }
+            : {}),
     };
-}
-
-export function getCurrentPage(searchParams: { [key: string]: string | string[] | undefined }): number {
-    return Number(searchParams.page) || 1;
 }

@@ -1,3 +1,4 @@
+import {firstParam} from '@/features/search/search-helpers';
 import type {Metadata} from 'next';
 import {Suspense} from 'react';
 import {getTranslations} from 'next-intl/server';
@@ -13,7 +14,7 @@ export async function generateMetadata({
     const resolvedParams = await searchParams;
     const locale = await getRouteLocale();
     const t = await getTranslations({locale, namespace: 'Search'});
-    const searchQuery = resolvedParams.q as string | undefined;
+    const searchQuery = firstParam(resolvedParams.q).trim().slice(0,200);
 
     const title = searchQuery
         ? t('resultsTitle', {query: searchQuery})
