@@ -58,6 +58,9 @@
     "productDetails": "Produktdetails",
     "orderHelp": "Wir bestätigen deine Bestellung telefonisch. Der Versand wird danach manuell organisiert.",
     "catalogError": "Der Katalog braucht etwas länger. Bitte erneut versuchen oder alle Produkte ansehen.",
-    "retryCatalog": "Erneut versuchen"
+    "retryCatalog": "Erneut versuchen",
+    "exploreMoreProducts": "Weitere Produkte entdecken",
+    "relatedProductsIntro": "Weitere Produkte aus derselben Kollektion.",
+    "exploreMoreProductsIntro": "Entdecke weitere Produkte in unserem Shop."
   }
 }
