@@ -1,8 +1,10 @@
 # Skillverse Global Commerce Backend (Vendure 3.8)
 
+New order operations, private transfer proofs, invoices, inventory alerts, reports and social features: see [SHOP-OPERATIONS.md](../SHOP-OPERATIONS.md) for behavior, deployment and the consolidated owner checklist.
+
 The Next.js storefront remains in the repository root and is deployed independently to Hostinger. This folder is a **separate Vendure server application**, with a background Worker and the official **React Dashboard**, which cannot be deployed just by pointing Hostinger's Next.js deployment at the repo root.
 
-**Current status: backend source and initial MySQL schema migration prepared and tested against disposable MySQL 8; not deployed; no Hostinger production database touched; no actual users created.**
+**Operations-suite status: source, additive migration and customer/admin interfaces tested against isolated MySQL and local SMTP. Live Hostinger deployment must be verified separately; this change does not access production data.**
 
 ## Systems prepared
 

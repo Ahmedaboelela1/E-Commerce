@@ -34,6 +34,7 @@ import {getTranslations} from 'next-intl/server';
 import {toOgLocale} from '@/platform/i18n/locale-utils';
 import {getActiveCurrencyCode} from '@/features/currency/currency-server';
 import {getRouteLocale} from '@/platform/i18n/server';
+import {ProductReviews} from '@/features/commerce/product-reviews';
 
 async function getProductData(slug: string, currencyCode: string) {
     'use cache';
@@ -227,6 +228,7 @@ export default async function ProductDetailPage({
                 </>
             )}
 
+            <div className="container mx-auto px-4 pb-12"><ProductReviews productId={product.id}/></div>
             {primaryCollection && (
                 <RelatedProducts
                     collectionSlug={primaryCollection.slug}

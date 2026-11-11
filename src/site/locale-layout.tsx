@@ -1,7 +1,7 @@
 import type {Metadata, Viewport} from "next";
 import {locale as rootLocale} from "next/root-params";
 import {hasLocale, NextIntlClientProvider} from "next-intl";
-import {Geist, Geist_Mono} from "next/font/google";
+import localFont from "next/font/local";
 import {getMessages, getTranslations, setRequestLocale} from "next-intl/server";
 import {notFound} from "next/navigation";
 import {routing} from "@/platform/i18n/routing";
@@ -12,15 +12,18 @@ import {Navbar} from '@/site/navigation/navbar';
 import {Footer} from "@/site/footer";
 import {ThemeProvider} from "@/site/providers/theme-provider";
 import {SITE_NAME, SITE_URL} from "@/config/metadata";
+import {CommerceProvider} from '@/features/commerce/wishlist';
 
-const geistSans = Geist({
+const geistSans = localFont({
+    src: "../../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
     variable: "--font-geist-sans",
-    subsets: ["latin"],
+    display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const geistMono = localFont({
+    src: "../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2",
     variable: "--font-geist-mono",
-    subsets: ["latin"],
+    display: "swap",
 });
 
 export function generateStaticParams() {
@@ -97,10 +100,12 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
             >
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <ThemeProvider>
+                        <CommerceProvider>
                         <Navbar />
                         {children}
                         <Footer/>
                         <Toaster/>
+                        </CommerceProvider>
                     </ThemeProvider>
                 </NextIntlClientProvider>
             </body>

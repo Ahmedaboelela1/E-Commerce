@@ -13,6 +13,7 @@ import {egyptGovernorateShippingChecker} from './egypt-governorate-shipping';
 import {EmailPlugin} from '@vendure/email-plugin';
 import {readShopEmailSettings} from './email-settings';
 import {createShopEmailOptions} from './shop-email';
+import {ShopOperationsPlugin} from './operations/operations.plugin';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const PORT = Number(process.env.PORT || 3000);
@@ -30,6 +31,7 @@ export const config: VendureConfig = {
         adminApiPath: 'admin-api',
         shopApiPath: 'shop-api',
         trustProxy: IS_DEV ? false : 1,
+        csrfPrevention: true,
         cors: {origin: IS_DEV ? true : corsOrigins, credentials: true},
     },
     authOptions: {
@@ -70,6 +72,7 @@ export const config: VendureConfig = {
         ],
     },
     plugins: [
+        ShopOperationsPlugin,
         ...(emailSettings ? [EmailPlugin.init(createShopEmailOptions(emailSettings))] : []),
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({useDatabaseForBuffer: true}),

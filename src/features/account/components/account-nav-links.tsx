@@ -2,7 +2,7 @@
 
 import { Link, usePathname } from '@/platform/i18n/navigation';
 import {cn} from '@/lib/utils';
-import {Package, User, MapPin} from 'lucide-react';
+import {Package, User, MapPin, Heart} from 'lucide-react';
 import type {LucideIcon} from 'lucide-react';
 import {useTranslations} from 'next-intl';
 
@@ -10,6 +10,7 @@ const iconMap: Record<string, LucideIcon> = {
     Package,
     MapPin,
     User,
+    Heart,
 };
 
 interface NavItem {

@@ -11,6 +11,7 @@ import {getTranslations} from 'next-intl/server';
 import {query} from '@/platform/vendure/api';
 import {graphql} from '@/platform/vendure/graphql';
 import {getTransferInstructions} from '@/features/checkout/offline-payments';
+import {OrderTools} from '@/features/commerce/order-tools';
 
 const GetOrderByCodeQuery = graphql(`
     query GetOrderByCode($code: String!) {
@@ -102,6 +103,7 @@ export async function OrderConfirmation({paramsPromise}: OrderConfirmationProps)
                     </Card>
                 )}
 
+                <div className="mb-6"><OrderTools orderId={order.id}/></div>
                 <Card className="mb-6">
                     <CardHeader>
                         <CardTitle>{t('orderSummary')}</CardTitle>

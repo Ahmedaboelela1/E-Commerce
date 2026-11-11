@@ -5,6 +5,7 @@ const withNextIntl = createNextIntlPlugin('./src/site/i18n/request.ts');
 
 const nextConfig: NextConfig = {
     cacheComponents: true,
+    experimental: {serverActions: {bodySizeLimit: '8mb'}},
     images: {
         // This is necessary to display images from your local Vendure instance
         dangerouslyAllowLocalIP: true,
