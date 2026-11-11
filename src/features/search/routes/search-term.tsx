@@ -15,7 +15,7 @@ export async function SearchTerm({searchParams}: SearchTermProps) {
 
     return (
         <div className="mb-6">
-            <h1 className="text-3xl font-bold">
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 {searchTerm ? t('resultsFor', {query: searchTerm}) : t('title')}
             </h1>
         </div>

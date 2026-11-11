@@ -128,7 +128,7 @@ export default async function ProductDetailPage({
 
     return (
         <>
-            <div className="container mx-auto px-4 py-8 mt-16">
+            <div className="container mx-auto max-w-7xl px-5 pb-12 pt-8 mt-16">
                 {/* Breadcrumb Navigation */}
                 <Breadcrumb className="mb-6">
                     <BreadcrumbList>
@@ -152,10 +152,10 @@ export default async function ProductDetailPage({
                     </BreadcrumbList>
                 </Breadcrumb>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                <div className="grid grid-cols-1 items-start lg:grid-cols-2 gap-8 lg:gap-14">
                     {/* Left Column: Image Carousel */}
                     <div className="lg:sticky lg:top-20 lg:self-start">
-                        <ProductImageCarousel images={productImages} />
+                        <ProductImageCarousel key={product.id} images={productImages} name={product.name} />
                     </div>
 
                     {/* Right Column: Product Info */}

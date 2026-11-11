@@ -46,6 +46,18 @@
         "answer": "Yes! We ship to over 50 countries worldwide. International shipping rates and delivery times vary by location. You can see the exact cost at checkout before completing your purchase."
       }
     },
-    "orderingComingSoon": "You can add available items to your cart. Checkout is not open yet."
+    "orderingComingSoon": "You can add available items to your cart. Checkout is not open yet.",
+    "viewProduct": "View product",
+    "spotlight": "Product spotlight",
+    "catalogEyebrow": "The Skillverse collection",
+    "catalogIntro": "Made for curious minds. Take a closer look and keep your favourites a heart away.",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "chooseImage": "Show image {number}",
+    "imageAlt": "{name} — image {number}",
+    "productDetails": "Product details",
+    "orderHelp": "Your order will be confirmed by phone. Delivery is arranged manually after confirmation.",
+    "catalogError": "The catalog is taking longer to load. Please retry or browse all products.",
+    "retryCatalog": "Retry"
   }
 }

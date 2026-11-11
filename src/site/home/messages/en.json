@@ -1,15 +1,18 @@
 {
   "Hero": {
-    "title": "Discover Quality",
-    "titleHighlight": "Products",
-    "subtitle": "Premium products, exceptional prices. Free shipping on orders over $50.",
-    "shopNow": "Shop Now",
-    "viewCollections": "View Collections"
+    "eyebrow": "Skillverse Global · Robotics & STEM",
+    "title": "Big ideas start",
+    "titleHighlight": "with a little building.",
+    "subtitle": "Explore robotics kits and learning tools for your next project. Find the right kit, save your favourites and get ready to create.",
+    "shopNow": "Explore the shop",
+    "savedProducts": "Your wishlist",
+    "helper": "Choose your products. We’ll confirm your order with you.",
+    "viewCollections": "Explore collections"
   },
   "Home": {
-    "pageTitle": "Your One-Stop Shop",
-    "description": "Discover high-quality products at competitive prices. Shop now for the best deals on electronics, fashion, home goods, and more.",
-    "ogDescription": "Discover high-quality products at competitive prices. Shop now for the best deals.",
+    "pageTitle": "Robotics kits & learning tools",
+    "description": "Explore robotics kits and STEM learning tools from Skillverse Global. Browse products, save favourites and build your next project.",
+    "ogDescription": "Robotics kits and learning tools for your next big idea.",
     "whyShopWithUs": "Why Shop With Us",
     "features": {
       "highQuality": {

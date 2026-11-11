@@ -233,13 +233,118 @@ export async function browserSuite(
         },
     );
     await t.test('new customer controls fit a mobile viewport', async () => {
-        await page.setViewportSize({width:390,height:844});
-        await page.goto(origin+'/en/account/wishlist');
-        await page.getByRole('heading',{name:'Wishlist',exact:true}).waitFor();
-        await page.getByRole('button',{name:'Remove from wishlist',exact:true}).waitFor();
-        await page.screenshot({path:path.join(artifacts,'mobile-wishlist.png'),fullPage:true});
-        assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),'new navigation must not force horizontal scrolling');
+        await page.setViewportSize({width: 390, height: 844});
+        await page.goto(origin + '/en/account/wishlist');
+        await page
+            .getByRole('heading', {name: 'Wishlist', exact: true})
+            .waitFor();
+        await page
+            .getByRole('button', {name: 'Remove from wishlist', exact: true})
+            .waitFor();
+        await page.screenshot({
+            path: path.join(artifacts, 'mobile-wishlist.png'),
+            fullPage: true,
+        });
+        assert.ok(
+            await page.evaluate(
+                () => document.documentElement.scrollWidth <= window.innerWidth,
+            ),
+            'new navigation must not force horizontal scrolling',
+        );
     });
+    if (process.env.SUITE_DESIGN === 'true')
+        await t.test(
+            'catalog hearts, guest redirect and accessible image gallery',
+            async () => {
+                await page.bringToFront();
+                await page.setViewportSize({width: 1440, height: 1000});
+                await page.goto(origin + '/en');
+                await page
+                    .getByRole('heading', {name: /Big ideas start/})
+                    .waitFor();
+                const card = page.locator('#products article').first();
+                const heart = card.getByRole('button', {
+                    name: 'Remove from wishlist',
+                    exact: true,
+                });
+                await heart.waitFor();
+                await heart.click();
+                await card
+                    .getByRole('button', {
+                        name: 'Save to wishlist',
+                        exact: true,
+                    })
+                    .waitFor();
+                assert.equal(new URL(page.url()).pathname, '/en');
+                await card
+                    .getByRole('button', {
+                        name: 'Save to wishlist',
+                        exact: true,
+                    })
+                    .click();
+                await heart.waitFor();
+                await page.screenshot({
+                    path: path.join(artifacts, 'redesigned-home-desktop.png'),
+                    fullPage: true,
+                });
+                await page.goto(origin + '/en/product/suite-test-robot');
+                await page
+                    .getByRole('button', {name: 'Next image', exact: true})
+                    .click();
+                await page
+                    .getByRole('button', {name: 'Show image 2', exact: true})
+                    .waitFor();
+                assert.equal(
+                    await page
+                        .getByRole('button', {
+                            name: 'Show image 2',
+                            exact: true,
+                        })
+                        .getAttribute('aria-pressed'),
+                    'true',
+                );
+                await page.screenshot({
+                    path: path.join(
+                        artifacts,
+                        'redesigned-product-desktop.png',
+                    ),
+                    fullPage: true,
+                });
+                await page.setViewportSize({width: 390, height: 844});
+                await page.goto(origin + '/en/search');
+                await page.locator('article').first().waitFor();
+                assert.ok(
+                    await page.evaluate(
+                        () =>
+                            document.documentElement.scrollWidth <= innerWidth,
+                    ),
+                );
+                await page.screenshot({
+                    path: path.join(artifacts, 'redesigned-catalog-mobile.png'),
+                    fullPage: true,
+                });
+                const guest = await browser.newContext({
+                    viewport: {width: 390, height: 844},
+                });
+                const guestPage = await guest.newPage();
+                await Promise.all([
+                    guestPage.waitForResponse((r) =>
+                        r.url().includes('/api/commerce/account'),
+                    ),
+                    guestPage.goto(origin + '/en/search'),
+                ]);
+                await guestPage
+                    .locator('article')
+                    .first()
+                    .getByRole('button', {
+                        name: 'Save to wishlist',
+                        exact: true,
+                    })
+                    .click();
+                await guestPage.waitForURL(/sign-in/);
+                await guest.close();
+            },
+        );
     await t.test(
         'dashboard extension renders all operations tabs and native channel data',
         async () => {

@@ -1,63 +1,35 @@
-import Image from 'next/image';
 import {FragmentOf, readFragment} from '@/platform/vendure/graphql';
-import {ProductCardFragment} from '@/features/products/graphql';
-import {Price} from '@/features/pricing/price';
-import {Suspense} from "react";
-import { Link } from '@/platform/i18n/navigation';
-import {useTranslations} from 'next-intl';
-import {WishlistButton} from '@/features/commerce/wishlist';
+import {ProductCardFragment} from '../graphql';
+import {ProductTile} from '../product-tile';
 
-interface ProductCardProps {
+export function ProductCard({
+    product: fragment,
+    preload,
+}: {
     product: FragmentOf<typeof ProductCardFragment>;
     preload?: boolean;
-}
-
-export function ProductCard({product: productProp, preload}: ProductCardProps) {
-    const t = useTranslations('Product');
-    const product = readFragment(ProductCardFragment, productProp);
-
+}) {
+    const product = readFragment(ProductCardFragment, fragment);
+    const price = product.priceWithTax;
+    const minimum =
+        price.__typename === 'PriceRange'
+            ? price.min
+            : price.__typename === 'SinglePrice'
+              ? price.value
+              : null;
+    const maximum = price.__typename === 'PriceRange' ? price.max : minimum;
     return (
-        <article className="group relative block bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-        <Link href={`/product/${product.slug}`} className="block">
-            <div className="aspect-square relative bg-muted overflow-hidden">
-                {product.productAsset ? (
-                    <Image
-                        src={product.productAsset.preview}
-                        alt={product.productName}
-                        fill
-                        preload={preload}
-                        className="object-cover group-hover:scale-105 group-hover:opacity-90 transition-all duration-500"
-                        sizes="(max-width: 640px) calc(100vw - 2rem), (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                    />
-                ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                        {t('noImage')}
-                    </div>
-                )}
-            </div>
-            <div className="p-4 space-y-2">
-                <h3 className="font-medium leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-                    {product.productName}
-                </h3>
-                <Suspense fallback={<div className="h-8 w-36 rounded bg-muted"></div>}>
-                    <p className="text-lg font-bold tracking-tight">
-                        {product.priceWithTax.__typename === 'PriceRange' ? (
-                            product.priceWithTax.min !== product.priceWithTax.max ? (
-                                <>
-                                    <span className="text-xs font-normal text-muted-foreground mr-1">{t('from')}</span>
-                                    <Price value={product.priceWithTax.min} currencyCode={product.currencyCode}/>
-                                </>
-                            ) : (
-                                <Price value={product.priceWithTax.min} currencyCode={product.currencyCode}/>
-                            )
-                        ) : product.priceWithTax.__typename === 'SinglePrice' ? (
-                            <Price value={product.priceWithTax.value} currencyCode={product.currencyCode}/>
-                        ) : null}
-                    </p>
-                </Suspense>
-            </div>
-        </Link>
-        <div className="absolute right-3 top-3"><WishlistButton productId={product.productId} compact/></div>
-        </article>
+        <ProductTile
+            product={{
+                id: product.productId,
+                name: product.productName,
+                slug: product.slug,
+                preview: product.productAsset?.preview,
+                minimum,
+                maximum,
+                currencyCode: product.currencyCode,
+            }}
+            preload={preload}
+        />
     );
 }

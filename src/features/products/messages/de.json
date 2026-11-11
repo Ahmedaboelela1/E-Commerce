@@ -46,6 +46,18 @@
         "answer": "Ja! Wir versenden in über 50 Länder weltweit. Die internationalen Versandkosten und Lieferzeiten variieren je nach Standort. Die genauen Kosten sehen Sie an der Kasse, bevor Sie Ihren Einkauf abschließen."
       }
     },
-    "orderingComingSoon": "Sie können verfügbare Artikel in den Warenkorb legen. Der Checkout ist noch nicht geöffnet."
+    "orderingComingSoon": "Sie können verfügbare Artikel in den Warenkorb legen. Der Checkout ist noch nicht geöffnet.",
+    "viewProduct": "Produkt ansehen",
+    "spotlight": "Produkt im Fokus",
+    "catalogEyebrow": "Die Skillverse-Kollektion",
+    "catalogIntro": "Für neugierige Köpfe. Entdecke die Details und speichere Favoriten mit einem Herz.",
+    "previousImage": "Vorheriges Bild",
+    "nextImage": "Nächstes Bild",
+    "chooseImage": "Bild {number} anzeigen",
+    "imageAlt": "{name} — Bild {number}",
+    "productDetails": "Produktdetails",
+    "orderHelp": "Wir bestätigen deine Bestellung telefonisch. Der Versand wird danach manuell organisiert.",
+    "catalogError": "Der Katalog braucht etwas länger. Bitte erneut versuchen oder alle Produkte ansehen.",
+    "retryCatalog": "Erneut versuchen"
   }
 }

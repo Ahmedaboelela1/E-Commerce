@@ -7,7 +7,7 @@ import {Button} from '@/components/ui/button';
 import {Label} from '@/components/ui/label';
 import {RadioGroup, RadioGroupItem} from '@/components/ui/radio-group';
 import {Separator} from '@/components/ui/separator';
-import {ShoppingCart, CheckCircle2} from 'lucide-react';
+import {ShoppingCart, CheckCircle2, Phone} from 'lucide-react';
 import {addToCart} from '@/features/products/add-to-cart';
 import {toast} from 'sonner';
 import {Price} from '@/features/pricing/price';
@@ -48,11 +48,15 @@ interface ProductInfoProps {
             }>;
         }>;
     };
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: {[key: string]: string | string[] | undefined};
     currencyCode: string;
 }
 
-export function ProductInfo({product, searchParams, currencyCode}: ProductInfoProps) {
+export function ProductInfo({
+    product,
+    searchParams,
+    currencyCode,
+}: ProductInfoProps) {
     const t = useTranslations('Product');
     const pathname = usePathname();
     const router = useRouter();
@@ -61,7 +65,9 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
     const [isAdded, setIsAdded] = useState(false);
 
     // Initialize selected options from URL
-    const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(() => {
+    const [selectedOptions, setSelectedOptions] = useState<
+        Record<string, string>
+    >(() => {
         const initialOptions: Record<string, string> = {};
 
         // Load from URL search params
@@ -69,7 +75,9 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
             const paramValue = searchParams[group.code];
             if (typeof paramValue === 'string') {
                 // Find the option by code
-                const option = group.options.find((opt) => opt.code === paramValue);
+                const option = group.options.find(
+                    (opt) => opt.code === paramValue,
+                );
                 if (option) {
                     initialOptions[group.id] = option.id;
                 }
@@ -86,7 +94,9 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
         }
 
         // If not all option groups have a selection, return null
-        if (Object.keys(selectedOptions).length !== product.optionGroups.length) {
+        if (
+            Object.keys(selectedOptions).length !== product.optionGroups.length
+        ) {
             return null;
         }
 
@@ -94,7 +104,9 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
         return product.variants.find((variant) => {
             const variantOptionIds = variant.options.map((opt) => opt.id);
             const selectedOptionIds = Object.values(selectedOptions);
-            return selectedOptionIds.every((optId) => variantOptionIds.includes(optId));
+            return selectedOptionIds.every((optId) =>
+                variantOptionIds.includes(optId),
+            );
         });
     }, [selectedOptions, product.variants, product.optionGroups]);
 
@@ -125,7 +137,9 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
             if (result.success) {
                 setIsAdded(true);
                 toast.success(t('addedToCartMessage'), {
-                    description: t('addedToCartDescription', {name: product.name}),
+                    description: t('addedToCartDescription', {
+                        name: product.name,
+                    }),
                 });
 
                 // Reset the added state after 2 seconds
@@ -138,27 +152,31 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
         });
     };
 
-    const isInStock = selectedVariant && selectedVariant.stockLevel !== 'OUT_OF_STOCK';
+    const isInStock =
+        selectedVariant && selectedVariant.stockLevel !== 'OUT_OF_STOCK';
     const canAddToCart = selectedVariant && isInStock;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 rounded-3xl border border-border/70 bg-card p-5 sm:p-8">
             {/* Product Title & Price */}
             <div className="space-y-2">
-                <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{product.name}</h1>
+                <div className="flex items-start gap-4">
+                    <h1 className="min-w-0 flex-1 text-2xl font-bold leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+                        {product.name}
+                    </h1>
+                    <WishlistButton productId={product.id} compact />
+                </div>
                 {selectedVariant && (
-                    <p className="text-2xl md:text-3xl text-muted-foreground font-semibold mt-3">
-                        <Price value={selectedVariant.priceWithTax} currencyCode={currencyCode}/>
+                    <p className="text-3xl font-bold tracking-tight text-primary mt-4">
+                        <Price
+                            value={selectedVariant.priceWithTax}
+                            currencyCode={currencyCode}
+                        />
                     </p>
                 )}
             </div>
 
             <Separator />
-
-            {/* Product Description */}
-            <div className="prose prose-sm max-w-none text-muted-foreground">
-                <div dangerouslySetInnerHTML={{__html: product.description}}/>
-            </div>
 
             {/* Option Groups */}
             {product.optionGroups.length > 0 && (
@@ -170,7 +188,9 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
                             </Label>
                             <RadioGroup
                                 value={selectedOptions[group.id] || ''}
-                                onValueChange={(value) => handleOptionChange(group.id, value)}
+                                onValueChange={(value) =>
+                                    handleOptionChange(group.id, value)
+                                }
                             >
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                                     {group.options.map((option) => (
@@ -216,32 +236,47 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
             <div className="pt-2 space-y-3">
                 <Button
                     size="lg"
-                    className="w-full h-12 text-base font-semibold rounded-lg"
+                    className="w-full h-13 text-base font-semibold rounded-xl shadow-lg shadow-primary/15"
                     disabled={!canAddToCart || isPending}
                     onClick={handleAddToCart}
                 >
                     {isAdded ? (
                         <>
-                            <CheckCircle2 className="mr-2 h-5 w-5"/>
+                            <CheckCircle2 className="mr-2 h-5 w-5" />
                             {t('addedToCart')}
                         </>
                     ) : (
                         <>
-                            <ShoppingCart className="mr-2 h-5 w-5"/>
+                            <ShoppingCart className="mr-2 h-5 w-5" />
                             {isPending
                                 ? t('adding')
-                                : !selectedVariant && product.optionGroups.length > 0
-                                    ? t('selectOptions')
-                                    : !isInStock
-                                        ? t('outOfStock')
-                                        : t('addToCart')}
+                                : !selectedVariant &&
+                                    product.optionGroups.length > 0
+                                  ? t('selectOptions')
+                                  : !isInStock
+                                    ? t('outOfStock')
+                                    : t('addToCart')}
                         </>
                     )}
                 </Button>
             </div>
 
             {/* SKU */}
-            <WishlistButton productId={product.id}/>
+            <div className="flex items-start gap-3 rounded-xl bg-muted/60 p-4 text-xs leading-6 text-muted-foreground">
+                <Phone className="mt-1 size-4 shrink-0 text-primary" />
+                {t('orderHelp')}
+            </div>
+            {product.description && (
+                <section className="space-y-3 border-t border-border pt-6">
+                    <h2 className="text-sm font-semibold">
+                        {t('productDetails')}
+                    </h2>
+                    <div
+                        className="prose prose-sm max-w-none break-words text-sm leading-7 text-muted-foreground [&_a]:text-primary [&_ul]:list-disc [&_ul]:pl-5"
+                        dangerouslySetInnerHTML={{__html: product.description}}
+                    />
+                </section>
+            )}
             {selectedVariant && (
                 <div className="text-xs text-muted-foreground">
                     {t('sku', {sku: selectedVariant.sku})}
