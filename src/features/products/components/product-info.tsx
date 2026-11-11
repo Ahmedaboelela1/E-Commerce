@@ -12,6 +12,7 @@ import {addToCart} from '@/features/products/add-to-cart';
 import {toast} from 'sonner';
 import {Price} from '@/features/pricing/price';
 import {useTranslations} from 'next-intl';
+import {WishlistButton} from '@/features/commerce/wishlist';
 
 interface ProductInfoProps {
     product: {
@@ -240,6 +241,7 @@ export function ProductInfo({product, searchParams, currencyCode}: ProductInfoPr
             </div>
 
             {/* SKU */}
+            <WishlistButton productId={product.id}/>
             {selectedVariant && (
                 <div className="text-xs text-muted-foreground">
                     {t('sku', {sku: selectedVariant.sku})}

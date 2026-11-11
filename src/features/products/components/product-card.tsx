@@ -5,6 +5,7 @@ import {Price} from '@/features/pricing/price';
 import {Suspense} from "react";
 import { Link } from '@/platform/i18n/navigation';
 import {useTranslations} from 'next-intl';
+import {WishlistButton} from '@/features/commerce/wishlist';
 
 interface ProductCardProps {
     product: FragmentOf<typeof ProductCardFragment>;
@@ -16,10 +17,8 @@ export function ProductCard({product: productProp, preload}: ProductCardProps) {
     const product = readFragment(ProductCardFragment, productProp);
 
     return (
-        <Link
-            href={`/product/${product.slug}`}
-            className="group block bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-        >
+        <article className="group relative block bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        <Link href={`/product/${product.slug}`} className="block">
             <div className="aspect-square relative bg-muted overflow-hidden">
                 {product.productAsset ? (
                     <Image
@@ -58,5 +57,7 @@ export function ProductCard({product: productProp, preload}: ProductCardProps) {
                 </Suspense>
             </div>
         </Link>
+        <div className="absolute right-3 top-3"><WishlistButton productId={product.productId} compact/></div>
+        </article>
     );
 }

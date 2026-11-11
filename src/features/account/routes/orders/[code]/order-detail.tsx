@@ -15,6 +15,7 @@ import {useLocale, useTranslations} from 'next-intl';
 import type {ResultOf} from '@/platform/vendure/graphql';
 import type {GetOrderDetailQuery} from '@/features/account/graphql';
 import {getTransferInstructions} from '@/features/checkout/offline-payments';
+import {OrderTools} from '@/features/commerce/order-tools';
 
 type OrderByCode = NonNullable<ResultOf<typeof GetOrderDetailQuery>['orderByCode']>;
 type OrderLineItem = OrderByCode['lines'][number];
@@ -55,6 +56,7 @@ export function OrderDetail({orderPromise}: OrderDetailProps) {
                 </div>
             </div>
 
+            <div className="mb-6"><OrderTools orderId={order.id}/></div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     <Card>

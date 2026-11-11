@@ -110,6 +110,7 @@
       "verifyingDesc": "Please wait while we verify your email address."
     },
     "bankTransferPending": "Awaiting transfer verification",
-    "selectGovernorate": "Select governorate / اختر المحافظة"
+    "selectGovernorate": "Select governorate / اختر المحافظة",
+    "wishlist": "Wishlist"
   }
 }

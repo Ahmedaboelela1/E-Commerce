@@ -11,6 +11,7 @@ import {Suspense} from "react";
 import {SearchInput} from '@/site/navigation/search-input';
 import {NavbarUserSkeleton} from '@/site/navigation/skeletons/navbar-user-skeleton';
 import {SearchInputSkeleton} from '@/site/navigation/skeletons/search-input-skeleton';
+import {WishlistLink} from '@/features/commerce/wishlist';
 
 export function Navbar() {
     return (
@@ -48,6 +49,7 @@ export function Navbar() {
                         <Suspense>
                             <NavbarCart/>
                         </Suspense>
+                        <WishlistLink/>
                         <Suspense fallback={<NavbarUserSkeleton />}>
                             <NavbarUser/>
                         </Suspense>

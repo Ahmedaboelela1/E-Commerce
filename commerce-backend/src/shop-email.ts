@@ -6,6 +6,7 @@ import {
 import {EmailEventListener, type EmailPluginOptions} from '@vendure/email-plugin';
 import type {ShopEmailSettings} from './email-settings';
 import {ShopEmailTemplateLoader} from './shop-email-templates';
+import {LowStockAlertEvent} from './operations/events';
 
 function tokenUrl(base: string, path: string, token: string | null | undefined): string {
     if (!token) throw new Error('Cannot generate an account email without its token.');
@@ -100,7 +101,12 @@ export function createShopEmailOptions(settings: ShopEmailSettings): EmailPlugin
             requireTLS: settings.requireTLS, auth: {user: settings.user, pass: settings.password},
             tls: {rejectUnauthorized: true, minVersion: 'TLSv1.2'}, logging: false,
             connectionTimeout: 15000, greetingTimeout: 15000, socketTimeout: 30000},
-        handlers: [verification, password, emailChange, adminReset, orderHandler(false), orderHandler(true)],
+        handlers: [verification, password, emailChange, adminReset, orderHandler(false), orderHandler(true),
+            new EmailEventListener('low-stock-alert').on(LowStockAlertEvent)
+                .setRecipient(event=>event.recipient).setFrom(from).setOptionalAddressFields(replyTo)
+                .setSubject('Low stock / مخزون منخفض — {{sku}}')
+                .setTemplateVars(event=>({sku:event.sku,available:event.available,threshold:event.threshold}))
+                .setPlainTextBody((_event,vars)=>`Low stock / مخزون منخفض: ${vars.sku}\nAvailable: ${vars.available}\nThreshold: ${vars.threshold}`)],
         templateLoader: new ShopEmailTemplateLoader(),
         globalTemplateVars: async ctx => ({supportEmail: settings.fromAddress, locale: ctx.languageCode === 'de' ? 'de' : 'en'}),
     };

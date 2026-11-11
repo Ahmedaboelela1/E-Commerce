@@ -13,6 +13,9 @@ const summary = `<mj-text>Order / رقم الطلب: <strong>{{orderCode}}</stro
     {{#each items}}<tr><td>{{name}}</td><td>{{quantity}}</td><td>{{total}}</td></tr>{{/each}}</mj-table>
     <mj-text>Delivery / التوصيل: {{shippingTotal}}<br/>Total / الإجمالي: <strong>{{orderTotal}}</strong></mj-text>`;
 const templates: Record<string, string> = {
+    'low-stock-alert': layout(`<mj-text font-size="20px">Low stock / مخزون منخفض</mj-text>
+        <mj-text>SKU: {{sku}}<br/>Available / المتاح: {{available}}<br/>Alert threshold / حد التنبيه: {{threshold}}</mj-text>
+        <mj-text>Review physical stock and reorder in Dashboard. / راجع المخزون الفعلي وحدّث الكميات من لوحة الإدارة.</mj-text>`),
     'email-verification': action('Verify your email', 'Activate your account to sign in and place an order.', 'فعّل بريدك الإلكتروني لتسجيل الدخول وإرسال طلبك.'),
     'password-reset': action('Reset your password', 'Use this one-time link to choose a new password.', 'استخدم الرابط لتعيين كلمة مرور جديدة لحسابك.'),
     'email-address-change': action('Verify your new email', 'Confirm this email address for your account.', 'أكّد عنوان بريدك الإلكتروني الجديد لحسابك.'),

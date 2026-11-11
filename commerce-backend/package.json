@@ -15,19 +15,29 @@
     "migration": "vendure migrate",
     "db:check": "node scripts/check-database.mjs",
     "migration:generate:initial": "vendure migrate --generate initial --from-empty",
-    "build:server": "tsc -p tsconfig.json"
+    "build:server": "tsc -p tsconfig.json && node scripts/copy-operations-assets.mjs"
   },
   "dependencies": {
+    "@nestjs/common": "12.4.2",
+    "@nestjs/graphql": "14.0.3",
     "@vendure/asset-server-plugin": "3.8.0",
     "@vendure/core": "3.8.0",
     "@vendure/dashboard": "3.8.0",
     "@vendure/email-plugin": "3.8.0",
+    "bidi-js": "1.0.3",
     "dotenv": "^17.2.3",
+    "graphql": "16.15.0",
+    "graphql-tag": "^2.12.6",
     "mysql2": "^3.15.2",
-    "reflect-metadata": "^0.2.2"
+    "pdfkit": "^0.17.2",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "7.8.2",
+    "sharp": "0.35.5",
+    "typeorm": "0.3.31"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
+    "@types/pdfkit": "^0.17.7",
     "@vendure/cli": "3.8.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.8.3",

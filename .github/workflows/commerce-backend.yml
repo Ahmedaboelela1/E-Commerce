@@ -121,3 +121,7 @@ jobs:
         env:
           VENDURE_EMAIL_TEST_PORT: '3306'
         run: node --test scripts/test-shop-email-mysql.mjs
+      - name: Verify scoped order operations, private proofs, PDF invoices, stock and reviews
+        env:
+          VENDURE_EMAIL_TEST_PORT: '3306'
+        run: node --test scripts/test-shop-operations-mysql.mjs
