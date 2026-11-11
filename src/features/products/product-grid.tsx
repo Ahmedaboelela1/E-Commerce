@@ -15,7 +15,11 @@ interface ProductGridProps {
     take: number;
 }
 
-export async function ProductGrid({productDataPromise, currentPage, take}: ProductGridProps) {
+export async function ProductGrid({
+    productDataPromise,
+    currentPage,
+    take,
+}: ProductGridProps) {
     const locale = await getRouteLocale();
     const t = await getTranslations({locale, namespace: 'Product'});
     const result = await productDataPromise;
@@ -25,7 +29,7 @@ export async function ProductGrid({productDataPromise, currentPage, take}: Produ
 
     if (!searchResult.items.length) {
         return (
-            <div className="text-center py-12">
+            <div className="text-center py-16 rounded-2xl border border-dashed bg-muted/20">
                 <p className="text-muted-foreground">{t('noProductsFound')}</p>
             </div>
         );
@@ -33,21 +37,24 @@ export async function ProductGrid({productDataPromise, currentPage, take}: Produ
 
     return (
         <div className="space-y-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/70 bg-muted/30 px-4 py-3">
                 <p className="text-sm text-muted-foreground">
                     {t('productCount', {count: searchResult.totalItems})}
                 </p>
-                <SortDropdown/>
+                <SortDropdown />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 items-stretch gap-3 sm:gap-5 lg:grid-cols-3">
                 {searchResult.items.map((product, i) => (
-                    <ProductCard key={'product-grid-item' + i} product={product}/>
+                    <ProductCard
+                        key={'product-grid-item' + i}
+                        product={product}
+                    />
                 ))}
             </div>
 
             {totalPages > 1 && (
-                <Pagination currentPage={currentPage} totalPages={totalPages}/>
+                <Pagination currentPage={currentPage} totalPages={totalPages} />
             )}
         </div>
     );

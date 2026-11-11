@@ -192,6 +192,56 @@ export async function suiteFixture(t) {
             },
         )
     ).data.createProduct;
+    if (process.env.SUITE_DESIGN === 'true') {
+        const {default: sharp} = await import('sharp');
+        const assetIds = [];
+        for (const color of ['#2e5eab', '#0f766e']) {
+            const png = await sharp(
+                Buffer.from(
+                    `<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="600" fill="white"/><rect x="110" y="100" width="380" height="400" rx="70" fill="${color}"/><circle cx="225" cy="245" r="28" fill="white"/><circle cx="375" cy="245" r="28" fill="white"/><path d="M225 355h150" stroke="white" stroke-width="20"/><text x="300" y="560" font-size="28" text-anchor="middle" fill="#102140">Synthetic test image</text></svg>`,
+                ),
+            )
+                .png()
+                .toBuffer();
+            const form = new FormData();
+            form.set(
+                'operations',
+                JSON.stringify({
+                    query: 'mutation($input:[CreateAssetInput!]!){createAssets(input:$input){__typename ... on Asset{id} ... on ErrorResult{message}}}',
+                    variables: {input: [{file: null}]},
+                }),
+            );
+            form.set('map', JSON.stringify({0: ['variables.input.0.file']}));
+            form.set(
+                '0',
+                new Blob([png], {type: 'image/png'}),
+                'suite-design.png',
+            );
+            const response = await fetch(url(true), {
+                method: 'POST',
+                headers: {
+                    Authorization: 'Bearer ' + adminToken,
+                    'vendure-token': channelToken,
+                    'Apollo-Require-Preflight': 'true',
+                },
+                body: form,
+            });
+            const result = await response.json();
+            if (
+                result.errors ||
+                result.data?.createAssets?.[0]?.__typename !== 'Asset'
+            )
+                throw Error(
+                    'Synthetic catalog image upload failed: ' +
+                        JSON.stringify(result),
+                );
+            assetIds.push(result.data.createAssets[0].id);
+        }
+        await admin(
+            'mutation($input:UpdateProductInput!){updateProduct(input:$input){id}}',
+            {input: {id: product.id, assetIds, featuredAssetId: assetIds[0]}},
+        );
+    }
     const variant = (
         await admin(
             'mutation($input:[CreateProductVariantInput!]!){createProductVariants(input:$input){id}}',

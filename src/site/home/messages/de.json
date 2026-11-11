@@ -1,15 +1,18 @@
 {
   "Hero": {
-    "title": "Entdecke hochwertige",
-    "titleHighlight": "Produkte",
-    "subtitle": "Hochwertige Produkte zu außergewöhnlichen Preisen. Kostenloser Versand ab 50 €.",
-    "shopNow": "Jetzt einkaufen",
-    "viewCollections": "Kategorien ansehen"
+    "eyebrow": "Skillverse Global · Robotik & MINT",
+    "title": "Große Ideen beginnen",
+    "titleHighlight": "mit kleinen Bausteinen.",
+    "subtitle": "Entdecke Robotik-Sets und Lernmaterial für dein nächstes Projekt. Finde das passende Set, speichere Favoriten und werde kreativ.",
+    "shopNow": "Shop entdecken",
+    "savedProducts": "Deine Merkliste",
+    "helper": "Wähle deine Produkte. Wir bestätigen die Bestellung mit dir.",
+    "viewCollections": "Kollektionen entdecken"
   },
   "Home": {
-    "pageTitle": "Ihr One-Stop-Shop",
-    "description": "Entdecken Sie hochwertige Produkte zu wettbewerbsfähigen Preisen. Jetzt einkaufen und die besten Angebote für Elektronik, Mode, Haushaltswaren und mehr finden.",
-    "ogDescription": "Entdecken Sie hochwertige Produkte zu wettbewerbsfähigen Preisen. Jetzt die besten Angebote sichern.",
+    "pageTitle": "Robotik-Sets & Lernmaterial",
+    "description": "Entdecke Robotik-Sets und MINT-Lernmaterial von Skillverse Global. Produkte ansehen, Favoriten speichern und Projekte bauen.",
+    "ogDescription": "Robotik-Sets und Lernmaterial für deine nächste große Idee.",
     "whyShopWithUs": "Warum bei uns einkaufen",
     "features": {
       "highQuality": {

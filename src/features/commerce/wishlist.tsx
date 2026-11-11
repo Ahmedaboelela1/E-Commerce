@@ -9,7 +9,7 @@ import {
     useState,
     type ReactNode,
 } from 'react';
-import {Heart} from 'lucide-react';
+import {Heart, LoaderCircle} from 'lucide-react';
 import {useLocale, useTranslations} from 'next-intl';
 import {Link, usePathname, useRouter} from '@/platform/i18n/navigation';
 import {Button} from '@/components/ui/button';
@@ -111,15 +111,25 @@ export function WishlistButton({
             size={compact ? 'icon' : 'default'}
             aria-label={saved ? t('removeSaved') : t('saveProduct')}
             aria-pressed={saved}
+            aria-busy={busy}
+            title={saved ? t('removeSaved') : t('saveProduct')}
             disabled={busy}
             onClick={() => void toggle()}
-            className={compact ? 'rounded-full bg-background/95 shadow-sm' : ''}
+            className={
+                compact
+                    ? `size-11 rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition-[color,background-color,transform] hover:scale-105 hover:bg-rose-50 hover:text-rose-600 ${saved ? 'border-rose-200 bg-rose-50 text-rose-600' : ''}`
+                    : `rounded-full px-4 ${saved ? 'border-rose-200 text-rose-600' : ''}`
+            }
         >
-            <Heart
-                className={
-                    saved ? 'size-4 fill-current text-rose-600' : 'size-4'
-                }
-            />
+            {busy ? (
+                <LoaderCircle className="size-4 animate-spin" />
+            ) : (
+                <Heart
+                    className={
+                        saved ? 'size-4 fill-current text-rose-600' : 'size-4'
+                    }
+                />
+            )}
             {!compact && (saved ? t('saved') : t('saveProduct'))}
         </Button>
     );
