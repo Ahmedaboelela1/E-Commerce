@@ -61,6 +61,10 @@
     "retryCatalog": "Retry",
     "exploreMoreProducts": "Explore more products",
     "relatedProductsIntro": "More products from the same collection.",
-    "exploreMoreProductsIntro": "Discover other products in our shop."
+    "exploreMoreProductsIntro": "Discover other products in our shop.",
+    "recentlyViewed": "Recently viewed",
+    "recentlyViewedHelp": "Saved on this browser for up to 30 days. Clear your history at any time.",
+    "clearHistory": "Clear browsing history",
+    "recentUnavailable": "Your recent products could not be loaded. Your saved history is still available."
   }
 }

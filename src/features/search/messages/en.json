@@ -9,7 +9,10 @@
   "Filters": {
     "title": "Filters",
     "clearAll": "Clear all",
-    "filtersButton": "Filters"
+    "filtersButton": "Filters",
+    "category": "Category",
+    "allCategories": "All categories",
+    "inStockOnly": "In stock only"
   },
   "Search": {
     "title": "Search",
@@ -17,6 +20,9 @@
     "resultsFor": "Search results for \"{query}\"",
     "resultsTitle": "Search results for \"{query}\"",
     "metaDescription": "Find products matching \"{query}\" at {siteName}",
-    "metaCatalogDescription": "Search our product catalog at {siteName}"
+    "metaCatalogDescription": "Search our product catalog at {siteName}",
+    "searchLabel": "Search this catalog",
+    "searchPlaceholder": "Search products by name…",
+    "searchButton": "Search"
   }
 }

@@ -1,3 +1,4 @@
+import {firstParam} from '@/features/search/search-helpers';
 import {getRouteLocale} from '@/platform/i18n/server';
 import {getTranslations} from 'next-intl/server';
 
@@ -9,7 +10,7 @@ interface SearchTermProps {
 
 export async function SearchTerm({searchParams}: SearchTermProps) {
     const searchParamsResolved = await searchParams;
-    const searchTerm = (searchParamsResolved.q as string) || '';
+    const searchTerm = firstParam(searchParamsResolved.q).trim().slice(0,200);
     const locale = await getRouteLocale();
     const t = await getTranslations({locale, namespace: 'Search'});
 

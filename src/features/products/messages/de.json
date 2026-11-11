@@ -61,6 +61,10 @@
     "retryCatalog": "Erneut versuchen",
     "exploreMoreProducts": "Weitere Produkte entdecken",
     "relatedProductsIntro": "Weitere Produkte aus derselben Kollektion.",
-    "exploreMoreProductsIntro": "Entdecke weitere Produkte in unserem Shop."
+    "exploreMoreProductsIntro": "Entdecke weitere Produkte in unserem Shop.",
+    "recentlyViewed": "Zuletzt angesehen",
+    "recentlyViewedHelp": "Bis zu 30 Tage in diesem Browser gespeichert. Du kannst den Verlauf jederzeit löschen.",
+    "clearHistory": "Verlauf löschen",
+    "recentUnavailable": "Deine zuletzt angesehenen Produkte konnten nicht geladen werden. Dein gespeicherter Verlauf ist weiterhin vorhanden."
   }
 }

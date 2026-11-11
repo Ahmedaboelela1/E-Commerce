@@ -1,52 +1,37 @@
 'use client';
-
-
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
-import {useSearchParams} from "next/navigation";
+import {useSearchParams} from 'next/navigation';
 import {usePathname, useRouter} from '@/platform/i18n/navigation';
 import {useTranslations} from 'next-intl';
-
+import {getCatalogSort} from './search-helpers';
 export function SortDropdown() {
-    const t = useTranslations('Sort');
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const router = useRouter();
-
-    const sortOptions = [
-        {value: 'name-asc', label: t('nameAsc')},
-        {value: 'name-desc', label: t('nameDesc')},
-        {value: 'price-asc', label: t('priceAsc')},
-        {value: 'price-desc', label: t('priceDesc')},
-    ];
-
-    const currentSort = searchParams.get('sort') || 'name-asc';
-
-    const handleSortChange = (value: string | null) => {
-        if (!value) return;
-        const params = new URLSearchParams(searchParams);
-        params.set('sort', value);
-        params.delete('page'); // Reset to page 1 when sort changes
-        router.push(`${pathname}?${params.toString()}`);
-    };
-
+    const t = useTranslations('Sort'),
+        path = usePathname(),
+        params = useSearchParams(),
+        router = useRouter();
     return (
-        <Select value={currentSort} onValueChange={handleSortChange} items={sortOptions}>
-            <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={t('placeholder')}/>
-            </SelectTrigger>
-            <SelectContent>
-                {sortOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                    </SelectItem>
+        <label className="flex flex-wrap items-center gap-3 text-sm font-medium">
+            {t('placeholder')}
+            <select
+                value={getCatalogSort(params.get('sort') || '')}
+                className="h-11 max-w-full rounded-xl border border-input bg-background px-3 text-sm"
+                onChange={(e) => {
+                    const next = new URLSearchParams(params);
+                    next.set('sort', e.target.value);
+                    next.delete('page');
+                    router.push(`${path}?${next}`);
+                }}
+            >
+                {[
+                    ['name-asc', 'nameAsc'],
+                    ['name-desc', 'nameDesc'],
+                    ['price-asc', 'priceAsc'],
+                    ['price-desc', 'priceDesc'],
+                ].map(([value, key]) => (
+                    <option value={value} key={value}>
+                        {t(key)}
+                    </option>
                 ))}
-            </SelectContent>
-        </Select>
+            </select>
+        </label>
     );
 }

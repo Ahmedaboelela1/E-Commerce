@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { Link } from '@/platform/i18n/navigation';
 import { query } from '@/platform/vendure/api';
-import {SearchProductsQuery} from '@/features/search/graphql';
+import {getCatalogData} from '@/features/search/data';
+import {CatalogSearch} from '@/features/search/catalog-search';
 import {GetCollectionProductsQuery} from '@/features/collections/graphql';
 import {ProductGrid} from '@/features/products/product-grid';
 import {FacetFilters} from '@/features/search/facet-filters';
 import {ProductGridSkeleton} from '@/features/products/product-grid-skeleton';
-import { buildSearchInput, getCurrentPage } from '@/features/search/search-helpers';
+import { getCurrentPage } from '@/features/search/search-helpers';
 import { cacheLife, cacheTag } from 'next/cache';
 import {
     Breadcrumb,
@@ -28,22 +29,6 @@ import {toOgLocale} from '@/platform/i18n/locale-utils';
 import {getActiveCurrencyCode} from '@/features/currency/currency-server';
 import {getRouteLocale} from '@/platform/i18n/server';
 import {getTranslations} from 'next-intl/server';
-
-async function getCollectionProducts(slug: string, searchParams: { [key: string]: string | string[] | undefined }, currencyCode: string) {
-    'use cache';
-    cacheLife('hours');
-
-    const locale = await getRouteLocale();
-    cacheTag(`collection-${slug}-${locale}-${currencyCode}`);
-    cacheTag('collection');
-
-    return query(SearchProductsQuery, {
-        input: buildSearchInput({
-            searchParams,
-            collectionSlug: slug
-        })
-    }, {languageCode: locale, currencyCode});
-}
 
 async function getCollectionMetadata(slug: string) {
     'use cache';
@@ -116,7 +101,7 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
     const t = await getTranslations({locale, namespace: 'Collection'});
     const page = getCurrentPage(searchParamsResolved);
 
-    const productDataPromise = getCollectionProducts(slug, searchParamsResolved, currencyCode);
+    const {productDataPromise,facetDataPromise,collectionsPromise} = await getCatalogData(searchParamsResolved,locale,currencyCode,slug);
     const collectionResult = await getCollectionMetadata(slug);
     const collectionName = collectionResult.data.collection?.name ?? slug;
 
@@ -140,11 +125,12 @@ export default async function CollectionPage({params, searchParams}: PageProps<'
                 <h1 className="text-3xl font-bold tracking-tight">{collectionName}</h1>
             </div>
 
+            <CatalogSearch/>
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* Filters Sidebar */}
                 <aside className="lg:col-span-1">
                     <Suspense fallback={<div className="h-64 animate-pulse bg-muted rounded-lg" />}>
-                        <FacetFilters productDataPromise={productDataPromise} />
+                        <FacetFilters productDataPromise={facetDataPromise} collectionsPromise={collectionsPromise} collectionSlug={slug}/>
                     </Suspense>
                 </aside>
 
