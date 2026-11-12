@@ -281,6 +281,7 @@ export class OrderOperationsService {
             payments: order.payments?.map((p) => ({
                 id: p.id,
                 method: p.method,
+                offlineType: offlinePaymentType(p),
                 state: p.state,
                 amount: p.amount,
             })),

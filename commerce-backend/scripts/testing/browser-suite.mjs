@@ -403,10 +403,34 @@ export async function browserSuite(
             await adminPage
                 .getByText('Private telephone confirmation', {exact: false})
                 .waitFor();
+            const confirmTransfer=adminPage.getByRole('button',{name:'Confirm receipt and settle payment / تأكيد التحصيل',exact:true});
+            assert.equal(await confirmTransfer.count(),0,'COD must not display bank verification controls');
             await adminPage.screenshot({
                 path: path.join(artifacts, 'admin-order-operations.png'),
                 fullPage: true,
             });
+            await adminPage.getByRole('row').filter({hasText:pendingBank.code})
+                .getByRole('button',{name:'Open / فتح',exact:true}).click();
+            await confirmTransfer.waitFor();
+            assert.equal(await confirmTransfer.isDisabled(),true,'receipt upload alone cannot confirm payment');
+            const verificationReference=adminPage.getByRole('textbox',{name:/Verified transfer reference/});
+            await verificationReference.fill('ADMIN-BROWSER-VERIFIED-TRANSFER');
+            assert.equal(await confirmTransfer.isDisabled(),true,'reference alone cannot confirm actual receipt');
+            const actualFunds=adminPage.getByRole('checkbox',{name:/I checked actual receipt/});
+            await actualFunds.check();
+            assert.equal(await confirmTransfer.isEnabled(),true);
+            const pending=(await f.admin('query($id:ID!){shopOperationsOrder(orderId:$id)}',{id:pendingBank.id})).data.shopOperationsOrder;
+            assert.equal(pending.payments[0].method,'01');
+            assert.equal(pending.payments[0].offlineType,'bank-transfer');
+            assert.equal(pending.payments[0].state,'Authorized');
+            await adminPage.screenshot({path:path.join(artifacts,'admin-confirm-transfer.png'),fullPage:true,animations:'disabled'});
+            await confirmTransfer.click();
+            await adminPage.getByText('Receipt confirmed / تم تأكيد استلام التحويل',{exact:true}).waitFor();
+            const paid=(await f.admin('query($id:ID!){shopOperationsOrder(orderId:$id)}',{id:pendingBank.id})).data.shopOperationsOrder;
+            assert.equal(paid.payments[0].state,'Settled');
+            assert.equal(paid.receiptStatus,'accepted');
+            assert.equal(paid.transferReference,'ADMIN-BROWSER-VERIFIED-TRANSFER');
+            assert.equal(await confirmTransfer.count(),0,'settled transfers must not be settled twice');
             for (const tab of [
                 'Sales / المبيعات',
                 'Stock / المخزون',
