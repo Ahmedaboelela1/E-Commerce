@@ -36,7 +36,7 @@ export function OrderStatusBadge({state}: OrderStatusBadgeProps) {
 
     return (
         <Badge className={config.color} variant="secondary">
-            <Icon className="h-3 w-3 mr-1"/>
+            <Icon className="h-3 w-3 me-1"/>
             {label}
         </Badge>
     );

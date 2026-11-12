@@ -10,7 +10,7 @@ export async function HeroSection() {
     return (
         <section className="relative overflow-hidden border-b border-border/60 bg-[#f0f5fc] pt-16 dark:bg-[#13243e]">
             <div
-                className="pointer-events-none absolute -right-48 -top-24 size-[38rem] rounded-full border-[80px] border-[#dae7fa]/60 dark:border-[#203b62]/40"
+                className="pointer-events-none absolute -end-48 -top-24 size-[38rem] rounded-full border-[80px] border-[#dae7fa]/60 dark:border-[#203b62]/40"
                 aria-hidden="true"
             />
             <div className="container relative mx-auto grid max-w-7xl items-center gap-10 px-5 py-12 md:grid-cols-2 md:gap-12 md:py-20 lg:py-24">
@@ -36,7 +36,7 @@ export async function HeroSection() {
                             className="h-12 rounded-full px-6 font-semibold"
                         >
                             {t('shopNow')}
-                            <ArrowRight className="ml-2 size-4" />
+                            <ArrowRight className="ms-2 size-4" />
                         </Button>
                         <Button
                             render={<Link href="/account/wishlist" />}

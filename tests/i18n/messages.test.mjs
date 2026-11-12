@@ -68,14 +68,14 @@ test('message keys match across locales', async () => {
     const discovered = await findMessageFiles(path.join(root, 'src'));
     const englishFiles = discovered.filter(file => path.basename(file) === 'en.json');
     for (const englishFile of englishFiles) {
-        const germanFile = path.join(path.dirname(englishFile), 'de.json');
-        assert.ok(discovered.includes(germanFile), `${englishFile} has no matching de.json file.`);
+        const arabicFile = path.join(path.dirname(englishFile), 'ar.json');
+        assert.ok(discovered.includes(arabicFile), `${englishFile} has no matching ar.json file.`);
         const english = JSON.parse(await readFile(path.join(root, englishFile), 'utf8'));
-        const german = JSON.parse(await readFile(path.join(root, germanFile), 'utf8'));
+        const arabic = JSON.parse(await readFile(path.join(root, arabicFile), 'utf8'));
         assert.deepEqual(
-            messageKeys(german).sort(),
+            messageKeys(arabic).sort(),
             messageKeys(english).sort(),
-            `${englishFile} and ${germanFile} must define the same message keys.`,
+            `${englishFile} and ${arabicFile} must define the same message keys.`,
         );
     }
 });
@@ -122,4 +122,27 @@ test('features use only owned or shared message namespaces', async () => {
         }
     }
     assert.deepEqual(violations, []);
+});
+
+// ICU plural branches may differ across languages, but interpolation arguments must not.
+test('Arabic ICU messages parse and preserve every English interpolation argument',async()=>{
+    const {parse}=await import('@formatjs/icu-messageformat-parser');
+    function argumentsIn(message){
+        const names=new Set();
+        function walk(nodes){for(const node of nodes){
+            if(node.type>=1&&node.type<=6)names.add(node.value);
+            if(node.options)for(const option of Object.values(node.options))walk(option.value);
+            if(node.children)walk(node.children);
+        }}
+        walk(parse(message));return [...names].sort();
+    }
+    function flatten(value,prefix=''){
+        return Object.entries(value).flatMap(([key,child])=>typeof child==='string'?[[prefix+key,child]]:flatten(child,prefix+key+'.'));
+    }
+    for(const file of (await findMessageFiles(path.join(root,'src'))).filter(f=>f.endsWith('/en.json'))){
+        const english=flatten(JSON.parse(await readFile(path.join(root,file),'utf8')));
+        const arabic=new Map(flatten(JSON.parse(await readFile(path.join(root,file.replace('/en.json','/ar.json')),'utf8'))));
+        for(const [key,message] of english)assert.deepEqual(argumentsIn(arabic.get(key)),argumentsIn(message),file+':'+key);
+    }
+    assert.ok(!(await findMessageFiles(path.join(root,'src'))).some(f=>f.endsWith('/de.json')));
 });

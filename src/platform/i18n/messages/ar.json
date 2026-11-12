@@ -1,0 +1,30 @@
+{
+  "Common": {
+    "loading": "جارٍ التحميل...",
+    "sending": "جارٍ الإرسال...",
+    "sku": "رمز المنتج",
+    "siteDescription": "تسوّق منتجات {siteName} واكتشف أدوات الروبوتات والتعلّم المتاحة.",
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "close": "إغلاق",
+    "previousSlide": "الشريحة السابقة",
+    "nextSlide": "الشريحة التالية"
+  },
+  "Errors": {
+    "fieldsRequired": "جميع الحقول مطلوبة",
+    "passwordsMismatch": "كلمتا المرور غير متطابقتين",
+    "unexpectedError": "حدث خطأ غير متوقع. يُرجى المحاولة مرة أخرى.",
+    "emailPasswordRequired": "البريد الإلكتروني وكلمة المرور مطلوبان",
+    "verifyEmailFirst": "يُرجى تفعيل بريدك الإلكتروني قبل تسجيل الدخول.",
+    "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "firstLastNameRequired": "الاسم الأول واسم العائلة مطلوبان",
+    "passwordEmailRequired": "كلمة المرور والبريد الإلكتروني الجديد مطلوبان",
+    "invalidEmail": "أدخل بريدًا إلكترونيًا صحيحًا",
+    "failedUpdateCustomer": "تعذّر تحديث بيانات العميل",
+    "newPasswordMustDiffer": "يجب أن تختلف كلمة المرور الجديدة عن الحالية",
+    "failedPasswordReset": "تعذّر إرسال طلب إعادة تعيين كلمة المرور",
+    "verificationTokenRequired": "رمز التفعيل مطلوب",
+    "failedAddToCart": "تعذّرت إضافة المنتج إلى السلة"
+  }
+}

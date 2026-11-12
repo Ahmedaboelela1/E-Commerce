@@ -18,6 +18,24 @@
     "documentation": "Documentation",
     "sourceCode": "Source Code",
     "copyright": "Vendure Store. All rights reserved.",
-    "poweredBy": "Powered by"
+    "poweredBy": "Powered by",
+    "brandDescription": "Bringing technology to life. Opening a world of possibility through robotics, AI and STEM education.",
+    "exploreShop": "Explore the shop",
+    "browseProducts": "Browse products",
+    "productsKits": "Products & kits",
+    "stemSolutions": "STEM solutions",
+    "aboutUs": "About us",
+    "partners": "Our partners",
+    "projects": "Projects",
+    "contactUs": "Contact us",
+    "getInTouch": "Get in touch",
+    "location": "Cairo, Egypt",
+    "facebook": "Facebook",
+    "availabilityTerms": "Product availability, delivery and local selling terms are confirmed before ordering.",
+    "brandCopyright": "© {year} Skillverse Global. All rights reserved.",
+    "tagline": "Built around possibility.",
+    "homeLabel": "Skillverse Global Shop home",
+    "shopLinks": "Shop links",
+    "companyLinks": "Company links"
   }
 }

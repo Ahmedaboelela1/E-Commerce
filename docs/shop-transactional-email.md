@@ -62,7 +62,7 @@ activate/create any payment or shipping method.
 ## Messages
 
 - Registration and resend-verification events: customer verification link at
-  /en/verify?token=... (or /de/verify for the German storefront).
+  /en/verify?token=... (or /ar/verify for the Arabic storefront).
 - Customer password reset: /en/reset-password?token=... .
 - Email address change: new address only, /en/account/verify-email?token=... .
 - Administrator password reset: the Dashboard reset page on the API domain.

@@ -1,0 +1,7 @@
+{
+  "Collection": {
+    "home": "الرئيسية",
+    "collectionNotFound": "التصنيف غير موجود",
+    "browseCollectionAt": "تصفّح منتجات تصنيف {name} في {siteName}"
+  }
+}

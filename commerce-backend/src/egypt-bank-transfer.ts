@@ -31,7 +31,7 @@ export const egyptBankTransferHandler = new PaymentMethodHandler({
         return {
             amount, state: 'Authorized' as const,
             metadata: {paymentType: 'bank-transfer', transferVerification: 'pending', phoneConfirmation: 'pending',
-                public: {paymentInstructions: instructions, reference: order.code}},
+                public: {paymentType:'bank-transfer', paymentInstructions: instructions, reference: order.code}},
         };
     },
     settlePayment: async ctx => {

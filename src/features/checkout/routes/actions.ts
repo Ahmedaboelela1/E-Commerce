@@ -5,9 +5,9 @@ import {SetOrderShippingAddressMutation, SetOrderBillingAddressMutation, SetOrde
 import {CreateCustomerAddressMutation} from '@/features/account/graphql';
 import {revalidatePath, updateTag} from 'next/cache';
 import {redirect} from '@/platform/i18n/navigation';
-import {getLocale} from 'next-intl/server';
+import {getLocale,getTranslations} from 'next-intl/server';
 import {getActiveCustomer} from '@/features/account/customer';
-import {GetActiveOrderForCheckoutQuery} from '@/features/checkout/graphql';
+import {GetActiveOrderForCheckoutQuery,GetEligiblePaymentMethodsQuery} from '@/features/checkout/graphql';
 import {isOfflinePaymentMethod} from '@/features/checkout/offline-payments';
 
 function requireCallbackPhone(number: string): void {
@@ -110,9 +110,7 @@ export async function transitionToArrangingPayment() {
 }
 
 export async function placeOrder(paymentMethodCode: string) {
-    if (!isOfflinePaymentMethod(paymentMethodCode)) {
-        throw new Error('Card payments are not available yet');
-    }
+
     const customer = await getActiveCustomer();
     if (!customer) {
         throw new Error('Please register and sign in before ordering');
@@ -126,6 +124,12 @@ export async function placeOrder(paymentMethodCode: string) {
     requireCallbackPhone(order.shippingAddress.phoneNumber);
     if (order.currencyCode !== 'EGP') {
         throw new Error('Cash on delivery is available only for the Egypt store');
+    }
+    const eligible = await query(GetEligiblePaymentMethodsQuery, {}, {useAuthToken: true, languageCode: await getLocale()});
+    const paymentMethod = eligible.data.eligiblePaymentMethods.find(m => m.code === paymentMethodCode && m.isEligible);
+    if (!paymentMethod || !isOfflinePaymentMethod(paymentMethod)) {
+        const t = await getTranslations('Checkout');
+        throw new Error(t('paymentUnavailable'));
     }
     // First, transition the order to ArrangingPayment state
     await transitionToArrangingPayment();

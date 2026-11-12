@@ -5,7 +5,7 @@ import {requestGrowth} from './growth-api';
 export async function GET(request: NextRequest) {
     const p = request.nextUrl.searchParams;
     const operation = p.get('operation') || '';
-    const locale = p.get('locale') === 'de' ? 'de' : 'en';
+    const locale = p.get('locale') === 'ar' ? 'ar' : 'en';
     const id = p.get('id') || '';
     const skip = Number(p.get('skip') || 0);
     if (!Number.isInteger(skip) || skip < 0 || skip > 100000)

@@ -3,6 +3,7 @@ import type {GraphQLSchema} from 'graphql';
 
 export const shopSchema = (schema?: GraphQLSchema) => gql`
     ${schema?.getType('Upload') ? '' : 'scalar Upload'}
+    extend type PaymentMethodQuote { offlineType: String }
     extend type Query {
         myOrderOperations(orderId: ID!): JSON!
         myOrderInvoice(orderId: ID!): JSON!

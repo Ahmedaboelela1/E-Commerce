@@ -15,3 +15,11 @@ test('transfer display uses only public instructions on a pending transfer',()=>
         {...payment,metadata:{privateAccount:'private'}},{...payment,metadata:'invalid'},
         {...payment,metadata:{public:{paymentInstructions:123}}}]) assert.equal(getTransferInstructions([candidate]),undefined);
 });
+
+test('merchant codes are accepted only when the server identifies an approved handler',()=>{
+    assert.equal(isOfflinePaymentMethod({code:'01',offlineType:'bank-transfer'}),true);
+    assert.equal(isOfflinePaymentMethod({code:'02',offlineType:'cash-on-delivery'}),true);
+    assert.equal(isOfflinePaymentMethod({code:'cash-on-delivery',offlineType:null}),false);
+    assert.equal(isOfflinePaymentMethod({code:'01',offlineType:'dummy-payment-handler'}),false);
+    assert.equal(getTransferInstructions([{method:'01',state:'Authorized',metadata:{public:{paymentType:'bank-transfer',paymentInstructions:'Verified public instructions'}}}]),'Verified public instructions');
+});

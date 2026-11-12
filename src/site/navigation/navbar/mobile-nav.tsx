@@ -14,7 +14,7 @@ import {
     SheetClose,
 } from '@/components/ui/sheet';
 import {ShopLinks} from '@/features/commerce/shop-menu';
-import {useTranslations} from 'next-intl';
+import {useTranslations,useLocale} from 'next-intl';
 
 interface Collection {
     id: string;
@@ -27,7 +27,7 @@ interface MobileNavProps {
 }
 
 export function MobileNav({collections}: MobileNavProps) {
-    const t = useTranslations('Navigation');
+    const t = useTranslations('Navigation'),locale=useLocale();
     const [open, setOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const router = useRouter();
@@ -49,7 +49,7 @@ export function MobileNav({collections}: MobileNavProps) {
                 <Menu className="size-5" />
                 <span className="sr-only">{t('openMenu')}</span>
             </SheetTrigger>
-            <SheetContent side="left" className="w-full sm:max-w-sm overflow-y-auto">
+            <SheetContent side={locale==='ar'?'right':'left'} className="w-full sm:max-w-sm overflow-y-auto">
                 <SheetHeader>
                     <SheetTitle>{t('menu')}</SheetTitle>
                 </SheetHeader>
@@ -58,11 +58,11 @@ export function MobileNav({collections}: MobileNavProps) {
                     <ShopLinks onNavigate={handleLinkClick}/>
                     {/* Search */}
                     <form onSubmit={handleSearch} className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input
                             type="search"
                             placeholder={t('searchProducts')}
-                            className="pl-9 w-full"
+                            className="ps-9 w-full"
                             value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                         />

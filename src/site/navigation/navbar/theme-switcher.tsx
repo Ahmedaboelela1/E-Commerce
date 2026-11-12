@@ -39,17 +39,17 @@ export function ThemeSwitcher() {
                 <DropdownMenuItem onClick={() => setTheme("light")}>
                     <Sun className="size-4" />
                     <span>Light</span>
-                    {theme === "light" && <span className="ml-auto text-xs">✓</span>}
+                    {theme === "light" && <span className="ms-auto text-xs">✓</span>}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("dark")}>
                     <Moon className="size-4" />
                     <span>Dark</span>
-                    {theme === "dark" && <span className="ml-auto text-xs">✓</span>}
+                    {theme === "dark" && <span className="ms-auto text-xs">✓</span>}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setTheme("system")}>
                     <Monitor className="size-4" />
                     <span>System</span>
-                    {theme === "system" && <span className="ml-auto text-xs">✓</span>}
+                    {theme === "system" && <span className="ms-auto text-xs">✓</span>}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

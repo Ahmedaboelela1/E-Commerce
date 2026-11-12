@@ -22,7 +22,7 @@ export function useGrowthWork() {
             const result = await growthAction(action, input);
             if (result.requiresSignIn) {
                 router.push(
-                    `/sign-in?redirectTo=${encodeURIComponent(window.location.pathname.replace(/^\/(en|de)(?=\/|$)/, '') || '/')}`,
+                    `/sign-in?redirectTo=${encodeURIComponent(window.location.pathname.replace(/^\/(en|ar)(?=\/|$)/, '') || '/')}`,
                 );
                 return null;
             }

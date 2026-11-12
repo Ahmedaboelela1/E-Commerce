@@ -1,0 +1,23 @@
+{
+  "Cart": {
+    "title": "سلة التسوّق",
+    "empty": "سلة التسوّق فارغة",
+    "emptyMessage": "أضف منتجات إلى سلتك لتبدأ التسوّق",
+    "continueShopping": "متابعة التسوّق",
+    "each": "للقطعة",
+    "orderSummary": "ملخص الطلب",
+    "subtotal": "المجموع الفرعي",
+    "shipping": "الشحن",
+    "calculatedAtCheckout": "يُحسب عند إتمام الطلب",
+    "total": "الإجمالي",
+    "proceedToCheckout": "إتمام الطلب",
+    "checkoutComingSoon": "السلة مسودة. إتمام الطلب غير متاح حاليًا ولم يتم إرسال أي طلب.",
+    "secureCheckout": "إتمام طلب آمن",
+    "promotionCode": "كود الخصم",
+    "enterDiscountCode": "أدخل كود الخصم أدناه",
+    "remove": "إزالة",
+    "enterCode": "أدخل الكود",
+    "apply": "تطبيق",
+    "sku": "رمز المنتج: {sku}"
+  }
+}

@@ -7,7 +7,7 @@ import { Card } from '@/components/ui/card';
 import { CreditCard, Banknote, Landmark } from 'lucide-react';
 import { useCheckout } from '../checkout-provider';
 import {useTranslations} from 'next-intl';
-import {isOfflinePaymentMethod} from '@/features/checkout/offline-payments';
+import {isOfflinePaymentMethod,getOfflinePaymentType} from '@/features/checkout/offline-payments';
 
 interface PaymentStepProps {
   onComplete: () => void;
@@ -16,7 +16,7 @@ interface PaymentStepProps {
 export default function PaymentStep({ onComplete }: PaymentStepProps) {
   const t = useTranslations('Checkout');
   const { paymentMethods, selectedPaymentMethodCode, setSelectedPaymentMethodCode } = useCheckout();
-  const offlineMethods = paymentMethods.filter((method) => isOfflinePaymentMethod(method.code));
+  const offlineMethods = paymentMethods.filter((method) => isOfflinePaymentMethod(method));
 
   const handleContinue = () => {
     if (!offlineMethods.some(method => method.code === selectedPaymentMethodCode)) return;
@@ -41,11 +41,11 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
             <Card className="p-4">
               <div className="flex items-center gap-3">
                 <RadioGroupItem value={method.code} id={method.code} />
-                {method.code === 'bank-transfer'
+                {getOfflinePaymentType(method) === 'bank-transfer'
                   ? <Landmark className="h-5 w-5 text-muted-foreground" />
                   : <Banknote className="h-5 w-5 text-muted-foreground" />}
                 <div className="flex-1">
-                  <p className="font-medium">{method.name}</p>
+                  <p className="font-medium">{getOfflinePaymentType(method)==='bank-transfer'?t('bankTransfer'):t('cashOnDelivery')}</p><p className="text-xs text-muted-foreground">{method.name}</p>
                   {method.description && (
                     <p className="text-sm text-muted-foreground mt-1" dangerouslySetInnerHTML={{ __html: method.description }} />
                   )}
@@ -55,7 +55,7 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
           </Label>
         ))}
       </RadioGroup>
-      {selectedPaymentMethodCode === 'bank-transfer' && (
+      {getOfflinePaymentType(offlineMethods.find(m=>m.code===selectedPaymentMethodCode)||'') === 'bank-transfer' && (
         <p className="rounded-lg bg-muted p-4 text-sm">{t('transferVerificationNote')}</p>
       )}
 

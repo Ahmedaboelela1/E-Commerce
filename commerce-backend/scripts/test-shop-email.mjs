@@ -39,7 +39,7 @@ const injector={get(token){assert.equal(token,EntityHydrator);return {hydrate:as
 function order(){return {id:3,code:'EG-TEST-1',currencyCode:'EGP',totalWithTax:12500,shippingWithTax:2500,
     customer:{emailAddress:'customer@example.invalid',firstName:'<img src=x onerror=alert(1)>',lastName:'Customer',phoneNumber:'01012345678'},
     shippingAddress:{phoneNumber:'01012345678',streetLine1:'<script>bad</script>',city:'Cairo',country:'Egypt'},
-    payments:[{method:'cash-on-delivery',state:'Authorized'}],
+    payments:[{method:'02',state:'Authorized',metadata:{paymentType:'cash-on-delivery'}}],
     lines:[{productVariant:{name:'Robot <script>bad</script>'},quantity:1,linePriceWithTax:10000}]};}
 
 test('real handlers, MJML rendering and SMTP deliver correct account links and separate COD customer/admin messages',async t=>{
@@ -74,8 +74,8 @@ test('real handlers, MJML rendering and SMTP deliver correct account links and s
     assert.equal(smtp.messages.length,6);
     assert.ok(smtp.authUsers.length>0);assert.ok(smtp.authUsers.every(user=>user==='ahmed@skillverse-global.com'));
     const verification=options.handlers.find(h=>h.type==='email-verification');
-    const german=ctx('de');const localized=await verification.handle(new AccountRegistrationEvent(german,account),await options.globalTemplateVars(german,injector),injector);
-    assert.equal(new URL(localized.templateVars.actionUrl).pathname,'/de/verify');
+    const arabic=ctx('ar');const localized=await verification.handle(new AccountRegistrationEvent(arabic,account),await options.globalTemplateVars(arabic,injector),injector);
+    assert.equal(new URL(localized.templateVars.actionUrl).pathname,'/ar/verify');
     for(const [from,to,context,record] of [
         ['PaymentAuthorized','PaymentSettled',ctx(),order()],['Modifying','PaymentAuthorized',ctx(),order()],
         ['ArrangingPayment','PaymentAuthorized',ctx('en','skillverse-sa'),order()],

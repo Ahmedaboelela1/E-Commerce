@@ -87,6 +87,9 @@
     "governorateRequired": "Enter your governorate to calculate delivery",
     "transferVerificationNote": "Use your order number as the transfer reference. Payment awaits manual verification; contact us after transferring. Shipping follows phone confirmation and verified receipt.",
     "governorateExample": "Cairo / القاهرة",
-    "selectGovernorate": "Select governorate / اختر المحافظة"
+    "selectGovernorate": "Select governorate / اختر المحافظة",
+    "cashOnDelivery": "Cash on delivery",
+    "bankTransfer": "InstaPay / Bank transfer",
+    "paymentUnavailable": "This payment method is unavailable. Refresh the page and choose another offline method."
   }
 }

@@ -1,3 +1,4 @@
+import {offlinePaymentType} from './offline-payment-type';
 import {GrowthMailEvent} from './growth/mail.service';
 import {
     AccountRegistrationEvent, AdministratorPasswordResetEvent, EntityHydrator,
@@ -58,7 +59,7 @@ export function createShopEmailOptions(settings: ShopEmailSettings): EmailPlugin
                 relations: ['customer', 'payments', 'lines.productVariant', 'shippingLines.shippingMethod'],
             });
             const payment = event.order.payments?.find(payment =>
-                ['cash-on-delivery', 'bank-transfer'].includes(payment.method) && payment.state === 'Authorized');
+                !!offlinePaymentType(payment) && payment.state === 'Authorized');
             if (!event.order.customer?.emailAddress || !payment) {
                 throw new Error('Order notification requires an authorized offline payment and a customer.');
             }
@@ -70,8 +71,8 @@ export function createShopEmailOptions(settings: ShopEmailSettings): EmailPlugin
         .setTemplateVars((event, globals) => {
             const order = event.data.order;
             return {
-                isBankTransfer: event.data.payment.method === 'bank-transfer',
-                paymentInstructions: event.data.payment.method === 'bank-transfer'
+                isBankTransfer: offlinePaymentType(event.data.payment) === 'bank-transfer',
+                paymentInstructions: offlinePaymentType(event.data.payment) === 'bank-transfer'
                     ? String(event.data.payment.metadata?.public?.paymentInstructions || '') : '',
                 orderCode: order.code,
                 customerName: [order.customer?.firstName, order.customer?.lastName].filter(Boolean).join(' '),
@@ -114,6 +115,6 @@ export function createShopEmailOptions(settings: ShopEmailSettings): EmailPlugin
                 .setTemplateVars(event=>({subject:event.subject,body:event.body}))
                 .setPlainTextBody((_event,vars)=>vars.body)],
         templateLoader: new ShopEmailTemplateLoader(),
-        globalTemplateVars: async ctx => ({supportEmail: settings.fromAddress, locale: ctx.languageCode === 'de' ? 'de' : 'en'}),
+        globalTemplateVars: async ctx => ({supportEmail: settings.fromAddress, locale: ctx.languageCode === 'ar' ? 'ar' : 'en'}),
     };
 }

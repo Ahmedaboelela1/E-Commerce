@@ -75,8 +75,8 @@ export class CatalogToolsService {
         version: number,
     ) {
         await this.common.product(ctx, productId, false);
-        if (!['en', 'de'].includes(languageCode))
-            throw new UserInputError('Choose English or German');
+        if (!['en', 'ar'].includes(languageCode))
+            throw new UserInputError('Choose English or Arabic');
         const input = object(value);
         const specs = object(input.specs || {});
         const resources = Array.isArray(input.resources) ? input.resources : [];

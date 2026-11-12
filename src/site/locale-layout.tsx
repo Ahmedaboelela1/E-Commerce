@@ -1,3 +1,5 @@
+import {DirectionProvider} from '@/components/ui/direction';
+import {localeDirection} from '@/platform/i18n/locale-utils';
 import {ComparisonProvider} from '@/features/commerce/comparison';
 import type {Metadata, Viewport} from "next";
 import {locale as rootLocale} from "next/root-params";
@@ -20,6 +22,8 @@ const geistSans = localFont({
     variable: "--font-geist-sans",
     display: "swap",
 });
+
+const arabicSans = localFont({src:'../../node_modules/@fontsource-variable/noto-sans-arabic/files/noto-sans-arabic-arabic-wght-normal.woff2',variable:'--font-arabic',display:'swap'});
 
 const geistMono = localFont({
     src: "../../node_modules/@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2",
@@ -95,19 +99,19 @@ export default async function LocaleLayout({children}: {children: React.ReactNod
     const messages = await getMessages({locale});
 
     return (
-        <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
+        <html lang={locale} dir={localeDirection(locale)} data-scroll-behavior="smooth" suppressHydrationWarning>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+                className={`${geistSans.variable} ${geistMono.variable} ${arabicSans.variable} antialiased flex flex-col min-h-screen`}
             >
                 <NextIntlClientProvider locale={locale} messages={messages}>
-                    <ThemeProvider>
+                    <DirectionProvider direction={localeDirection(locale)}><ThemeProvider>
                         <CommerceProvider><ComparisonProvider>
                         <Navbar />
                         {children}
                         <Footer/>
                         <Toaster/>
                         </ComparisonProvider></CommerceProvider>
-                    </ThemeProvider>
+                    </ThemeProvider></DirectionProvider>
                 </NextIntlClientProvider>
             </body>
         </html>

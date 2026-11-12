@@ -77,7 +77,7 @@ test('authorized offline order placement ignores the retired flag while cards st
     try {
         const actions = load('src/features/checkout/routes/actions.ts', {
             '@/platform/vendure/api': {
-                query: async () => ({data:{activeOrder:{lines:[{id:'l1'}],currencyCode:'EGP',shippingAddress:{phoneNumber:'01012345678',streetLine1:'Test street'}}}}),
+                query: async document => document===documents.GetEligiblePaymentMethodsQuery ? {data:{eligiblePaymentMethods:[{code:'01',offlineType:'bank-transfer',isEligible:true},{code:'02',offlineType:'cash-on-delivery',isEligible:true},{code:'visa',offlineType:null,isEligible:true}]}} : ({data:{activeOrder:{lines:[{id:'l1'}],currencyCode:'EGP',shippingAddress:{phoneNumber:'01012345678',streetLine1:'Test street'}}}}),
                 mutate: async (document, input) => {
                     mutations.push({document,input});
                     return document === 'transition'
@@ -87,14 +87,14 @@ test('authorized offline order placement ignores the retired flag while cards st
             },
             '@/features/checkout/graphql': {...documents,TransitionOrderToStateMutation:'transition',AddPaymentToOrderMutation:'payment'},
             '@/features/account/graphql': {}, 'next/cache': {revalidatePath(){},updateTag(){}},
-            '@/platform/i18n/navigation': {redirect}, 'next-intl/server': {getLocale:locale},
+            '@/platform/i18n/navigation': {redirect}, 'next-intl/server': {getLocale:locale,getTranslations:text},
             '@/features/account/customer': {getActiveCustomer:async()=>({id:'customer1'})},
             '@/features/checkout/offline-payments': {isOfflinePaymentMethod},
         });
-        await assert.rejects(actions.placeOrder('bank-transfer'), /REDIRECT:\/order-confirmation\/EG-TEST-1/);
+        await assert.rejects(actions.placeOrder('01'), /REDIRECT:\/order-confirmation\/EG-TEST-1/);
         assert.deepEqual(mutations.map(m=>m.document),['transition','payment']);
-        assert.equal(mutations[1].input.input.method,'bank-transfer');
-        await assert.rejects(actions.placeOrder('visa'),/Card payments are not available/);
+        assert.equal(mutations[1].input.input.method,'01');
+        await assert.rejects(actions.placeOrder('visa'),/paymentUnavailable/);
         assert.equal(mutations.length,2,'card requests must not reach Vendure');
     } finally {
         if (previous === undefined) delete process.env.NEXT_PUBLIC_ENABLE_CHECKOUT;

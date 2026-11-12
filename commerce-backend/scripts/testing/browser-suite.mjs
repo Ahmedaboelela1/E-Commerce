@@ -67,10 +67,14 @@ export async function browserSuite(
     let logs = '';
     next.stdout.on('data', (b) => (logs += b));
     next.stderr.on('data', (b) => (logs += b));
+    let browser;
     t.after(async () => {
+        await browser?.close();
         if (next.exitCode === null) {
             next.kill('SIGTERM');
+            const timer=setTimeout(()=>next.kill('SIGKILL'),5000);
             await once(next, 'exit');
+            clearTimeout(timer);
         }
         await fs.writeFile(
             path.join(artifacts, 'storefront-runtime.log'),
@@ -85,12 +89,14 @@ export async function browserSuite(
             return false;
         }
     }, 'Built Next server did not start');
-    const browser = await chromium.launch({
+    browser = await chromium.launch({
         executablePath: process.env.CHROMIUM_EXECUTABLE || '/usr/bin/chromium',
         headless: true,
         args: ['--no-sandbox', '--disable-dev-shm-usage'],
     });
-    t.after(() => browser.close());
+
+    const {arabicPaymentBrowserSuite}=await import('./arabic-payment-browser-suite.mjs');
+    await arabicPaymentBrowserSuite(t,f,browser,origin,artifacts);
     const context = await browser.newContext({
         viewport: {width: 1440, height: 1000},
     });

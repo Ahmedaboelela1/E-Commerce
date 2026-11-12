@@ -12,7 +12,7 @@ import {
     SheetTitle,
 } from '@/components/ui/sheet';
 import {SlidersHorizontal} from 'lucide-react';
-import {useTranslations} from 'next-intl';
+import {useTranslations,useLocale} from 'next-intl';
 import {SearchProductsQuery} from './graphql';
 import {selectedFacetIds} from './search-helpers';
 import type {FilterCollection} from './data';
@@ -91,7 +91,7 @@ function FilterContent(p: ContentProps) {
                     key={g.id}
                     className="border-t pt-4"
                 >
-                    <legend className="mb-2 pr-2 text-sm font-semibold">
+                    <legend className="mb-2 pe-2 text-sm font-semibold">
                         {g.name}
                     </legend>
                     <div className="space-y-1">
@@ -132,6 +132,7 @@ export function FacetFilters({
     collectionsPromise: Promise<FilterCollection[]>;
     collectionSlug?: string;
 }) {
+    const locale=useLocale();
     const t = useTranslations('Filters'),
         result = use(productDataPromise),
         collections = use(collectionsPromise),
@@ -240,7 +241,7 @@ export function FacetFilters({
                             </span>
                         )}
                     </SheetTrigger>
-                    <SheetContent side="left" className="overflow-y-auto p-6">
+                    <SheetContent side={locale==='ar'?'right':'left'} className="overflow-y-auto p-6">
                         <SheetHeader>
                             <SheetTitle>{t('title')}</SheetTitle>
                         </SheetHeader>

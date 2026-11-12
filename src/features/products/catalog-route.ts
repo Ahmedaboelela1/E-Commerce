@@ -5,7 +5,7 @@ import {SearchProductsQuery} from '@/features/search/graphql';
 
 export async function GET(request: NextRequest) {
     const locale =
-        request.nextUrl.searchParams.get('locale') === 'de' ? 'de' : 'en';
+        request.nextUrl.searchParams.get('locale') === 'ar' ? 'ar' : 'en';
     try {
         const currencyCode = await getActiveCurrencyCode();
         const result = await query(

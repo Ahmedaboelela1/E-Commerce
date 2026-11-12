@@ -1,0 +1,27 @@
+{
+  "OrderStatus": {
+    "AddingItems": "إضافة المنتجات",
+    "ArrangingPayment": "تجهيز الدفع",
+    "PaymentAuthorized": "بانتظار التأكيد / مراجعة الدفع",
+    "PaymentSettled": "تم التحصيل",
+    "PartiallyShipped": "تم الشحن جزئيًا",
+    "Shipped": "تم الشحن",
+    "PartiallyDelivered": "تم التسليم جزئيًا",
+    "Delivered": "تم التسليم",
+    "Cancelled": "ملغي"
+  },
+  "OrderConfirmation": {
+    "pageTitle": "تأكيد الطلب",
+    "orderConfirmed": "استلمنا طلبك",
+    "thankYou": "رقم طلبك هو",
+    "emailConfirmation": "سنتصل بك لتأكيد الطلب قبل الشحن. تتم مراجعة المدفوعات غير الإلكترونية يدويًا.",
+    "orderSummary": "ملخص الطلب",
+    "qty": "الكمية: {quantity}",
+    "total": "الإجمالي",
+    "shippingAddress": "عنوان الشحن",
+    "continueShopping": "متابعة التسوّق",
+    "viewOrders": "عرض الطلبات",
+    "transferInstructions": "إنستاباي / تحويل بنكي",
+    "transferVerificationNote": "استخدم {code} كمرجع للتحويل وتواصل معنا بعده. تتم مراجعة التحصيل بواسطة الإدارة قبل الشحن."
+  }
+}
