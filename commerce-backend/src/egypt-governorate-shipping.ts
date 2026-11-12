@@ -42,7 +42,17 @@ export const egyptGovernorateShippingChecker = new ShippingEligibilityChecker({
         governorate: {
             type: 'string',
             label: [{languageCode: LanguageCode.en, value: 'Governorate / المحافظة'}],
-            ui: {component: 'select-form-input', options: egyptGovernorates.map(([value, en, ar]) => ({value, label: `${ar} / ${en}`}))},
+            ui: {
+                component: 'select-form-input',
+                options: egyptGovernorates.map(([value, en, ar]) => ({
+                    value,
+                    // Native Dashboard selects and summaries require localized labels.
+                    label: [
+                        {languageCode: LanguageCode.en, value: `${ar} / ${en}`},
+                        {languageCode: LanguageCode.ar, value: `${ar} / ${en}`},
+                    ],
+                })),
+            },
         },
     },
     check: (ctx, order, args) => ctx.channel.code === 'skillverse-eg'

@@ -58,3 +58,17 @@ test('governorate delivery accepts Arabic/English aliases and rejects mismatched
     ]) assert.equal(await shipping.check(ctx(),candidate,args,{}),false);
     assert.equal(await shipping.check(ctx('shop',true,'other'),order(),args,{}),false);
 });
+
+test('governorate labels support native Dashboard translation lookup for all 27 stable codes',()=>{
+    const options=shipping.args.governorate.ui.options;
+    assert.equal(options.length,27);
+    assert.equal(new Set(options.map(option=>option.value)).size,27);
+    for(const option of options){
+        for(const languageCode of ['en','ar']){
+            // The native select and its collapsed summary both use label.find().
+            const label=option.label.find(label=>label.languageCode===languageCode)?.value;
+            assert.ok(label?.trim(),`${option.value} needs a ${languageCode} label`);
+        }
+    }
+    assert.equal(options.find(option=>option.value==='cairo').label.find(label=>label.languageCode==='en').value,'القاهرة / Cairo');
+});
