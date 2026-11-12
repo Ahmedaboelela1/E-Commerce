@@ -38,7 +38,7 @@ export async function arabicPaymentBrowserSuite(t,f,browser,origin,artifacts) {
         await page.waitForURL(/\/ar\/order-confirmation\//);
         const placed=(await f.admin('query($id:ID!){order(id:$id){state payments{method state}}}',{id:order.id})).data.order;
         assert.equal(placed.state,'PaymentAuthorized');assert.equal(placed.payments[0].method,'01');assert.equal(placed.payments[0].state,'Authorized');
-        await page.getByText('CI public receiving instructions — not a real account',{exact:true}).waitFor();
+        await page.getByText('CI public receiving instructions — not a real account',{exact:true}).filter({visible:true}).waitFor();
         const code=new URL(page.url()).pathname.split('/').at(-1);
         await waitFor(()=>f.smtp.messages.filter(m=>m.raw.includes(code)).length>=2,'Aliased bank method must send customer and staff notifications');
     });

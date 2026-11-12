@@ -6,7 +6,13 @@ import {
 } from '@vendure/dashboard';
 import {useCallback, useEffect, useState} from 'react';
 
-type Payment = {id: string; method: string; state: string; amount: number};
+type Payment = {
+    id: string;
+    method: string;
+    offlineType: 'bank-transfer' | 'cash-on-delivery' | null;
+    state: string;
+    amount: number;
+};
 type OrderRow = {
     id: string;
     code: string;
@@ -483,7 +489,7 @@ function OperationsPage() {
                             {permissions('UpdateOrder') &&
                                 selected.payments?.some(
                                     (p) =>
-                                        p.method === 'bank-transfer' &&
+                                        p.offlineType === 'bank-transfer' &&
                                         p.state === 'Authorized',
                                 ) && (
                                     <div className="sv-box">
