@@ -148,7 +148,7 @@ export function WishlistLink() {
         >
             <Heart className="size-5" />
             {ids.length > 0 && (
-                <span className="absolute -right-1 -top-1 rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
+                <span className="absolute -end-1 -top-1 rounded-full bg-primary px-1.5 text-xs text-primary-foreground">
                     {ids.length}
                 </span>
             )}

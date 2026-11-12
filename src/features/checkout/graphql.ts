@@ -1,3 +1,5 @@
+import {parse} from 'graphql';
+import type {TadaDocumentNode} from 'gql.tada';
 import {graphql} from '@/platform/vendure/graphql';
 
 export const GetActiveOrderForCheckoutQuery = graphql(`
@@ -92,18 +94,10 @@ export const GetEligibleShippingMethodsQuery = graphql(`
     }
 `);
 
-export const GetEligiblePaymentMethodsQuery = graphql(`
-    query GetEligiblePaymentMethods {
-        eligiblePaymentMethods {
-            id
-            name
-            code
-            description
-            isEligible
-            eligibilityMessage
-        }
-    }
-`);
+export interface OfflinePaymentQuote {id:string;name:string;code:string;description:string;isEligible:boolean;eligibilityMessage:string|null;offlineType:string|null;}
+export const GetEligiblePaymentMethodsQuery = parse(`query GetEligiblePaymentMethods {
+    eligiblePaymentMethods {id name code description isEligible eligibilityMessage offlineType}
+}`) as TadaDocumentNode<{eligiblePaymentMethods:OfflinePaymentQuote[]},Record<string,never>>;
 
 export const GetAvailableCountriesQuery = graphql(`
     query GetAvailableCountries {

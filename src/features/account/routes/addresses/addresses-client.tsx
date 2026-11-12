@@ -148,7 +148,7 @@ export function AddressesClient({ addresses, countries }: AddressesClientProps) 
             <div className="flex justify-between items-center">
                 <div></div>
                 <Button onClick={handleAddNew}>
-                    <Plus className="mr-2 h-4 w-4" />
+                    <Plus className="me-2 h-4 w-4" />
                     {t('addNewAddress')}
                 </Button>
             </div>
@@ -158,7 +158,7 @@ export function AddressesClient({ addresses, countries }: AddressesClientProps) 
                     <CardContent className="py-12 text-center">
                         <p className="text-muted-foreground mb-4">{t('noAddressesSaved')}</p>
                         <Button onClick={handleAddNew}>
-                            <Plus className="mr-2 h-4 w-4" />
+                            <Plus className="me-2 h-4 w-4" />
                             {t('addFirstAddress')}
                         </Button>
                     </CardContent>
@@ -188,7 +188,7 @@ export function AddressesClient({ addresses, countries }: AddressesClientProps) 
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuItem onClick={() => handleEdit(address)}>
-                                                <Edit2 className="mr-2 h-4 w-4" />
+                                                <Edit2 className="me-2 h-4 w-4" />
                                                 {t('edit')}
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
@@ -199,7 +199,7 @@ export function AddressesClient({ addresses, countries }: AddressesClientProps) 
                                                     (settingDefault?.id === address.id && settingDefault?.type === 'shipping')
                                                 }
                                             >
-                                                <Home className="mr-2 h-4 w-4" />
+                                                <Home className="me-2 h-4 w-4" />
                                                 {address.defaultShippingAddress ? t('defaultShipping') : t('setAsShipping')}
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
@@ -209,7 +209,7 @@ export function AddressesClient({ addresses, countries }: AddressesClientProps) 
                                                     (settingDefault?.id === address.id && settingDefault?.type === 'billing')
                                                 }
                                             >
-                                                <CreditCard className="mr-2 h-4 w-4" />
+                                                <CreditCard className="me-2 h-4 w-4" />
                                                 {address.defaultBillingAddress ? t('defaultBilling') : t('setAsBilling')}
                                             </DropdownMenuItem>
                                             <DropdownMenuSeparator />
@@ -217,7 +217,7 @@ export function AddressesClient({ addresses, countries }: AddressesClientProps) 
                                                 onClick={() => handleDelete(address.id)}
                                                 className="text-destructive focus:text-destructive"
                                             >
-                                                <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                                                <Trash2 className="me-2 h-4 w-4 text-destructive" />
                                                 {t('delete')}
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>

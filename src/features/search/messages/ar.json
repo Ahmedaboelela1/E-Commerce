@@ -1,0 +1,28 @@
+{
+  "Sort": {
+    "nameAsc": "الاسم: تصاعديًا",
+    "nameDesc": "الاسم: تنازليًا",
+    "priceAsc": "السعر: من الأقل للأعلى",
+    "priceDesc": "السعر: من الأعلى للأقل",
+    "placeholder": "ترتيب حسب"
+  },
+  "Filters": {
+    "title": "الفلاتر",
+    "clearAll": "مسح الفلاتر",
+    "filtersButton": "الفلاتر",
+    "category": "التصنيف",
+    "allCategories": "كل التصنيفات",
+    "inStockOnly": "المتاح بالمخزون فقط"
+  },
+  "Search": {
+    "title": "بحث",
+    "pageTitle": "البحث عن المنتجات",
+    "resultsFor": "نتائج البحث عن «{query}»",
+    "resultsTitle": "نتائج البحث عن «{query}»",
+    "metaDescription": "ابحث عن منتجات تطابق «{query}» في {siteName}",
+    "metaCatalogDescription": "ابحث في كتالوج منتجات {siteName}",
+    "searchLabel": "البحث في هذا الكتالوج",
+    "searchPlaceholder": "ابحث باسم المنتج…",
+    "searchButton": "بحث"
+  }
+}

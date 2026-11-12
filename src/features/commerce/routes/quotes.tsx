@@ -78,7 +78,7 @@ export default function QuotesPage() {
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead>
-                                            <tr className="border-b text-left">
+                                            <tr className="border-b text-start">
                                                 <th className="py-3">
                                                     {t('product')}
                                                 </th>
@@ -96,7 +96,7 @@ export default function QuotesPage() {
                                                     key={i.variantId}
                                                     className="border-b"
                                                 >
-                                                    <td className="py-3 pr-4">
+                                                    <td className="py-3 pe-4">
                                                         {i.name}
                                                     </td>
                                                     <td>{i.quantity}</td>

@@ -28,7 +28,7 @@ export function CatalogSearch() {
             }}
         >
             <div className="relative min-w-0 flex-1">
-                <Search className="absolute left-3 top-3 size-4 text-muted-foreground" />
+                <Search className="absolute start-3 top-3 size-4 text-muted-foreground" />
                 <Input
                     type="search"
                     name="q"
@@ -36,7 +36,7 @@ export function CatalogSearch() {
                     maxLength={200}
                     aria-label={t('searchLabel')}
                     placeholder={t('searchPlaceholder')}
-                    className="h-11 border-0 bg-muted/40 pl-10 shadow-none"
+                    className="h-11 border-0 bg-muted/40 ps-10 shadow-none"
                 />
             </div>
             <Button type="submit" className="h-11 rounded-xl px-5">

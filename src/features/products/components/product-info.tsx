@@ -254,12 +254,12 @@ export function ProductInfo({
                 >
                     {isAdded ? (
                         <>
-                            <CheckCircle2 className="mr-2 h-5 w-5" />
+                            <CheckCircle2 className="me-2 h-5 w-5" />
                             {t('addedToCart')}
                         </>
                     ) : (
                         <>
-                            <ShoppingCart className="mr-2 h-5 w-5" />
+                            <ShoppingCart className="me-2 h-5 w-5" />
                             {isPending
                                 ? t('adding')
                                 : !selectedVariant &&
@@ -291,7 +291,7 @@ export function ProductInfo({
                         {t('productDetails')}
                     </h2>
                     <div
-                        className="prose prose-sm max-w-none break-words text-sm leading-7 text-muted-foreground [&_a]:text-primary [&_ul]:list-disc [&_ul]:pl-5"
+                        className="prose prose-sm max-w-none break-words text-sm leading-7 text-muted-foreground [&_a]:text-primary [&_ul]:list-disc [&_ul]:ps-5"
                         dangerouslySetInnerHTML={{__html: product.description}}
                     />
                 </section>

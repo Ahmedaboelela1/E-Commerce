@@ -11,6 +11,14 @@ test(
     {skip: !enabled, timeout: 600000},
     async (t) => {
         const f = await suiteFixture(t);
+        const settings=(await f.admin('{globalSettings{availableLanguages}}')).data.globalSettings;
+        await f.admin('mutation($input:UpdateGlobalSettingsInput!){updateGlobalSettings(input:$input){__typename}}', {input:{availableLanguages:[...new Set([...settings.availableLanguages,'ar'])]}});
+        await f.admin('mutation($input:UpdateChannelInput!){updateChannel(input:$input){__typename}}',{input:{id:f.channel.id,availableLanguageCodes:['en','ar']}});
+        // Arbitrary merchant method codes must preserve handler identity end to end.
+        const methods=(await f.admin('{paymentMethods{items{id code}}}')).data.paymentMethods.items;
+        for(const [type,code] of [['bank-transfer','01'],['cash-on-delivery','02']]) {
+            await f.admin('mutation($input:UpdatePaymentMethodInput!){updatePaymentMethod(input:$input){id}}',{input:{id:methods.find(m=>m.code===type).id,code}});
+        }
         const token = await f.customer('suite-buyer@example.invalid');
         const other = await f.customer('suite-other@example.invalid');
         const shop = (q, v = {}, who = token) => f.query(q, v, {token: who});
@@ -27,6 +35,12 @@ test(
                 )
             ).data.order;
         let cod, bank;
+        await t.test('Arabic product help can be maintained without replacing English content',async()=>{
+            const input={specs:{ageRange:'من ٨ سنوات'},faqs:[{question:'كيف أبدأ؟',answer:'راجع دليل التركيب.'}]};
+            const result=(await f.admin('mutation($id:ID!,$input:JSON!){saveShopProductContent(productId:$id,languageCode:"ar",input:$input,version:0)}',{id:f.product.id,input})).data.saveShopProductContent;
+            assert.equal(result.languageCode,'ar');
+            assert.equal(result.content.specs.ageRange,input.specs.ageRange);
+        });
         await t.test(
             'wishlist belongs to verified account and channel',
             async () => {
@@ -128,6 +142,9 @@ test(
                 )
             ).data.setOrderShippingMethod;
             assert.equal(shipping.__typename, 'Order');
+            const quotes=(await shop('{eligiblePaymentMethods{code isEligible offlineType}}',{},who)).data.eligiblePaymentMethods;
+            assert.equal(quotes.find(m=>m.code==='01').offlineType,'bank-transfer');
+            assert.equal(quotes.find(m=>m.code==='02').offlineType,'cash-on-delivery');
             const transition = (
                 await shop(
                     'mutation{transitionOrderToState(state:"ArrangingPayment"){__typename ... on ErrorResult{message}}}',
@@ -155,7 +172,7 @@ test(
         await t.test(
             'phone confirmation protects both operations and native fulfillment',
             async () => {
-                cod = await place('cash-on-delivery', token, 'SUITE10');
+                cod = await place('02', token, 'SUITE10');
                 assert.equal(cod.totalWithTax, 20500);
                 await denied('query($id:ID!){myOrderOperations(orderId:$id)}', {
                     id: cod.id,
@@ -284,7 +301,7 @@ test(
         await t.test(
             'private multipart receipt, explicit bank verification and rejection',
             async () => {
-                bank = await place('bank-transfer');
+                bank = await place('01');
                 assert.equal(bank.totalWithTax, 21500);
                 await denied(
                     'mutation($id:ID!){submitTransferProof(orderId:$id,reference:"OTHER-USER")}',
@@ -852,7 +869,7 @@ test(
             },
         );
         if (process.env.SUITE_BROWSER === 'true') {
-            const pendingBank = await place('bank-transfer');
+            const pendingBank = await place('01');
             const {browserSuite} = await import('./testing/browser-suite.mjs');
             await browserSuite(t, f, {token, other, cod, bank, pendingBank});
         }

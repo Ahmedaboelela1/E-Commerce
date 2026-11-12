@@ -62,7 +62,7 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
                 size="sm"
                 onClick={() => onEditStep('contact')}
               >
-                <Edit className="h-4 w-4 mr-1" />
+                <Edit className="h-4 w-4 me-1" />
                 {t('edit')}
               </Button>
             </div>
@@ -94,7 +94,7 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
                 size="sm"
                 onClick={() => onEditStep('shipping')}
               >
-                <Edit className="h-4 w-4 mr-1" />
+                <Edit className="h-4 w-4 me-1" />
                 {t('edit')}
               </Button>
             </div>
@@ -124,7 +124,7 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
                 size="sm"
                 onClick={() => onEditStep('delivery')}
               >
-                <Edit className="h-4 w-4 mr-1" />
+                <Edit className="h-4 w-4 me-1" />
                 {t('edit')}
               </Button>
             </div>
@@ -152,7 +152,7 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
                 size="sm"
                 onClick={() => onEditStep('payment')}
               >
-                <Edit className="h-4 w-4 mr-1" />
+                <Edit className="h-4 w-4 me-1" />
                 {t('edit')}
               </Button>
             </div>
@@ -170,7 +170,7 @@ export default function ReviewStep({ onEditStep }: ReviewStepProps) {
         size="lg"
         className="w-full"
       >
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {loading && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
         {t('placeOrder')}
       </Button>
 

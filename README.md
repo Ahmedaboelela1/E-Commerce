@@ -61,7 +61,7 @@
 
 **Internationalization**
 
-- Multi-language support via next-intl (English & German out of the box)
+- Multi-language support via next-intl (English & Arabic, with RTL layout)
 - Multi-currency support with persistent currency selection
 - Locale-aware price formatting
 

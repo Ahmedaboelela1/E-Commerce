@@ -1,0 +1,41 @@
+{
+  "NotFound": {
+    "title": "الصفحة غير موجودة",
+    "message": "الصفحة المطلوبة غير موجودة أو نُقلت أو غير متاحة مؤقتًا.",
+    "goHome": "العودة للرئيسية",
+    "browseProducts": "تصفّح المنتجات",
+    "popularCollections": "التصنيفات الشائعة"
+  },
+  "Footer": {
+    "description": "متجر إلكتروني لمنتجات وأدوات التعلّم والروبوتات.",
+    "categories": "التصنيفات",
+    "customer": "العميل",
+    "shopAll": "كل المنتجات",
+    "orders": "الطلبات",
+    "account": "الحساب",
+    "vendure": "Vendure",
+    "github": "GitHub",
+    "documentation": "دليل الاستخدام",
+    "sourceCode": "الكود المصدري",
+    "copyright": "متجر Vendure. جميع الحقوق محفوظة.",
+    "poweredBy": "يعمل بواسطة",
+    "brandDescription": "نحوّل التكنولوجيا إلى واقع، ونفتح آفاقًا جديدة من خلال الروبوتات والذكاء الاصطناعي وتعليم العلوم والتكنولوجيا.",
+    "exploreShop": "استكشف المتجر",
+    "browseProducts": "تصفّح المنتجات",
+    "productsKits": "المنتجات والمجموعات",
+    "stemSolutions": "حلول تعليم العلوم والتكنولوجيا",
+    "aboutUs": "من نحن",
+    "partners": "شركاؤنا",
+    "projects": "المشروعات",
+    "contactUs": "تواصل معنا",
+    "getInTouch": "للتواصل",
+    "location": "القاهرة، مصر",
+    "facebook": "فيسبوك",
+    "availabilityTerms": "نؤكد توافر المنتجات والتوصيل وشروط البيع قبل إتمام الطلب.",
+    "brandCopyright": "© {year} Skillverse Global. جميع الحقوق محفوظة.",
+    "tagline": "نفتح آفاقًا للابتكار.",
+    "homeLabel": "رئيسية متجر Skillverse Global",
+    "shopLinks": "روابط المتجر",
+    "companyLinks": "روابط الشركة"
+  }
+}

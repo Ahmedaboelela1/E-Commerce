@@ -33,6 +33,7 @@ interface ShippingMethod {
 }
 
 interface PaymentMethod {
+  offlineType?:string|null;
   id: string;
   name: string;
   code: string;

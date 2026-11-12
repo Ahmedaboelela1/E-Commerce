@@ -27,7 +27,7 @@ export function SkillverseBrand({inverse = false, compact = false}: SkillverseBr
                     <span className={inverse ? 'text-white' : 'text-[#102140] dark:text-white'}>Skill</span>
                     <span className={inverse ? 'text-[#91b8fa]' : 'text-[#2e5eab] dark:text-[#91b8fa]'}>Verse</span>
                 </span>
-                <span className={`mt-1.5 pl-0.5 text-[9px] font-bold uppercase tracking-[0.35em] ${inverse ? 'text-[#a9c6f7]' : 'text-[#2e5eab] dark:text-[#91b8fa]'}`}>
+                <span className={`mt-1.5 ps-0.5 text-[9px] font-bold uppercase tracking-[0.35em] ${inverse ? 'text-[#a9c6f7]' : 'text-[#2e5eab] dark:text-[#91b8fa]'}`}>
                     GLOBAL
                 </span>
             </span>

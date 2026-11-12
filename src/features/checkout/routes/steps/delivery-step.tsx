@@ -74,7 +74,7 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
                     )}
                   </div>
                 </div>
-                <div className="text-right flex-shrink-0">
+                <div className="text-end flex-shrink-0">
                   <p className="font-semibold">
                     {method.priceWithTax === 0
                       ? t('free')
@@ -95,7 +95,7 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
         disabled={!selectedMethodId || submitting}
         className="w-full"
       >
-        {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {submitting && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
         {t('continueToPayment')}
       </Button>
     </div>

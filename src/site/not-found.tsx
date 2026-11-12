@@ -34,11 +34,11 @@ export default async function NotFound() {
 
                 <div className="flex gap-3 justify-center">
                     <Button nativeButton={false} render={<Link href="/" />} size="lg">
-                        <Home className="mr-2 h-4 w-4" />
+                        <Home className="me-2 h-4 w-4" />
                         {t('goHome')}
                     </Button>
                     <Button nativeButton={false} render={<Link href="/search" />} variant="outline" size="lg">
-                        <ShoppingBag className="mr-2 h-4 w-4" />
+                        <ShoppingBag className="me-2 h-4 w-4" />
                         {t('browseProducts')}
                     </Button>
                 </div>

@@ -1,3 +1,4 @@
+import {offlinePaymentType} from '../offline-payment-type';
 import {Injectable} from '@nestjs/common';
 import {
     CustomerService,
@@ -235,7 +236,7 @@ export class OrderOperationsService {
             transferPending:
                 order.payments?.some(
                     (p) =>
-                        p.method === 'bank-transfer' &&
+                        offlinePaymentType(p) === 'bank-transfer' &&
                         p.state === 'Authorized',
                 ) || false,
             shipments: this.shipments(order),
@@ -334,7 +335,7 @@ export class OrderOperationsService {
         return shipmentAllowed(
             row?.phoneStatus || 'pending',
             order.payments?.some(
-                (p) => p.method === 'bank-transfer' && p.state === 'Authorized',
+                (p) => offlinePaymentType(p) === 'bank-transfer' && p.state === 'Authorized',
             ) || false,
         );
     }
@@ -440,7 +441,7 @@ export class OrderOperationsService {
         if (
             order.state === 'Cancelled' ||
             !order.payments?.some(
-                (p) => p.method === 'bank-transfer' && p.state === 'Authorized',
+                (p) => offlinePaymentType(p) === 'bank-transfer' && p.state === 'Authorized',
             )
         ) {
             throw new UserInputError('This order has no pending bank transfer');
@@ -522,7 +523,7 @@ export class OrderOperationsService {
                     current.state === 'Cancelled' ||
                     !current.payments?.some(
                         (p) =>
-                            p.method === 'bank-transfer' &&
+                            offlinePaymentType(p) === 'bank-transfer' &&
                             p.state === 'Authorized',
                     )
                 )
@@ -593,7 +594,7 @@ export class OrderOperationsService {
                     'Cannot verify payment on a cancelled order',
                 );
             const payment = order.payments?.find(
-                (p) => p.method === 'bank-transfer' && p.state === 'Authorized',
+                (p) => offlinePaymentType(p) === 'bank-transfer' && p.state === 'Authorized',
             );
             if (!payment)
                 throw new UserInputError(
@@ -630,7 +631,7 @@ export class OrderOperationsService {
                 order.state === 'Cancelled' ||
                 !order.payments?.some(
                     (p) =>
-                        p.method === 'bank-transfer' &&
+                        offlinePaymentType(p) === 'bank-transfer' &&
                         p.state === 'Authorized',
                 )
             )

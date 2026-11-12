@@ -14,7 +14,7 @@ export default function OrdersLoading() {
                             <TableHead>Date</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Items</TableHead>
-                            <TableHead className="text-right">Total</TableHead>
+                            <TableHead className="text-end">Total</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -32,8 +32,8 @@ export default function OrdersLoading() {
                                 <TableCell>
                                     <Skeleton className="h-4 w-16"/>
                                 </TableCell>
-                                <TableCell className="text-right">
-                                    <Skeleton className="h-4 w-20 ml-auto"/>
+                                <TableCell className="text-end">
+                                    <Skeleton className="h-4 w-20 ms-auto"/>
                                 </TableCell>
                             </TableRow>
                         ))}

@@ -1,3 +1,4 @@
+import {offlinePaymentType} from '../offline-payment-type';
 import {
     defaultFulfillmentProcess,
     defaultOrderProcess,
@@ -12,7 +13,7 @@ import {
     VendurePlugin,
 } from '@vendure/core';
 import {operationsEntities} from './entities';
-import {OperationsShopResolver, OperationsAdminResolver} from './resolvers';
+import {OperationsShopResolver, OperationsAdminResolver, OfflinePaymentQuoteResolver} from './resolvers';
 import {OrderOperationsService} from './order-operations.service';
 import {ShopSocialService} from './social.service';
 import {ShopReportsService} from './reports.service';
@@ -77,7 +78,7 @@ const orderGate: OrderProcess<never> = {
                     data.ctx.channel.code !== 'skillverse-eg' ||
                     !order.payments?.some(
                         (p) =>
-                            p.method === 'cash-on-delivery' &&
+                            offlinePaymentType(p) === 'cash-on-delivery' &&
                             p.state === 'Authorized',
                     )
                 ) {
@@ -116,7 +117,7 @@ const fulfillmentGate: FulfillmentProcess<never> = {
     ],
     shopApiExtensions: {
         schema: shopSchema,
-        resolvers: [OperationsShopResolver],
+        resolvers: [OperationsShopResolver, OfflinePaymentQuoteResolver],
     },
     adminApiExtensions: {
         schema: adminSchema,

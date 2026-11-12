@@ -6,7 +6,7 @@ type DateFormat = 'short' | 'long';
  * Format a date string
  * @param dateString ISO date string
  * @param format 'short' (Jan 15, 2024) or 'long' (January 15, 2024)
- * @param locale App locale code (e.g. 'en', 'de')
+ * @param locale App locale code (e.g. 'en', 'ar')
  */
 export function formatDate(dateString: string, format: DateFormat = 'short', locale: string = 'en'): string {
     const options: Intl.DateTimeFormatOptions = format === 'long'

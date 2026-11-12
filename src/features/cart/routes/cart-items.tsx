@@ -140,7 +140,7 @@ export async function CartItems({activeOrder}: { activeOrder: ActiveOrder | null
                                 </Button>
                             </form>
 
-                            <div className="sm:hidden ml-auto">
+                            <div className="sm:hidden ms-auto">
                                 <p className="font-semibold text-lg">
                                     <Price value={line.linePriceWithTax}
                                            currencyCode={activeOrder.currencyCode}/>
@@ -149,7 +149,7 @@ export async function CartItems({activeOrder}: { activeOrder: ActiveOrder | null
                         </div>
                     </div>
 
-                    <div className="hidden sm:block text-right flex-shrink-0">
+                    <div className="hidden sm:block text-end flex-shrink-0">
                         <p className="font-semibold text-lg">
                             <Price value={line.linePriceWithTax} currencyCode={activeOrder.currencyCode}/>
                         </p>

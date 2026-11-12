@@ -109,7 +109,7 @@ export default async function OrdersPage(props: PageProps<'/[locale]/account/ord
                                     <TableHead>{t('date')}</TableHead>
                                     <TableHead>{t('status')}</TableHead>
                                     <TableHead>{t('itemsHeader')}</TableHead>
-                                    <TableHead className="text-right">{t('totalHeader')}</TableHead>
+                                    <TableHead className="text-end">{t('totalHeader')}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -130,7 +130,7 @@ export default async function OrdersPage(props: PageProps<'/[locale]/account/ord
                                             {order.lines.length}{' '}
                                             {order.lines.length === 1 ? t('item') : t('items')}
                                         </TableCell>
-                                        <TableCell className="text-right">
+                                        <TableCell className="text-end">
                                             <Price value={order.totalWithTax} currencyCode={order.currencyCode}/>
                                         </TableCell>
                                     </TableRow>

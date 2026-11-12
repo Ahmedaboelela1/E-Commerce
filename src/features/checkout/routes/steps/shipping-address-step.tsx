@@ -268,7 +268,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
             </div>
 
             <Button type="submit" disabled={loading} className="w-full mt-4">
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
               {t('continue')}
             </Button>
           </FieldGroup>
@@ -328,7 +328,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
               disabled={!selectedAddressId || loading}
               className="flex-1"
             >
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
               {t('continueWithSelected')}
             </Button>
 
@@ -452,7 +452,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
                       {t('cancel')}
                     </Button>
                     <Button type="submit" disabled={saving}>
-                      {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      {saving && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
                       {t('saveAddress')}
                     </Button>
                   </DialogFooter>
@@ -581,7 +581,7 @@ export default function ShippingAddressStep({ onComplete }: ShippingAddressStepP
 
               <DialogFooter>
                 <Button type="submit" disabled={saving} className="w-full">
-                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {saving && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
                   {t('saveAddress')}
                 </Button>
               </DialogFooter>

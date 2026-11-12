@@ -131,7 +131,7 @@ export async function OrderConfirmation({paramsPromise}: OrderConfirmationProps)
                                     )}
                                     <p className="text-xs text-muted-foreground mt-0.5">{t('qty', {quantity: line.quantity})}</p>
                                 </div>
-                                <div className="text-right">
+                                <div className="text-end">
                                     <p className="font-semibold">
                                         <Price value={line.linePriceWithTax} currencyCode={order.currencyCode}/>
                                     </p>
@@ -172,11 +172,11 @@ export async function OrderConfirmation({paramsPromise}: OrderConfirmationProps)
 
                 <div className="flex flex-col sm:flex-row gap-3">
                     <Button nativeButton={false} render={<Link href="/" />} className="flex-1" size="lg">
-                        <ShoppingBag className="mr-2 h-4 w-4" />
+                        <ShoppingBag className="me-2 h-4 w-4" />
                         {t('continueShopping')}
                     </Button>
                     <Button nativeButton={false} render={<Link href="/account/orders" />} variant="outline" className="flex-1" size="lg">
-                        <ClipboardList className="mr-2 h-4 w-4" />
+                        <ClipboardList className="me-2 h-4 w-4" />
                         {t('viewOrders')}
                     </Button>
                 </div>

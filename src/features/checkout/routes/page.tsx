@@ -36,13 +36,13 @@ export default async function CheckoutPage() {
 
     const [orderRes, addressesRes, countries, shippingMethodsRes, paymentMethodsRes] =
         await Promise.all([
-            query(GetActiveOrderForCheckoutQuery, {}, {useAuthToken: true, currencyCode}),
+            query(GetActiveOrderForCheckoutQuery, {}, {useAuthToken: true, languageCode:locale, currencyCode}),
             isGuest
                 ? Promise.resolve({ data: { activeCustomer: null } })
                 : query(GetCustomerAddressesQuery, {}, {useAuthToken: true}),
             getAvailableCountriesCached(locale),
-            query(GetEligibleShippingMethodsQuery, {}, {useAuthToken: true, currencyCode}),
-            query(GetEligiblePaymentMethodsQuery, {}, {useAuthToken: true, currencyCode}),
+            query(GetEligibleShippingMethodsQuery, {}, {useAuthToken: true, languageCode:locale, currencyCode}),
+            query(GetEligiblePaymentMethodsQuery, {}, {useAuthToken: true, languageCode:locale, currencyCode}),
         ]);
 
     const activeOrder = orderRes.data.activeOrder;
@@ -60,7 +60,7 @@ export default async function CheckoutPage() {
     // Only show the configured offline methods; card gateways remain unavailable.
     const paymentMethods =
         paymentMethodsRes.data.eligiblePaymentMethods?.filter(
-            (m) => m.isEligible && isOfflinePaymentMethod(m.code)
+            (m) => m.isEligible && isOfflinePaymentMethod(m)
         ) || [];
 
     return (

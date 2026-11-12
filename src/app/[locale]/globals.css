@@ -137,3 +137,6 @@
 .animate-fade-up {
   animation: fade-up 0.4s ease-out both;
 }
+
+html[lang="ar"] body, html[lang="ar"] .font-sans { font-family: var(--font-arabic), var(--font-geist-sans), Arial, sans-serif; }
+html[dir="rtl"] input[type="email"], html[dir="rtl"] input[type="password"], html[dir="rtl"] input[type="tel"] { direction: ltr; text-align: start; }

@@ -3,7 +3,12 @@
     "loading": "Loading...",
     "sending": "Sending...",
     "sku": "SKU",
-    "siteDescription": "Shop the best products at {siteName}. Quality products, competitive prices, and fast delivery."
+    "siteDescription": "Shop the best products at {siteName}. Quality products, competitive prices, and fast delivery.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "close": "Close",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide"
   },
   "Errors": {
     "fieldsRequired": "All fields are required",

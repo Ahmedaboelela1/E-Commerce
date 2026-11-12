@@ -78,7 +78,7 @@ function OrderSummaryContent({ order, t }: { order: ReturnType<typeof useCheckou
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">{t('shipping')}</span>
           <span>
-            {order.shippingWithTax > 0
+            {order.shippingLines.length > 0
               ? <Price value={order.shippingWithTax} currencyCode={order.currencyCode} />
               : t('toBeCalculated')}
           </span>

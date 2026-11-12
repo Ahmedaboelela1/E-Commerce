@@ -55,6 +55,7 @@ export const egyptCashOnDeliveryHandler = new PaymentMethodHandler({
             state: 'Authorized' as const,
             metadata: {
                 paymentType: 'cash-on-delivery',
+                public: {paymentType:'cash-on-delivery'},
                 phoneConfirmation: 'pending',
                 cashCollection: 'not-collected',
             },

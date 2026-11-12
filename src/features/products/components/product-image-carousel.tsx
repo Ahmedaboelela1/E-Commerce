@@ -32,25 +32,25 @@ export function ProductImageCarousel({
                             variant="outline"
                             size="icon-lg"
                             aria-label={t('previousImage')}
-                            className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full border-slate-200 bg-white text-slate-700 shadow-sm"
+                            className="absolute start-3 top-1/2 -translate-y-1/2 rounded-full border-slate-200 bg-white text-slate-700 shadow-sm"
                             onClick={() =>
                                 setIndex(
                                     (index + images.length - 1) % images.length,
                                 )
                             }
                         >
-                            <ChevronLeft className="size-5" />
+                            <ChevronLeft className="size-5 rtl:rotate-180" />
                         </Button>
                         <Button
                             variant="outline"
                             size="icon-lg"
                             aria-label={t('nextImage')}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full border-slate-200 bg-white text-slate-700 shadow-sm"
+                            className="absolute end-3 top-1/2 -translate-y-1/2 rounded-full border-slate-200 bg-white text-slate-700 shadow-sm"
                             onClick={() =>
                                 setIndex((index + 1) % images.length)
                             }
                         >
-                            <ChevronRight className="size-5" />
+                            <ChevronRight className="size-5 rtl:rotate-180" />
                         </Button>
                         <span
                             aria-live="polite"

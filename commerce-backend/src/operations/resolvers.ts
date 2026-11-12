@@ -1,4 +1,4 @@
-import {Args, Mutation, Query, Resolver} from '@nestjs/graphql';
+import {Args, Mutation, Query, Resolver, ResolveField, Parent} from '@nestjs/graphql';
 import {
     Allow,
     Ctx,
@@ -6,6 +6,8 @@ import {
     Permission,
     RequestContext,
     Transaction,
+    TransactionalConnection,
+    PaymentMethod,
 } from '@vendure/core';
 import {
     OrderOperationsService,
@@ -228,5 +230,18 @@ export class OperationsAdminResolver {
         @Args('version') version: number,
     ) {
         return this.social.moderate(ctx, id, status, version);
+    }
+}
+
+@Resolver('PaymentMethodQuote')
+export class OfflinePaymentQuoteResolver {
+    constructor(private db: TransactionalConnection) {}
+    @ResolveField()
+    @Allow(Permission.Owner)
+    async offlineType(@Ctx() ctx: RequestContext, @Parent() quote: {id: ID}) {
+        const method = await this.db.findOneInChannel(ctx, PaymentMethod, quote.id, ctx.channelId);
+        const code = method?.handler?.code;
+        return method?.enabled && (code === 'cash-on-delivery' || code === 'bank-transfer')
+            ? code : null;
     }
 }

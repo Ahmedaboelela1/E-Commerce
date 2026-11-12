@@ -42,7 +42,7 @@ export function OrderDetail({orderPromise}: OrderDetailProps) {
         <div>
             <div className="mb-6">
                 <Button render={<Link href="/account/orders" />} nativeButton={false} variant="ghost" size="sm" className="mb-4">
-                        <ChevronLeft className="h-4 w-4 mr-2"/>
+                        <ChevronLeft className="h-4 w-4 me-2"/>
                         {t('backToOrders')}
                 </Button>
                 <div className="flex items-center justify-between">
@@ -91,7 +91,7 @@ export function OrderDetail({orderPromise}: OrderDetailProps) {
                                                 {t('skuLabel', {sku: line.productVariant.sku})}
                                             </p>
                                         </div>
-                                        <div className="text-right">
+                                        <div className="text-end">
                                             <p className="font-medium">
                                                 <Price value={line.linePriceWithTax} currencyCode={order.currencyCode}/>
                                             </p>

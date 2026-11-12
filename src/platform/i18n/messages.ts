@@ -4,5 +4,5 @@ export type MessageLoaders = Record<string, MessageLoader>;
 
 export const platformMessageLoaders: MessageLoaders = {
     en: () => import('./messages/en.json'),
-    de: () => import('./messages/de.json'),
+    ar: () => import('./messages/ar.json'),
 };

@@ -48,7 +48,7 @@ export function CurrencyPicker({availableCurrencyCodes, activeCurrencyCode}: Cur
                         disabled={isPending}
                     >
                         <span>{code}</span>
-                        {activeCurrencyCode === code && <span className="ml-auto text-xs">✓</span>}
+                        {activeCurrencyCode === code && <span className="ms-auto text-xs">✓</span>}
                     </DropdownMenuItem>
                 ))}
             </DropdownMenuContent>

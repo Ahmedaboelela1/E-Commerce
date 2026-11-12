@@ -57,7 +57,7 @@ export async function ProductSpotlight() {
                     )}
                 </div>
             </Link>
-            <div className="absolute right-5 top-4 sm:right-6 sm:top-5">
+            <div className="absolute end-5 top-4 sm:right-6 sm:top-5">
                 <WishlistButton productId={product.productId} compact />
             </div>
         </div>

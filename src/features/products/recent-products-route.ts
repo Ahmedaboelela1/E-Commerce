@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({error: true}, {status: 400, headers});
     try {
         const currencyCode = await getActiveCurrencyCode(),
-            languageCode = params.get('locale') === 'de' ? 'de' : 'en';
+            languageCode = params.get('locale') === 'ar' ? 'ar' : 'en';
         const products = await Promise.all(
             [...new Set(ids)].map(async (id) => {
                 const {data} = await query(

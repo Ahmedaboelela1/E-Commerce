@@ -33,14 +33,14 @@ export function ProductCarousel({
                     }}
                     className="w-full"
                 >
-                    <CarouselContent className="-ml-2 md:-ml-4">
+                    <CarouselContent className="-ms-2 md:-ms-4">
                         {products.map((product, index) => (
                             <CarouselItem
                                 key={
                                     readFragment(ProductCardFragment, product)
                                         .productId
                                 }
-                                className="pl-2 md:pl-4 basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                                className="ps-2 md:ps-4 basis-1/2 lg:basis-1/3 xl:basis-1/4"
                             >
                                 <ProductCard
                                     product={product}
