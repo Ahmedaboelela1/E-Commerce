@@ -450,5 +450,7 @@ export async function browserSuite(
             });
             await adminPage.close();
         },
-    );
+    );    const {marketplaceCheckoutBrowserSuite}=await import('./marketplace-checkout-browser-suite.mjs');
+    await marketplaceCheckoutBrowserSuite(t,f,browser,origin,artifacts);
+
 }

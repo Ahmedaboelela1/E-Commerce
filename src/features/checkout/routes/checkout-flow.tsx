@@ -16,7 +16,7 @@ type CheckoutStep = 'contact' | 'shipping' | 'delivery' | 'payment' | 'review';
 
 export default function CheckoutFlow() {
   const t = useTranslations('Checkout');
-  const { order, isGuest } = useCheckout();
+  const { order, isGuest, shippingMethods, deliveryGroups } = useCheckout();
 
   const getStepOrder = (): CheckoutStep[] => {
     if (isGuest) {
@@ -45,7 +45,9 @@ export default function CheckoutFlow() {
       }
     }
 
-    if (order.shippingLines && order.shippingLines.length > 0) {
+    const selectedGroups = order.shippingLines.map(line => shippingMethods.find(method => method.id === line.shippingMethod.id)?.deliveryGroup);
+    const deliveryComplete = deliveryGroups.length > 0 && selectedGroups.length === deliveryGroups.length && deliveryGroups.every(group => selectedGroups.includes(group.id));
+    if (deliveryComplete) {
       if (completed.has('shipping')) {
         completed.add('delivery');
         current = 'payment';

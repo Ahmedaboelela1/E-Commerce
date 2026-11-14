@@ -21,31 +21,35 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
   const locale = useLocale();
   const intlLocale = toIntlLocale(locale);
   const router = useRouter();
-  const { shippingMethods, order } = useCheckout();
-  const [selectedMethodId, setSelectedMethodId] = useState<string | null>(() => {
-    if (order.shippingLines && order.shippingLines.length > 0) {
-      return order.shippingLines[0].shippingMethod.id;
-    }
-    return shippingMethods.length === 1 ? shippingMethods[0].id : null;
-  });
+  const { shippingMethods, deliveryGroups, order } = useCheckout();
+  const groups = deliveryGroups.map(group => group.id);
+  const [selection, setSelection] = useState<Record<string,string>>(() => Object.fromEntries(groups.map(group => {
+    const options = shippingMethods.filter(method => method.deliveryGroup === group);
+    const previous = options.find(method => order.shippingLines.some(line => line.shippingMethod.id === method.id));
+    return [group, previous?.id || (options.length === 1 ? options[0].id : '')];
+  })));
+  const [error, setError] = useState(false);
+  const complete = groups.every(group => shippingMethods.some(method => method.deliveryGroup === group && method.id === selection[group]));
   const [submitting, setSubmitting] = useState(false);
 
   const handleContinue = async () => {
-    if (!selectedMethodId) return;
+    if (!complete) return;
+    setError(false);
 
     setSubmitting(true);
     try {
-      await setShippingMethodAction(selectedMethodId);
+      await setShippingMethodAction(groups.map(group => selection[group]));
       router.refresh();
       onComplete();
     } catch (error) {
       console.error('Error setting shipping method:', error);
+      setError(true);
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (shippingMethods.length === 0) {
+  if (shippingMethods.length === 0 || groups.length === 0) {
     return (
       <div className="text-center py-8">
         <p className="text-muted-foreground">{t('noShippingMethods')}</p>
@@ -57,8 +61,12 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
     <div className="space-y-6">
       <h3 className="font-semibold">{t('selectShippingMethod')}</h3>
 
-      <RadioGroup value={selectedMethodId || ''} onValueChange={setSelectedMethodId}>
-        {shippingMethods.map((method) => (
+      {groups.length > 1 && <p className="text-sm text-muted-foreground">{t('sellerDeliveryNotice')}</p>}
+      {groups.map(group => <fieldset key={group} className="space-y-3">
+        {groups.length > 1 && <legend className="font-medium">{deliveryGroups.find(item => item.id === group)?.name}</legend>}
+        {!shippingMethods.some(method=>method.deliveryGroup===group)&&<p role="alert" className="text-destructive">{t('noSellerDelivery')}</p>}
+        <RadioGroup value={selection[group] || ''} onValueChange={id => setSelection(previous => ({...previous,[group]:id}))}>
+        {shippingMethods.filter(method => method.deliveryGroup === group).map((method) => (
           <Label key={method.id} htmlFor={method.id} className="cursor-pointer">
             <Card className="p-4">
               <div className="flex items-center justify-between gap-4">
@@ -89,10 +97,12 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
           </Label>
         ))}
       </RadioGroup>
+      </fieldset>)}
+      {error && <p role="alert" className="text-destructive">{t('deliverySaveError')}</p>}
 
       <Button
         onClick={handleContinue}
-        disabled={!selectedMethodId || submitting}
+        disabled={!complete || submitting}
         className="w-full"
       >
         {submitting && <Loader2 className="me-2 h-4 w-4 animate-spin" />}

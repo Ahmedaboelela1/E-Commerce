@@ -1,3 +1,4 @@
+import {ManageStore} from '../marketplace/permissions';
 import {Args, Mutation, Query, Resolver} from '@nestjs/graphql';
 import {
     Allow,
@@ -185,7 +186,7 @@ export class GrowthAdminResolver {
     ) {
         return this.common.saveSettings(c, input);
     }
-    @Query() @Allow(Permission.ReadCatalog) shopCatalogContent(
+    @Query() @Allow(Permission.ReadCatalog,ManageStore.Permission) shopCatalogContent(
         @Ctx() c: RequestContext,
         @Args('productId') id: ID,
         @Args('languageCode') language?: string,
@@ -193,7 +194,7 @@ export class GrowthAdminResolver {
         return this.catalog.content(c, id, language, false, false);
     }
     @Mutation()
-    @Allow(Permission.UpdateCatalog)
+    @Allow(Permission.UpdateCatalog,ManageStore.Permission)
     @Transaction()
     saveShopProductContent(
         @Ctx() c: RequestContext,
@@ -204,28 +205,28 @@ export class GrowthAdminResolver {
     ) {
         return this.catalog.save(c, id, language, input, v);
     }
-    @Query() @Allow(Permission.ReadCatalog) shopAdminBundles(
+    @Query() @Allow(Permission.ReadCatalog,ManageStore.Permission) shopAdminBundles(
         @Ctx() c: RequestContext,
         @Args('skip') skip?: number,
     ) {
         return this.bundles.list(c, true, skip);
     }
-    @Mutation() @Allow(Permission.UpdateCatalog) @Transaction() saveShopBundle(
+    @Mutation() @Allow(Permission.UpdateCatalog,ManageStore.Permission) @Transaction() saveShopBundle(
         @Ctx() c: RequestContext,
         @Args('input') input: unknown,
     ) {
-        if (!c.userHasPermissions([Permission.CreatePromotion]))
+        if (!c.userHasPermissions([Permission.CreatePromotion,ManageStore.Permission]))
             throw new ForbiddenError();
         return this.bundles.save(c, input);
     }
-    @Query() @Allow(Permission.ReadOrder) shopSchoolQuotes(
+    @Query() @Allow(Permission.ReadOrder,ManageStore.Permission) shopSchoolQuotes(
         @Ctx() c: RequestContext,
         @Args('skip') skip?: number,
     ) {
         return this.quotes.list(c, true, skip);
     }
     @Mutation()
-    @Allow(Permission.UpdateOrder)
+    @Allow(Permission.UpdateOrder,ManageStore.Permission)
     @Transaction()
     publishSchoolQuote(
         @Ctx() c: RequestContext,
@@ -237,7 +238,7 @@ export class GrowthAdminResolver {
         return this.quotes.offer(c, id, input, v, publish);
     }
     @Mutation()
-    @Allow(Permission.UpdateOrder)
+    @Allow(Permission.UpdateOrder,ManageStore.Permission)
     @Transaction()
     linkSchoolQuoteOrder(
         @Ctx() c: RequestContext,
@@ -247,20 +248,20 @@ export class GrowthAdminResolver {
     ) {
         return this.quotes.linkOrder(c, id, order, v);
     }
-    @Query() @Allow(Permission.ReadOrder) shopReturnRequests(
+    @Query() @Allow(Permission.ReadOrder,ManageStore.Permission) shopReturnRequests(
         @Ctx() c: RequestContext,
         @Args('skip') skip?: number,
     ) {
         return this.returns.list(c, true, skip);
     }
-    @Query() @Allow(Permission.ReadOrder) shopReturnPhoto(
+    @Query() @Allow(Permission.ReadOrder,ManageStore.Permission) shopReturnPhoto(
         @Ctx() c: RequestContext,
         @Args('returnId') id: ID,
         @Args('index') i: number,
     ) {
         return this.returns.photo(c, id, i, false);
     }
-    @Mutation() @Allow(Permission.UpdateOrder) @Transaction() updateShopReturn(
+    @Mutation() @Allow(Permission.UpdateOrder,ManageStore.Permission) @Transaction() updateShopReturn(
         @Ctx() c: RequestContext,
         @Args('returnId') id: ID,
         @Args('input') input: unknown,

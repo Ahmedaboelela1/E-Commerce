@@ -90,6 +90,9 @@
     "selectGovernorate": "Select governorate / اختر المحافظة",
     "cashOnDelivery": "Cash on delivery",
     "bankTransfer": "InstaPay / Bank transfer",
-    "paymentUnavailable": "This payment method is unavailable. Refresh the page and choose another offline method."
+    "paymentUnavailable": "This payment method is unavailable. Refresh the page and choose another offline method.",
+    "sellerDeliveryNotice": "Your items ship separately. Choose delivery for each seller; the total includes all delivery charges.",
+    "deliverySaveError": "Delivery could not be saved. Check the address and try again.",
+    "noSellerDelivery": "Delivery is not available for this seller at this address. Contact the store before continuing."
   }
 }
