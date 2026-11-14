@@ -1,3 +1,4 @@
+import {SellingSectionPanel,SellingOrderDetails,type SellingSection} from '../../marketplace/dashboard';
 import {
     defineDashboardExtension,
     api,
@@ -111,15 +112,24 @@ function OperationsPage() {
     const {hasPermissions} = usePermissions();
     const storeAdmin = hasPermissions(['ManageStore']);
     const allowed = (permission:string) => hasPermissions([permission]) || (storeAdmin && ['ReadOrder','UpdateOrder','ReadCatalog','UpdateCatalog','CreatePromotion'].includes(permission));
-    const tabs = [
-        ['orders', 'Orders / الطلبات', 'ReadOrder'],
-        ['reports', 'Sales / المبيعات', 'ReadOrder'],
-        ['inventory', 'Stock / المخزون', 'ReadCatalog'],
-        ['reviews', 'Reviews / التقييمات', 'ReadCatalog'],
-        ['coupons', 'Coupons / الكوبونات', 'CreatePromotion'],
-        ['settings', 'Settings / الإعدادات', 'ReadSettings'],
-    ].filter((tab) => allowed(tab[2]));
-    const [requestedTab, setTab] = useState('orders');
+    const sellerOnly=hasPermissions(['SellOwnProducts'])&&!storeAdmin;
+    const canReadOrders=allowed('ReadOrder');
+    const canManageCatalog=storeAdmin||sellerOnly;
+    const integratedOrderManagement=storeAdmin&&activeChannel?.code!=='__default_channel__';
+    const tabDefinitions:[string,string,boolean][]=[
+        ['orders','Orders / الطلبات',canReadOrders||sellerOnly],
+        ['products','Products / المنتجات',canManageCatalog],
+        ['reports','Sales / المبيعات',allowed('ReadOrder')],
+        ['inventory','Stock / المخزون',allowed('ReadCatalog')],
+        ['delivery','Delivery rates / أسعار التوصيل',canManageCatalog],
+        ['payments','Payments / الدفع',storeAdmin],
+        ['accounts','Team & sellers / الحسابات والبائعون',storeAdmin],
+        ['reviews','Reviews / التقييمات',allowed('ReadCatalog')],
+        ['coupons','Coupons / الكوبونات',allowed('CreatePromotion')],
+        ['settings','Settings / الإعدادات',hasPermissions(['ReadSettings'])],
+    ];
+    const tabs=tabDefinitions.filter(([, ,visible])=>visible);
+    const [requestedTab, setTab] = useState(()=>typeof window==='undefined'?'orders':new URLSearchParams(window.location.search).get('tab')||'orders');
     const tab = tabs.some((item) => item[0] === requestedTab)
         ? requestedTab
         : tabs[0]?.[0] || '';
@@ -200,7 +210,7 @@ function OperationsPage() {
         setTracking('');
     };
     const loadTab = useCallback(async () => {
-        if (tab === 'orders') await loadOrders();
+        if (tab === 'orders' && canReadOrders) await loadOrders();
         if (tab === 'inventory') {
             const d = await request<{
                 shopOperationsInventory: {items: Stock[]; total: number};
@@ -226,7 +236,7 @@ function OperationsPage() {
             );
             setSettings(d.shopOperationsSettings);
         }
-    }, [tab, loadOrders, stockSkip, reviewStatus, reviewSkip]);
+    }, [tab, loadOrders, stockSkip, reviewStatus, reviewSkip, canReadOrders]);
     useEffect(() => {
         setSelected(null);
         setReceipt(null);
@@ -253,8 +263,7 @@ function OperationsPage() {
             <style>{css}</style>
             <h1>Shop operations / إدارة المتجر</h1>
             <p className="sv-muted">
-                {activeChannel?.code} · Confirm, verify payment, then ship
-                manually / تأكيد الطلب والتحصيل ثم الشحن اليدوي
+                {activeChannel?.code} · {sellerOnly?'Your products, stock and order items only / منتجاتك ومخزونك وبنود طلباتك فقط':'Confirm, verify payment, then ship manually / تأكيد الطلب والتحصيل ثم الشحن اليدوي'}
             </p>
             <div className="sv-tabs" role="tablist">
                 {tabs.map(([key, title]) => (
@@ -264,6 +273,8 @@ function OperationsPage() {
                         aria-selected={tab === key}
                         onClick={() => {
                             setTab(key);
+                            const url=new URL(window.location.href);url.searchParams.set('tab',key);
+                            window.history.replaceState(window.history.state,'',url);
                             setSelected(null);
                             setError('');
                             setMessage('');
@@ -283,6 +294,8 @@ function OperationsPage() {
                     {message}
                 </p>
             )}
+            {sellerOnly&&tab==='orders'&&<SellingSectionPanel key="seller-orders" section="orders"/>}
+            {(['products','delivery','payments','accounts'].includes(tab))&&<SellingSectionPanel key={tab} section={(tab==='products'?'catalog':tab) as SellingSection}/>}
             {tab === 'orders' && permissions('ReadOrder') && (
                 <>
                     <form
@@ -373,7 +386,7 @@ function OperationsPage() {
                             >
                                 Open in Orders / إدارة الطلب
                             </a>}
-                            {storeAdmin && !hasPermissions(['ReadOrder']) && <a className="sv-btn" href="/dashboard/store-workspace">Order items, shipments, cancellations & refunds / بنود الطلب والشحن والإلغاء ورد المبلغ</a>}
+
                             {permissions('UpdateOrder') && selected.payments.some(p=>p.offlineType==='cash-on-delivery'&&p.state==='Authorized') && <form className="sv-box" onSubmit={e=>{e.preventDefault();const form=e.currentTarget;const data=new FormData(form);void run(async()=>{await request('mutation($id:ID!,$reference:String!){confirmStoreCashReceipt(orderId:$id,confirmed:true,reference:$reference)}',{id:selected.id,reference:String(data.get('cashReference')||'')});await refreshOrder();form.reset();});}}><h3>Actual cash collection / التحصيل الفعلي</h3><label>Collection reference / مرجع التحصيل<input name="cashReference" required maxLength={120}/></label><label><input type="checkbox" required/> I verified actual cash receipt / تحققت من استلام النقد فعليًا</label><button className="sv-primary" disabled={busy}>Record cash received / تسجيل استلام النقد</button></form>}
                             {permissions('UpdateOrder') && (
                                 <>
@@ -442,9 +455,7 @@ function OperationsPage() {
                                         Save callback / حفظ الاتصال
                                     </button>
                                     <p className="sv-muted">
-                                        Declining a call blocks dispatch. Cancel
-                                        the actual order in Orders to release
-                                        reserved stock.
+                                        {integratedOrderManagement?'Declining a call blocks dispatch. Cancel the order below to release reserved stock.':'Declining a call blocks dispatch. Cancel the actual order in Orders to release reserved stock.'}
                                     </p>
                                 </>
                             )}
@@ -583,6 +594,7 @@ function OperationsPage() {
                                         </button>
                                     </div>
                                 )}
+                            {integratedOrderManagement ? <SellingOrderDetails key={selected.id} orderId={selected.id} reloadKey={`${selected.version}:${selected.phoneStatus}:${selected.payments.map(payment=>payment.state).join(',')}`} onChange={refreshOrder}/> : <>
                             <h2>Shipping / الشحن</h2>
                             {selected.shipments?.map((s) => (
                                 <p key={s.id}>
@@ -654,6 +666,7 @@ function OperationsPage() {
                                     </button>
                                 </>
                             )}
+                            </>}
                             <h2>Invoice / الفاتورة</h2>
                             <button
                                 disabled={busy}
@@ -1243,7 +1256,7 @@ defineDashboardExtension({
         {
             path: '/shop-operations',
             navMenuItem: {
-                requiresPermission: ['ReadOrder','ManageStore'],
+                requiresPermission: ['ReadOrder','ManageStore','SellOwnProducts'],
                 sectionId: 'sales',
                 id: 'shop-operations',
                 title: 'Shop operations / إدارة المتجر',
