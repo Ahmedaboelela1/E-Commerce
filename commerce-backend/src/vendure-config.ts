@@ -15,6 +15,7 @@ import {EmailPlugin} from '@vendure/email-plugin';
 import {readShopEmailSettings} from './email-settings';
 import {createShopEmailOptions} from './shop-email';
 import {ShopOperationsPlugin} from './operations/operations.plugin';
+import {MarketplacePlugin} from './marketplace/marketplace.plugin';
 
 const IS_DEV = process.env.APP_ENV === 'dev';
 const PORT = Number(process.env.PORT || 3000);
@@ -75,6 +76,7 @@ export const config: VendureConfig = {
     plugins: [
         ShopOperationsPlugin,
         ShopGrowthPlugin,
+        MarketplacePlugin,
         ...(emailSettings ? [EmailPlugin.init(createShopEmailOptions(emailSettings))] : []),
         DefaultSchedulerPlugin.init(),
         DefaultJobQueuePlugin.init({useDatabaseForBuffer: true}),

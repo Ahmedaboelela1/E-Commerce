@@ -82,17 +82,14 @@ export const GetActiveOrderForCheckoutQuery = graphql(`
     }
 `);
 
-export const GetEligibleShippingMethodsQuery = graphql(`
-    query GetEligibleShippingMethods {
-        eligibleShippingMethods {
-            id
-            name
-            code
-            description
-            priceWithTax
-        }
-    }
-`);
+export interface DeliveryQuote {id:string;name:string;code:string;description:string;priceWithTax:number;deliveryGroup:string;sellerName:string;}
+export const GetEligibleShippingMethodsQuery = parse(`query GetEligibleShippingMethods {
+    eligibleShippingMethods { id name code description priceWithTax deliveryGroup sellerName }
+    marketplaceDeliveryGroups
+}`) as TadaDocumentNode<{eligibleShippingMethods:DeliveryQuote[];marketplaceDeliveryGroups:{id:string;name:string}[]},Record<string,never>>;
+export const SetMarketplaceDeliveryMutation = parse(`mutation SetMarketplaceDelivery($ids:[ID!]!) {
+    setMarketplaceDelivery(shippingMethodIds:$ids)
+}`) as TadaDocumentNode<{setMarketplaceDelivery:{success:boolean}},{ids:string[]}>;
 
 export interface OfflinePaymentQuote {id:string;name:string;code:string;description:string;isEligible:boolean;eligibilityMessage:string|null;offlineType:string|null;}
 export const GetEligiblePaymentMethodsQuery = parse(`query GetEligiblePaymentMethods {

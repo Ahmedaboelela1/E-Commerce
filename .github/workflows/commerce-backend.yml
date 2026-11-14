@@ -129,3 +129,7 @@ jobs:
         env:
           VENDURE_EMAIL_TEST_PORT: '3306'
         run: node --test scripts/test-shop-growth-mysql.mjs
+      - name: Verify store admin and mixed-seller ownership with central collection
+        env:
+          VENDURE_EMAIL_TEST_PORT: '3306'
+        run: node --test scripts/test-marketplace-mysql.mjs

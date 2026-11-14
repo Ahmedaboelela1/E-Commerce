@@ -152,7 +152,9 @@ function ProductPicker({
         [items, setItems] = useState<Product[]>([]),
         [selected, setSelected] = useState('');
     const work = useWork();
+    const {hasPermissions}=usePermissions();
     const load = async () => {
+        if(hasPermissions(['ManageStore'])&&!hasPermissions(['ReadCatalog'])){const d=await request<{marketplaceProducts:{items:Product[]}}>('query($search:String){marketplaceProducts(search:$search)}',{search});setItems(d.marketplaceProducts.items);return;}
         const d = await request<{products: {items: Product[]}}>(
             'query($options:ProductListOptions){products(options:$options){items{id name variants{id name sku priceWithTax}}}}',
             {
@@ -222,7 +224,8 @@ function ProductPicker({
 }
 function CatalogPage() {
     const {activeChannel} = useChannel();
-    const {hasPermissions} = usePermissions();
+    const {hasPermissions:nativePermissions} = usePermissions();
+    const hasPermissions=(permissions:string[])=>nativePermissions(permissions)||(nativePermissions(['ManageStore'])&&permissions.some(p=>['ReadOrder','UpdateOrder','ReadCatalog','UpdateCatalog','CreatePromotion'].includes(p)));
     const work = useWork();
     const [product, setProduct] = useState<Product | null>(null),
         [language, setLanguage] = useState('en'),
@@ -817,7 +820,8 @@ function CatalogPage() {
 }
 function CarePage() {
     const {activeChannel} = useChannel();
-    const {hasPermissions} = usePermissions();
+    const {hasPermissions:nativePermissions} = usePermissions();
+    const hasPermissions=(permissions:string[])=>nativePermissions(permissions)||(nativePermissions(['ManageStore'])&&permissions.some(p=>['ReadOrder','UpdateOrder','ReadCatalog','UpdateCatalog','CreatePromotion'].includes(p)));
     const work = useWork();
     const canEdit = hasPermissions(['UpdateOrder']);
     const [tab, setTab] = useState(() =>
@@ -1614,6 +1618,7 @@ defineDashboardExtension({
         {
             path: '/shop-catalog-tools',
             navMenuItem: {
+                requiresPermission: ['ReadCatalog','ManageStore'],
                 sectionId: 'catalog',
                 id: 'shop-catalog-tools',
                 title: 'Catalog tools / أدوات المنتجات',
@@ -1623,6 +1628,7 @@ defineDashboardExtension({
         {
             path: '/shop-customer-care',
             navMenuItem: {
+                requiresPermission: ['ReadOrder','ManageStore'],
                 sectionId: 'sales',
                 id: 'shop-customer-care',
                 title: 'Customer care / خدمة العملاء',

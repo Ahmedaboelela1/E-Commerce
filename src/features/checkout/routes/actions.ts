@@ -1,7 +1,7 @@
 'use server';
 
 import {mutate, query} from '@/platform/vendure/api';
-import {SetOrderShippingAddressMutation, SetOrderBillingAddressMutation, SetOrderShippingMethodMutation, AddPaymentToOrderMutation, TransitionOrderToStateMutation} from '@/features/checkout/graphql';
+import {SetOrderShippingAddressMutation, SetOrderBillingAddressMutation, SetMarketplaceDeliveryMutation, AddPaymentToOrderMutation, TransitionOrderToStateMutation} from '@/features/checkout/graphql';
 import {CreateCustomerAddressMutation} from '@/features/account/graphql';
 import {revalidatePath, updateTag} from 'next/cache';
 import {redirect} from '@/platform/i18n/navigation';
@@ -59,14 +59,14 @@ export async function setShippingAddress(
     revalidatePath(`/${locale}/checkout`);
 }
 
-export async function setShippingMethod(shippingMethodId: string) {
+export async function setShippingMethod(shippingMethodIds: string[]) {
     const result = await mutate(
-        SetOrderShippingMethodMutation,
-        {shippingMethodId: [shippingMethodId]},
+        SetMarketplaceDeliveryMutation,
+        {ids: shippingMethodIds},
         {useAuthToken: true}
     );
 
-    if (result.data.setOrderShippingMethod.__typename !== 'Order') {
+    if (!result.data.setMarketplaceDelivery.success) {
         throw new Error('Failed to set shipping method');
     }
 

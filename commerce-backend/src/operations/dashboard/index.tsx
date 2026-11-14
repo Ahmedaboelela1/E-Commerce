@@ -109,6 +109,8 @@ const dateValue = (date: Date) =>
 function OperationsPage() {
     const {activeChannel} = useChannel();
     const {hasPermissions} = usePermissions();
+    const storeAdmin = hasPermissions(['ManageStore']);
+    const allowed = (permission:string) => hasPermissions([permission]) || (storeAdmin && ['ReadOrder','UpdateOrder','ReadCatalog','UpdateCatalog','CreatePromotion'].includes(permission));
     const tabs = [
         ['orders', 'Orders / الطلبات', 'ReadOrder'],
         ['reports', 'Sales / المبيعات', 'ReadOrder'],
@@ -116,7 +118,7 @@ function OperationsPage() {
         ['reviews', 'Reviews / التقييمات', 'ReadCatalog'],
         ['coupons', 'Coupons / الكوبونات', 'CreatePromotion'],
         ['settings', 'Settings / الإعدادات', 'ReadSettings'],
-    ].filter((tab) => hasPermissions([tab[2]]));
+    ].filter((tab) => allowed(tab[2]));
     const [requestedTab, setTab] = useState('orders');
     const tab = tabs.some((item) => item[0] === requestedTab)
         ? requestedTab
@@ -240,7 +242,7 @@ function OperationsPage() {
             setError(e instanceof Error ? e.message : 'Could not load data'),
         );
     }, [loadTab, activeChannel?.id]);
-    const permissions = (permission: string) => hasPermissions([permission]);
+    const permissions = allowed;
     const refreshOrder = async () => {
         if (selected) await openOrder(selected.id);
         await loadOrders();
@@ -365,12 +367,14 @@ function OperationsPage() {
                             <p>
                                 {selected.email} · {selected.phone}
                             </p>
-                            <a
+                            {hasPermissions(['ReadOrder']) && <a
                                 className="sv-btn"
                                 href={`/dashboard/orders/${selected.id}`}
                             >
                                 Open in Orders / إدارة الطلب
-                            </a>
+                            </a>}
+                            {storeAdmin && !hasPermissions(['ReadOrder']) && <a className="sv-btn" href="/dashboard/store-workspace">Order items, shipments, cancellations & refunds / بنود الطلب والشحن والإلغاء ورد المبلغ</a>}
+                            {permissions('UpdateOrder') && selected.payments.some(p=>p.offlineType==='cash-on-delivery'&&p.state==='Authorized') && <form className="sv-box" onSubmit={e=>{e.preventDefault();const form=e.currentTarget;const data=new FormData(form);void run(async()=>{await request('mutation($id:ID!,$reference:String!){confirmStoreCashReceipt(orderId:$id,confirmed:true,reference:$reference)}',{id:selected.id,reference:String(data.get('cashReference')||'')});await refreshOrder();form.reset();});}}><h3>Actual cash collection / التحصيل الفعلي</h3><label>Collection reference / مرجع التحصيل<input name="cashReference" required maxLength={120}/></label><label><input type="checkbox" required/> I verified actual cash receipt / تحققت من استلام النقد فعليًا</label><button className="sv-primary" disabled={busy}>Record cash received / تسجيل استلام النقد</button></form>}
                             {permissions('UpdateOrder') && (
                                 <>
                                     <div className="sv-grid">
@@ -1239,6 +1243,7 @@ defineDashboardExtension({
         {
             path: '/shop-operations',
             navMenuItem: {
+                requiresPermission: ['ReadOrder','ManageStore'],
                 sectionId: 'sales',
                 id: 'shop-operations',
                 title: 'Shop operations / إدارة المتجر',

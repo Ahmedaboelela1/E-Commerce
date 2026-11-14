@@ -71,6 +71,7 @@ export default async function CheckoutPage() {
                 addresses={addresses}
                 countries={countries}
                 shippingMethods={shippingMethods}
+                deliveryGroups={shippingMethodsRes.data.marketplaceDeliveryGroups}
                 paymentMethods={paymentMethods}
                 isGuest={isGuest}
             >

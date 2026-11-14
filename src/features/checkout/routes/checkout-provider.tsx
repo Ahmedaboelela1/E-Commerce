@@ -25,6 +25,8 @@ interface Country {
 }
 
 interface ShippingMethod {
+  deliveryGroup: string;
+  sellerName: string;
   id: string;
   name: string;
   code: string;
@@ -47,6 +49,7 @@ interface CheckoutContextType {
   addresses: CustomerAddress[];
   countries: Country[];
   shippingMethods: ShippingMethod[];
+  deliveryGroups: {id:string;name:string}[];
   paymentMethods: PaymentMethod[];
   selectedPaymentMethodCode: string | null;
   setSelectedPaymentMethodCode: (code: string | null) => void;
@@ -61,6 +64,7 @@ interface CheckoutProviderProps {
   addresses: CustomerAddress[];
   countries: Country[];
   shippingMethods: ShippingMethod[];
+  deliveryGroups: {id:string;name:string}[];
   paymentMethods: PaymentMethod[];
   isGuest: boolean;
 }
@@ -71,6 +75,7 @@ export function CheckoutProvider({
   addresses,
   countries,
   shippingMethods,
+  deliveryGroups,
   paymentMethods,
   isGuest,
 }: CheckoutProviderProps) {
@@ -85,6 +90,7 @@ export function CheckoutProvider({
         addresses,
         countries,
         shippingMethods,
+        deliveryGroups,
         paymentMethods,
         selectedPaymentMethodCode,
         setSelectedPaymentMethodCode,

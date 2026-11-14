@@ -1,3 +1,4 @@
+import {ManageStore} from '../marketplace/permissions';
 import {Args, Mutation, Query, Resolver, ResolveField, Parent} from '@nestjs/graphql';
 import {
     Allow,
@@ -113,7 +114,7 @@ export class OperationsAdminResolver {
         return this.ops.saveSettings(ctx, input);
     }
     @Query()
-    @Allow(Permission.ReadOrder)
+    @Allow(Permission.ReadOrder,ManageStore.Permission)
     shopOperationsOrders(
         @Ctx() ctx: RequestContext,
         @Args('search') search?: string,
@@ -122,12 +123,12 @@ export class OperationsAdminResolver {
         return this.ops.listOrders(ctx, search, skip);
     }
     @Query()
-    @Allow(Permission.ReadOrder)
+    @Allow(Permission.ReadOrder,ManageStore.Permission)
     shopOperationsOrder(@Ctx() ctx: RequestContext, @Args('orderId') id: ID) {
         return this.ops.adminOrder(ctx, id);
     }
     @Mutation()
-    @Allow(Permission.UpdateOrder)
+    @Allow(Permission.UpdateOrder,ManageStore.Permission)
     @Transaction()
     updateOrderCallback(
         @Ctx() ctx: RequestContext,
@@ -139,12 +140,12 @@ export class OperationsAdminResolver {
         return this.ops.updateCallback(ctx, id, status, notes, version);
     }
     @Query()
-    @Allow(Permission.ReadOrder)
+    @Allow(Permission.ReadOrder,ManageStore.Permission)
     shopTransferReceipt(@Ctx() ctx: RequestContext, @Args('orderId') id: ID) {
         return this.ops.receipt(ctx, id);
     }
     @Mutation()
-    @Allow(Permission.UpdateOrder)
+    @Allow(Permission.UpdateOrder,ManageStore.Permission)
     @Transaction()
     verifyShopTransfer(
         @Ctx() ctx: RequestContext,
@@ -155,7 +156,7 @@ export class OperationsAdminResolver {
         return this.ops.verifyTransfer(ctx, id, reference, confirmed);
     }
     @Mutation()
-    @Allow(Permission.UpdateOrder)
+    @Allow(Permission.UpdateOrder,ManageStore.Permission)
     @Transaction()
     rejectShopTransferProof(
         @Ctx() ctx: RequestContext,
@@ -165,7 +166,7 @@ export class OperationsAdminResolver {
         return this.ops.rejectProof(ctx, id, note);
     }
     @Mutation()
-    @Allow(Permission.UpdateOrder)
+    @Allow(Permission.UpdateOrder,ManageStore.Permission)
     @Transaction()
     dispatchShopOrder(
         @Ctx() ctx: RequestContext,
@@ -176,12 +177,12 @@ export class OperationsAdminResolver {
         return this.ops.dispatch(ctx, id, carrier, code);
     }
     @Query()
-    @Allow(Permission.ReadOrder)
+    @Allow(Permission.ReadOrder,ManageStore.Permission)
     shopOrderInvoice(@Ctx() ctx: RequestContext, @Args('orderId') id: ID) {
         return this.invoices.download(ctx, id, false);
     }
     @Query()
-    @Allow(Permission.ReadOrder)
+    @Allow(Permission.ReadOrder,ManageStore.Permission)
     shopSalesReport(
         @Ctx() ctx: RequestContext,
         @Args('from') from: string,
@@ -190,7 +191,7 @@ export class OperationsAdminResolver {
         return this.reports.report(ctx, from, to);
     }
     @Mutation()
-    @Allow(Permission.CreatePromotion)
+    @Allow(Permission.CreatePromotion,ManageStore.Permission)
     @Transaction()
     createShopCoupon(
         @Ctx() ctx: RequestContext,
@@ -199,7 +200,7 @@ export class OperationsAdminResolver {
         return this.reports.createCoupon(ctx, input);
     }
     @Query()
-    @Allow(Permission.ReadCatalog)
+    @Allow(Permission.ReadCatalog,ManageStore.Permission)
     shopOperationsInventory(
         @Ctx() ctx: RequestContext,
         @Args('skip') skip?: number,
@@ -207,12 +208,12 @@ export class OperationsAdminResolver {
         return this.inventory.inventory(ctx, skip);
     }
     @Mutation()
-    @Allow(Permission.UpdateCatalog)
+    @Allow(Permission.UpdateCatalog,ManageStore.Permission)
     checkShopLowStock(@Ctx() ctx: RequestContext) {
         return this.inventory.scan(ctx);
     }
     @Query()
-    @Allow(Permission.ReadCatalog)
+    @Allow(Permission.ReadCatalog,ManageStore.Permission)
     shopProductReviews(
         @Ctx() ctx: RequestContext,
         @Args('status') status?: string,
@@ -221,7 +222,7 @@ export class OperationsAdminResolver {
         return this.social.adminReviews(ctx, status, skip);
     }
     @Mutation()
-    @Allow(Permission.UpdateCatalog)
+    @Allow(Permission.UpdateCatalog,ManageStore.Permission)
     @Transaction()
     moderateShopReview(
         @Ctx() ctx: RequestContext,
