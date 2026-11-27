@@ -1074,6 +1074,13 @@ function ProductEditor({
                     SuperAdmin؛ يمكنك تعديل الإصدارات الحالية هنا.
                 </p>
             )}
+            {p.id && access.superAdmin && (
+                <p>
+                    <a href={`/dashboard/products/${p.id}`}>
+                        Advanced product options / خيارات المنتج المتقدمة
+                    </a>
+                </p>
+            )}
             <h3>Product images / صور المنتج</h3>
             <div className="images">
                 {p.assets.map((image) => (

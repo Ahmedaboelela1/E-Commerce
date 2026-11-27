@@ -11,7 +11,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
     const artifacts = process.env.SUITE_ARTIFACT_DIR || f.root;
     await fs.mkdir(artifacts, { recursive: true });
     t.after(() => browser.close());
-    async function login(email, openProducts = true) {
+    async function login(email, openProducts = true, password = 'synthetic-admin-password') {
         const page = await browser.newPage({
             viewport: { width: 1500, height: 1000 },
         });
@@ -20,7 +20,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         );
         await page.goto(`http://127.0.0.1:${f.port}/dashboard/`);
         await page.locator('#field-username').fill(email);
-        await page.locator('#field-password').fill('synthetic-admin-password');
+        await page.locator('#field-password').fill(password);
         await page.getByRole('button', { name: /Log in|Sign in/i }).click();
         await page.waitForURL((url) => !url.pathname.includes('login'));
         await page.goto(`http://127.0.0.1:${f.port}/dashboard/shop-operations`);
@@ -37,10 +37,57 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         }
         return page;
     }
+    async function assertSingleNavigation(page) {
+        // Expand sections first so a collapsed menu cannot make this pass.
+        for (const name of ['Catalog', 'Sales', 'Settings']) {
+            const section = page.getByRole('button', { name, exact: true });
+            if (await section.count() && await section.getAttribute('aria-expanded') !== 'true') {
+                await section.click();
+            }
+        }
+        for (const path of ['orders', 'products', 'product-variants', 'payment-methods']) {
+            assert.equal(await page.locator(`a[href="/dashboard/${path}"]`).count(), 0,
+                `Duplicate native ${path} menu must be absent`);
+        }
+        assert.equal(await page.getByRole('link', {
+            name: 'Shop operations / إدارة المتجر', exact: true,
+        }).count(), 1);
+    }
+    await t.test('SuperAdmin uses one commerce entry with working Products, Orders and Payments tabs', async () => {
+        const page = await login(f.env.SUPERADMIN_USERNAME, false, f.env.SUPERADMIN_PASSWORD);
+        const channel = page.getByRole('button').filter({ hasText: /Default channel/ }).first();
+        await channel.click();
+        await page.getByText('skillverse-eg', { exact: true }).last().click();
+        await page.getByRole('tab', { name: 'Products / المنتجات', exact: true }).click();
+        await page.getByRole('cell', { name: 'vendor-a-robot', exact: true }).first().waitFor();
+        await assertSingleNavigation(page);
+        await page.getByRole('row').filter({ hasText: 'vendor-a-robot' })
+            .getByRole('button', { name: 'Edit / تعديل', exact: true }).click();
+        await page.getByRole('link', { name: 'Advanced product options / خيارات المنتج المتقدمة', exact: true }).waitFor();
+        await page.getByRole('tab', { name: 'Payments / الدفع', exact: true }).click();
+        await page.getByRole('heading', { name: 'Cash on Delivery', exact: true }).waitFor();
+        await page.getByRole('tab', { name: 'Orders / الطلبات', exact: true }).click();
+        const source = (await f.admin('query($id:ID!){order(id:$id){code}}', { id: orderId })).data.order;
+        await page.getByRole('row').filter({ hasText: source.code })
+            .getByRole('button', { name: 'Open / فتح', exact: true }).click();
+        await page.getByRole('heading', { name: 'Order items & shipping / بنود الطلب والشحن', exact: true }).waitFor();
+        await page.getByRole('link', { name: 'Advanced order details / تفاصيل الطلب المتقدمة', exact: true }).waitFor();
+        await page.screenshot({ path: path.join(artifacts, 'superadmin-single-commerce-navigation.png'), fullPage: true });
+        await page.getByRole('button').filter({ hasText: /skillverse-eg/ }).first().click();
+        await page.getByText('Default channel', { exact: true }).last().click();
+        for (const name of ['Catalog', 'Settings']) {
+            const section = page.getByRole('button', { name, exact: true });
+            if (await section.getAttribute('aria-expanded') !== 'true') await section.click();
+        }
+        await page.locator('a[href="/dashboard/products"]').waitFor();
+        await page.locator('a[href="/dashboard/payment-methods"]').waitFor();
+        await page.close();
+    });
     await t.test(
         'production Dashboard seller sees only owned catalog and can add a stocked product',
         async () => {
             const page = await login('vendor-b@example.invalid');
+            await assertSingleNavigation(page);
             assert.equal(
                 await page.getByRole('heading', { level: 1 }).count(),
                 1,
@@ -197,6 +244,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         'production store admin sees all sellers and operations without system settings',
         async () => {
             const page = await login('store-admin@example.invalid');
+            await assertSingleNavigation(page);
             await page
                 .getByRole('cell', { name: 'vendor-a-robot', exact: true })
                 .first()
@@ -373,6 +421,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
                 },
             );
             const page = await login('sales-reader@example.invalid', false);
+            assert.equal(await page.locator('a[href="/dashboard/orders"]').count(), 0);
             const source = (
                 await f.admin('query($id:ID!){order(id:$id){code}}', {
                     id: orderId,

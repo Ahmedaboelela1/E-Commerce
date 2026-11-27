@@ -6,6 +6,7 @@ import {
     usePermissions,
 } from '@vendure/dashboard';
 import {useCallback, useEffect, useState} from 'react';
+import {consolidateCommerceNavigation} from './navigation';
 
 type Payment = {
     id: string;
@@ -384,7 +385,7 @@ function OperationsPage() {
                                 className="sv-btn"
                                 href={`/dashboard/orders/${selected.id}`}
                             >
-                                Open in Orders / إدارة الطلب
+                                Advanced order details / تفاصيل الطلب المتقدمة
                             </a>}
 
                             {permissions('UpdateOrder') && selected.payments.some(p=>p.offlineType==='cash-on-delivery'&&p.state==='Authorized') && <form className="sv-box" onSubmit={e=>{e.preventDefault();const form=e.currentTarget;const data=new FormData(form);void run(async()=>{await request('mutation($id:ID!,$reference:String!){confirmStoreCashReceipt(orderId:$id,confirmed:true,reference:$reference)}',{id:selected.id,reference:String(data.get('cashReference')||'')});await refreshOrder();form.reset();});}}><h3>Actual cash collection / التحصيل الفعلي</h3><label>Collection reference / مرجع التحصيل<input name="cashReference" required maxLength={120}/></label><label><input type="checkbox" required/> I verified actual cash receipt / تحققت من استلام النقد فعليًا</label><button className="sv-primary" disabled={busy}>Record cash received / تسجيل استلام النقد</button></form>}
@@ -1252,6 +1253,7 @@ function OperationsRoute() {
 }
 
 defineDashboardExtension({
+    navSections: consolidateCommerceNavigation,
     routes: [
         {
             path: '/shop-operations',
