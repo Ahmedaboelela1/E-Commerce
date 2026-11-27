@@ -48,6 +48,8 @@ export class MarketplaceAudit extends VendureEntity {
 
 declare module '@vendure/core/dist/entity/custom-entity-fields' {
     interface CustomProductFields {
+        detailsEn?: string | null;
+        detailsAr?: string | null;
         marketplaceOwnerId?: number | null;
     }
 }

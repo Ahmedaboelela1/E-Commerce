@@ -127,6 +127,11 @@ const deliveryGuard: OrderProcess<never> = {
             public: false,
             internal: true,
         });
+        for (const name of ['detailsEn', 'detailsAr']) {
+            config.customFields.Product.push({
+                name, type: 'text', nullable: true, internal: true, public: false,
+            });
+        }
         config.orderOptions.orderSellerStrategy = new SellerLineOwnerStrategy();
         config.orderOptions.process = [
             ...(config.orderOptions.process || []),

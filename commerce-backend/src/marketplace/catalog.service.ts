@@ -28,6 +28,8 @@ import { GlobalFlag } from '@vendure/common/lib/generated-types';
 import { MarketplaceAccessService, StoreActor } from './access.service';
 import { MarketplaceVendor } from './entities';
 import { object } from '../growth/common';
+import { cleanProductDetails } from './product-details';
+import { slugFromProductName } from './product-slug';
 import { identifier, integer, text } from '../operations/rules';
 
 @Injectable()
@@ -125,6 +127,8 @@ export class MarketplaceCatalogService {
         }
         return {
             id: raw.id,
+            detailsEn: raw.customFields.detailsEn ?? '',
+            detailsAr: raw.customFields.detailsAr ?? '',
             enabled: raw.enabled,
             updatedAt: raw.updatedAt.toISOString(),
             ownerId: owner?.id || null,
@@ -250,12 +254,21 @@ export class MarketplaceCatalogService {
         if (vendor && !vendor.active)
             throw new UserInputError('Seller is disabled');
         const name = text(input.name, 200, true),
-            slug = text(input.slug, 200, true),
+            slug =
+                text(input.slug, 200) ||
+                old?.translations.find(
+                    (t) => t.languageCode === LanguageCode.en,
+                )?.slug ||
+                slugFromProductName(name),
             description = this.safeHtml(text(input.description, 20000));
         if (!/^[\p{L}\p{N}]+(?:-[\p{L}\p{N}]+)*$/u.test(slug))
             throw new UserInputError(
                 'Use a URL slug with words separated by hyphens',
             );
+        const details = {
+            ...(input.detailsEn !== undefined ? { detailsEn: cleanProductDetails(input.detailsEn) } : {}),
+            ...(input.detailsAr !== undefined ? { detailsAr: cleanProductDetails(input.detailsAr) } : {}),
+        };
         const translations = [
             { languageCode: LanguageCode.en, name, slug, description },
         ];
@@ -282,7 +295,7 @@ export class MarketplaceCatalogService {
                 variantId &&
                 (!old ||
                     !old.variants.some(
-                        (row) => String(row.id) === String(variantId),
+                        (row) => !row.deletedAt && String(row.id) === String(variantId),
                     ))
             )
                 throw new UserInputError('Variant not found');
@@ -300,6 +313,14 @@ export class MarketplaceCatalogService {
             variantInputs.length
         )
             throw new UserInputError('Each variant needs a distinct SKU');
+        const removals = input.removedVariantIds ?? [];
+        if (!Array.isArray(removals))
+            throw new UserInputError('Invalid removed variant list');
+        const removedIds = [
+            ...new Set(removals.map((value: ID) => identifier(value))),
+        ];
+        if (removedIds.length && !old)
+            throw new UserInputError('Variant not found');
         const assetIds = Array.isArray(input.assetIds)
             ? input.assetIds.map((id) => identifier(id as ID))
             : [];
@@ -338,6 +359,20 @@ export class MarketplaceCatalogService {
                         throw new UserInputError(
                             'Product changed; refresh it before saving',
                         );
+                    for (const removedId of removedIds) {
+                        if (
+                            !fresh.variants.some(
+                                (v) =>
+                                    !v.deletedAt &&
+                                    String(v.id) === String(removedId),
+                            )
+                        )
+                            throw new UserInputError('Variant not found');
+                        if (variantInputs.some((v) => v.id === removedId))
+                            throw new UserInputError(
+                                'A variant cannot be saved and removed together',
+                            );
+                    }
                 }
                 const productCtx = vendor
                     ? await this.access.storeContext(tx, vendor.channelId)
@@ -348,6 +383,7 @@ export class MarketplaceCatalogService {
                 const product = id
                     ? await this.products.update(productCtx, {
                           id,
+                          customFields: details,
                           enabled: input.enabled === true,
                           translations,
                           assetIds,
@@ -360,9 +396,12 @@ export class MarketplaceCatalogService {
                           assetIds,
                           featuredAssetId: assetIds[0],
                           customFields: {
+                              ...details,
                               marketplaceOwnerId: vendor?.id || null,
                           },
                       });
+                if (removedIds.length)
+                    await this.variants.softDelete(productCtx, removedIds);
                 const optionMap = await this.variantOptions(
                     productCtx,
                     actor.store.channelId,
@@ -444,6 +483,7 @@ export class MarketplaceCatalogService {
                         ['variants'],
                     ))!.variants;
                     for (const v of variants) {
+                        if (v.deletedAt) continue;
                         const row = variantInputs.find((item) =>
                             item.id
                                 ? String(item.id) === String(v.id)

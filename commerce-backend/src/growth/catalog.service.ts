@@ -47,7 +47,7 @@ export class CatalogToolsService {
         fallback = true,
         publicOnly = true,
     ) {
-        await this.common.product(ctx, productId, publicOnly);
+        const product = await this.common.product(ctx, productId, publicOnly);
         const repo = this.common.db.getRepository(ctx, ProductContent);
         const key = {
             channelId: identifier(ctx.channelId),
@@ -62,7 +62,10 @@ export class CatalogToolsService {
                 ? await repo.findOneBy({...key, languageCode: 'en'})
                 : null);
         return {
-            content: row ? json(row.content, empty()) : empty(),
+            content: {
+                ...(row ? json(row.content, empty()) : empty()),
+                detailsHtml: (languageCode === 'ar' && product.customFields.detailsAr) || product.customFields.detailsEn || '',
+            },
             version: row?.version || 0,
             languageCode: row?.languageCode || String(languageCode),
         };

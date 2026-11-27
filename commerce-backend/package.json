@@ -20,6 +20,9 @@
   "dependencies": {
     "@nestjs/common": "12.4.2",
     "@nestjs/graphql": "14.0.3",
+    "@tiptap/extension-image": "3.33.0",
+    "@tiptap/react": "3.33.0",
+    "@tiptap/starter-kit": "3.33.0",
     "@vendure/asset-server-plugin": "3.8.0",
     "@vendure/core": "3.8.0",
     "@vendure/dashboard": "3.8.0",

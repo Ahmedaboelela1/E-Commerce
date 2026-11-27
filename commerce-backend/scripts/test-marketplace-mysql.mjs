@@ -252,6 +252,9 @@ test(
             'new and expanded SKU variants use native option combinations and preserve their original IDs',
             async () => {
                 const input = prod('native-multi-sku');
+                input.detailsEn = '<h3>Included accessories</h3><ul><li><strong>USB cable</strong></li></ul>';
+                input.detailsAr = '<p>كابل <em>البرمجة</em></p>';
+
                 input.variants.push({
                     name: 'Advanced model',
                     sku: 'native-multi-advanced',
@@ -260,6 +263,13 @@ test(
                 });
                 let multi = await save(sb, input);
                 assert.equal(multi.variants.length, 2);
+                assert.equal(multi.detailsEn, input.detailsEn);
+                assert.equal(multi.detailsAr, input.detailsAr);
+                const readDetails = await f.query(
+                    'query($id:ID!){shopProductContent(productId:$id)}', { id: multi.id },
+                );
+                assert.equal(readDetails.data.shopProductContent.content.detailsHtml, input.detailsEn);
+
                 const publicProduct = (
                     await f.query(
                         '{product(slug:"native-multi-sku"){optionGroups{code options{id name}} variants{sku options{id}}}}',
@@ -299,6 +309,25 @@ test(
                 });
                 assert.equal(expanded.variants.length, 2);
                 assert.equal(expanded.variants[0].id, originalId);
+                const extra = expanded.variants.find((v) => v.id !== originalId);
+                const removal = {
+                    ...expanded,
+                    variants: [expanded.variants[0]],
+                    removedVariantIds: [extra.id],
+                };
+                await denied(
+                    'mutation($input:JSON!){saveMarketplaceProduct(input:$input)}',
+                    { input: { ...removal, removedVariantIds: [pa.variants[0].id] } },
+                    sb,
+                );
+                const reduced = await save(sb, removal);
+                assert.deepEqual(reduced.variants.map((v) => v.id), [originalId]);
+                const shop = await f.query('{product(slug:"expanded-single-sku"){variants{sku}}}');
+                assert.deepEqual(shop.data.product.variants.map((v) => v.sku), ['expanded-single-sku']);
+                // An older caller can omit variants without requesting their removal.
+                const partial = await save(sb, { ...multi, variants: [multi.variants[0]] });
+                assert.equal(partial.variants.length, 2);
+
             },
         );
         await t.test(
