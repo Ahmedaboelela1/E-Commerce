@@ -112,6 +112,11 @@ export async function marketplaceCheckoutBrowserSuite(
         'production shared checkout shows every seller fee and requires complete delivery before payment',
         async () => {
             await page.goto(origin + '/en/checkout');
+            // Checkout may resume at Payment after its delivery selections persist.
+            const deliveryToggle = page.getByRole('button', { name: /Delivery Method/ });
+            if (await deliveryToggle.getAttribute('aria-expanded') !== 'true') {
+                await deliveryToggle.click();
+            }
             // Accordion transitions briefly retain the outgoing hidden panel.
             // Assert against the accessible delivery region, not both copies.
             const delivery = page.getByRole('region', { name: 'Delivery Method', exact: true });
