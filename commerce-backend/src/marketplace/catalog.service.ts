@@ -28,6 +28,7 @@ import { GlobalFlag } from '@vendure/common/lib/generated-types';
 import { MarketplaceAccessService, StoreActor } from './access.service';
 import { MarketplaceVendor } from './entities';
 import { object } from '../growth/common';
+import { cleanProductDetails } from './product-details';
 import { slugFromProductName } from './product-slug';
 import { identifier, integer, text } from '../operations/rules';
 
@@ -126,6 +127,8 @@ export class MarketplaceCatalogService {
         }
         return {
             id: raw.id,
+            detailsEn: raw.customFields.detailsEn ?? '',
+            detailsAr: raw.customFields.detailsAr ?? '',
             enabled: raw.enabled,
             updatedAt: raw.updatedAt.toISOString(),
             ownerId: owner?.id || null,
@@ -262,6 +265,10 @@ export class MarketplaceCatalogService {
             throw new UserInputError(
                 'Use a URL slug with words separated by hyphens',
             );
+        const details = {
+            ...(input.detailsEn !== undefined ? { detailsEn: cleanProductDetails(input.detailsEn) } : {}),
+            ...(input.detailsAr !== undefined ? { detailsAr: cleanProductDetails(input.detailsAr) } : {}),
+        };
         const translations = [
             { languageCode: LanguageCode.en, name, slug, description },
         ];
@@ -376,6 +383,7 @@ export class MarketplaceCatalogService {
                 const product = id
                     ? await this.products.update(productCtx, {
                           id,
+                          customFields: details,
                           enabled: input.enabled === true,
                           translations,
                           assetIds,
@@ -388,6 +396,7 @@ export class MarketplaceCatalogService {
                           assetIds,
                           featuredAssetId: assetIds[0],
                           customFields: {
+                              ...details,
                               marketplaceOwnerId: vendor?.id || null,
                           },
                       });

@@ -170,7 +170,7 @@ export default async function ProductDetailPage({
                 </div>
             </div>
 
-            <div className="container mx-auto max-w-7xl px-5"><ProductHelp productId={product.id}/></div>
+            <div className="container mx-auto max-w-7xl px-5"><ProductHelp key={`${product.id}-${locale}`} productId={product.id}/></div>
 
             {/* Store policies in the starter are sample text. Hide them until
                 actual Egypt shipping/returns terms are published. */}

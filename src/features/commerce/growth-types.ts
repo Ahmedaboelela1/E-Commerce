@@ -1,5 +1,6 @@
 export type EntityId = string | number;
 export interface ProductHelp {
+    detailsHtml?: string;
     specs: {
         ageRange: string;
         programming: string;

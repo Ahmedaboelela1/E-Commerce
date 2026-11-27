@@ -39,13 +39,8 @@ export function ProductHelp({productId}: {productId: string}) {
                 {t('helpLoadError')}
             </p>
         );
-    if (
-        !help ||
-        (!help.resources.length &&
-            !help.faqs.length &&
-            !Object.values(help.specs).some(Boolean))
-    )
-        return null;
+    if (!help) return null;
+    const hasHelp = help.resources.length > 0 || help.faqs.length > 0 || Object.values(help.specs).some(Boolean);
     const icons = {
         manual: FileDown,
         video: PlayCircle,
@@ -53,7 +48,8 @@ export function ProductHelp({productId}: {productId: string}) {
         link: ArrowUpRight,
     };
     return (
-        <section className="mt-10 space-y-6 rounded-3xl border p-5 sm:p-8">
+        <>
+        {hasHelp && <section className="mt-10 space-y-6 rounded-3xl border p-5 sm:p-8">
             <h2 className="flex items-center gap-3 text-2xl font-semibold tracking-tight">
                 <BookOpen className="size-6 text-primary" />
                 {t('productHelp')}
@@ -118,6 +114,12 @@ export function ProductHelp({productId}: {productId: string}) {
                     ))}
                 </div>
             )}
-        </section>
+        </section>}
+        {help.detailsHtml && <section aria-labelledby="product-details-title" className="my-10 border-t pt-8">
+            <h2 id="product-details-title" className="mb-4 text-2xl font-semibold">{t('productDetails')}</h2>
+            <div className="max-w-4xl space-y-4 text-base leading-7 wrap-anywhere [&_h3]:mt-6 [&_h3]:text-xl [&_h3]:font-semibold [&_ul]:list-disc [&_ol]:list-decimal [&_li]:my-1 [&_ul]:ps-7 [&_ol]:ps-7 [&_img]:my-5 [&_img]:h-auto [&_img]:max-w-full"
+                dangerouslySetInnerHTML={{__html: help.detailsHtml}}/>
+        </section>}
+        </>
     );
 }

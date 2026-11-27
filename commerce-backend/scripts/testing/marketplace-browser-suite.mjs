@@ -152,6 +152,16 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             await productName.fill('Browser Seller Robot Kit');
             assert.equal(await slug.inputValue(), 'custom-robot-kit');
             await productName.fill('Browser Seller Robot');
+            const details = form.getByRole('textbox', { name: 'Details (English)', exact: true });
+            await details.fill('Included accessories');
+            await details.press('ControlOrMeta+a');
+            await form.getByRole('button', { name: 'Bold / عريض' }).first().click();
+            assert.equal(await details.locator('strong').innerText(), 'Included accessories');
+            await details.press('ArrowRight');
+            await details.press('Enter');
+            await form.getByRole('button', { name: 'Bullets / نقاط' }).first().click();
+            await page.keyboard.type('USB cable');
+            assert.equal(await details.locator('li').innerText(), 'USB cable');
             const remove = form.getByRole('button', { name: 'Remove variant / حذف الإصدار' });
             assert.ok(await remove.first().isDisabled());
             await form.getByRole('button', { name: 'Add variant / إضافة إصدار' }).click();
@@ -180,6 +190,12 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
                     exact: true,
                 })
                 .waitFor();
+            await page.getByRole('row').filter({hasText: 'Browser Seller Robot'})
+                .getByRole('button', {name: 'Edit / تعديل'}).click();
+            await form.getByRole('textbox', {name: 'Details (English)'}).locator('li').waitFor();
+            assert.equal(await details.locator('strong').first().innerText(), 'Included accessories');
+            assert.equal(await details.locator('li').innerText(), 'USB cable');
+            assert.equal(await slug.inputValue(), 'custom-robot-kit');
             await page
                 .getByRole('tab', {
                     name: 'Delivery rates / أسعار التوصيل',

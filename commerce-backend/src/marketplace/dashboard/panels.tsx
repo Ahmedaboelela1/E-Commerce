@@ -1,5 +1,7 @@
 import { api, useChannel } from '@vendure/dashboard';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { ProductDetailsEditor } from './product-details-editor';
+import './product-details-editor.css';
 import { slugFromProductName } from '../product-slug';
 import { egyptGovernorates } from '../../egypt-governorates';
 
@@ -28,6 +30,8 @@ type Variant = {
     enabled?: boolean;
 };
 type Product = {
+    detailsEn?: string;
+    detailsAr?: string;
     canAddVariants?: boolean;
     id?: string;
     updatedAt?: string;
@@ -954,6 +958,10 @@ function ProductEditor({
                     onChange={(e) => setArDescription(e.target.value)}
                 />
             </label>
+            <ProductDetailsEditor label="Details (English)" direction="ltr" value={p.detailsEn || ''} assets={p.assets}
+                onChange={detailsEn => set(prev => ({ ...prev, detailsEn }))}/>
+            <ProductDetailsEditor label="التفاصيل بالعربية" direction="rtl" value={p.detailsAr || ''} assets={p.assets}
+                onChange={detailsAr => set(prev => ({ ...prev, detailsAr }))}/>
             <h3>Variants & stock / الإصدارات والمخزون</h3>
             {p.variants.map((v, index) => (
                 <div

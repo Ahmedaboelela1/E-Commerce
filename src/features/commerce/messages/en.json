@@ -81,6 +81,7 @@
     "loadError": "Could not load this information. Please refresh and try again.",
     "loading": "Loading…",
     "actionError": "Could not save this change. Check the details, sign in again if needed, then refresh and retry.",
+    "productDetails": "Details",
     "productHelp": "Specifications & help centre",
     "helpLoadError": "Product help could not be loaded right now. Please try again later.",
     "faq": "Frequently asked questions",
