@@ -422,6 +422,9 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                     )}
                     {tab === 'delivery' && (
                         <>
+                            {access.superAdmin && <a href="/dashboard/shipping-methods">
+                                Advanced shipping settings / إعدادات الشحن المتقدمة
+                            </a>}
                             <p>
                                 Rates are charged separately for each seller. No
                                 carrier API is used. / لكل بائع مصاريف شحن

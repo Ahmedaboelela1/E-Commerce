@@ -1,3 +1,4 @@
+import {convert} from 'html-to-text';
 import type {Metadata} from 'next';
 import {getActiveCurrencyCode} from '@/features/currency/currency-server';
 import {getRouteLocale} from '@/platform/i18n/server';
@@ -56,7 +57,10 @@ export default async function CheckoutPage() {
     }
 
     const addresses = addressesRes.data.activeCustomer?.addresses || [];
-    const shippingMethods = shippingMethodsRes.data.eligibleShippingMethods || [];
+    const shippingMethods = (shippingMethodsRes.data.eligibleShippingMethods || []).map(method => ({
+        ...method,
+        description: convert(method.description || '', {wordwrap: false}).trim(),
+    }));
     // Only show the configured offline methods; card gateways remain unavailable.
     const paymentMethods =
         paymentMethodsRes.data.eligiblePaymentMethods?.filter(
