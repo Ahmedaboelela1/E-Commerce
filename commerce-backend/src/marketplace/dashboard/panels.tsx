@@ -1,5 +1,6 @@
 import { api, useChannel } from '@vendure/dashboard';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { slugFromProductName } from '../product-slug';
 import { egyptGovernorates } from '../../egypt-governorates';
 
 type Access = {
@@ -834,11 +835,13 @@ function ProductEditor({
     close: () => void;
 }) {
     const [p, set] = useState(product),
+        [customSlug, setCustomSlug] = useState(Boolean(product.slug)),
         [uploadError, setUploadError] = useState(''),
         [uploading, setUploading] = useState(false);
     const ar = p.translations?.find((t) => t.languageCode === 'ar');
     const [arName, setArName] = useState(ar?.name || ''),
         [arDescription, setArDescription] = useState(ar?.description || '');
+    const slug = customSlug ? p.slug : slugFromProductName(p.name);
     const field = (key: 'name' | 'slug' | 'description', value: string) =>
         set((prev) => ({ ...prev, [key]: value }));
     return (
@@ -849,6 +852,14 @@ function ProductEditor({
                 e.preventDefault();
                 void save({
                     ...p,
+                    slug,
+                    removedVariantIds: product.variants
+                        .filter(
+                            (original) =>
+                                original.id != null &&
+                                !p.variants.some((v) => v.id === original.id),
+                        )
+                        .map((original) => original.id),
                     vendorId: p.ownerId,
                     assetIds: p.assets.map((a) => a.id),
                     arName,
@@ -908,8 +919,15 @@ function ProductEditor({
                     URL slug
                     <input
                         required
-                        value={p.slug}
-                        onChange={(e) => field('slug', e.target.value)}
+                        value={slug}
+                        maxLength={200}
+                        onChange={(e) => {
+                            setCustomSlug(true);
+                            field('slug', e.target.value);
+                        }}
+                        onBlur={() => {
+                            if (!p.slug.trim()) setCustomSlug(false);
+                        }}
                     />
                 </label>
                 <label>
@@ -938,7 +956,10 @@ function ProductEditor({
             </label>
             <h3>Variants & stock / الإصدارات والمخزون</h3>
             {p.variants.map((v, index) => (
-                <div className="grid" key={v.id || index}>
+                <div
+                    className="grid"
+                    key={v.id == null ? `draft-${index}` : `saved-${v.id}`}
+                >
                     <label>
                         Variant name / اسم الإصدار
                         <input
@@ -1046,6 +1067,25 @@ function ProductEditor({
                             Available / متاح
                         </span>
                     </label>
+                    <button
+                        type="button"
+                        disabled={p.variants.length === 1}
+                        title={
+                            p.variants.length === 1
+                                ? 'Keep at least one variant / يلزم إصدار واحد على الأقل'
+                                : undefined
+                        }
+                        onClick={() =>
+                            set((prev) => ({
+                                ...prev,
+                                variants: prev.variants.filter(
+                                    (_, i) => i !== index,
+                                ),
+                            }))
+                        }
+                    >
+                        Remove variant / حذف الإصدار
+                    </button>
                 </div>
             ))}
             <button

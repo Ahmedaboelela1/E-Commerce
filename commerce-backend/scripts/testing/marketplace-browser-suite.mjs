@@ -145,9 +145,18 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             await form
                 .getByLabel('Name (English)', { exact: true })
                 .fill('Browser Seller Robot');
-            await form
-                .getByLabel('URL slug', { exact: true })
-                .fill('browser-seller-robot');
+            const slug = form.getByLabel('URL slug', { exact: true });
+            assert.equal(await slug.inputValue(), 'browser-seller-robot');
+            await slug.fill('custom-robot-kit');
+            const productName = form.getByLabel('Name (English)', { exact: true });
+            await productName.fill('Browser Seller Robot Kit');
+            assert.equal(await slug.inputValue(), 'custom-robot-kit');
+            await productName.fill('Browser Seller Robot');
+            const remove = form.getByRole('button', { name: 'Remove variant / حذف الإصدار' });
+            assert.ok(await remove.first().isDisabled());
+            await form.getByRole('button', { name: 'Add variant / إضافة إصدار' }).click();
+            await remove.nth(1).click();
+            assert.equal(await remove.count(), 1);
             await form
                 .getByLabel('Variant name / اسم الإصدار', { exact: true })
                 .fill('Browser robot');

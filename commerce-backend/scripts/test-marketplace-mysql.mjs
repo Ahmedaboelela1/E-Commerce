@@ -299,6 +299,25 @@ test(
                 });
                 assert.equal(expanded.variants.length, 2);
                 assert.equal(expanded.variants[0].id, originalId);
+                const extra = expanded.variants.find((v) => v.id !== originalId);
+                const removal = {
+                    ...expanded,
+                    variants: [expanded.variants[0]],
+                    removedVariantIds: [extra.id],
+                };
+                await denied(
+                    'mutation($input:JSON!){saveMarketplaceProduct(input:$input)}',
+                    { input: { ...removal, removedVariantIds: [pa.variants[0].id] } },
+                    sb,
+                );
+                const reduced = await save(sb, removal);
+                assert.deepEqual(reduced.variants.map((v) => v.id), [originalId]);
+                const shop = await f.query('{product(slug:"expanded-single-sku"){variants{sku}}}');
+                assert.deepEqual(shop.data.product.variants.map((v) => v.sku), ['expanded-single-sku']);
+                // An older caller can omit variants without requesting their removal.
+                const partial = await save(sb, { ...multi, variants: [multi.variants[0]] });
+                assert.equal(partial.variants.length, 2);
+
             },
         );
         await t.test(
