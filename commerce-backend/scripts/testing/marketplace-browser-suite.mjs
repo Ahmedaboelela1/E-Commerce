@@ -25,14 +25,14 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         await page.waitForURL((url) => !url.pathname.includes('login'));
         await page.goto(`http://127.0.0.1:${f.port}/dashboard/shop-operations`);
         await page
-            .getByRole('heading', { name: 'Shop operations / إدارة المتجر' })
+            .getByRole('heading', { name: 'Shop operations' })
             .waitFor();
         if (openProducts) {
             await page
-                .getByRole('tab', { name: 'Products / المنتجات', exact: true })
+                .getByRole('tab', { name: 'Products', exact: true })
                 .click();
             await page
-                .getByRole('button', { name: 'Add product / إضافة منتج' })
+                .getByRole('button', { name: 'Add product' })
                 .waitFor();
         }
         return page;
@@ -50,7 +50,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
                 `Duplicate native ${path} menu must be absent`);
         }
         assert.equal(await page.getByRole('link', {
-            name: 'Shop operations / إدارة المتجر', exact: true,
+            name: 'Shop operations', exact: true,
         }).count(), 1);
     }
     await t.test('SuperAdmin uses one commerce entry with working Products, Orders and Payments tabs', async () => {
@@ -58,20 +58,20 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         const channel = page.getByRole('button').filter({ hasText: /Default channel/ }).first();
         await channel.click();
         await page.getByText('skillverse-eg', { exact: true }).last().click();
-        await page.getByRole('tab', { name: 'Products / المنتجات', exact: true }).click();
+        await page.getByRole('tab', { name: 'Products', exact: true }).click();
         await page.getByRole('cell', { name: 'vendor-a-robot', exact: true }).first().waitFor();
         await assertSingleNavigation(page);
         await page.getByRole('row').filter({ hasText: 'vendor-a-robot' })
-            .getByRole('button', { name: 'Edit / تعديل', exact: true }).click();
-        await page.getByRole('link', { name: 'Advanced product options / خيارات المنتج المتقدمة', exact: true }).waitFor();
-        await page.getByRole('tab', { name: 'Payments / الدفع', exact: true }).click();
+            .getByRole('button', { name: 'Edit', exact: true }).click();
+        await page.getByRole('link', { name: 'Advanced product options', exact: true }).waitFor();
+        await page.getByRole('tab', { name: 'Payments', exact: true }).click();
         await page.getByRole('heading', { name: 'Cash on Delivery', exact: true }).waitFor();
-        await page.getByRole('tab', { name: 'Orders / الطلبات', exact: true }).click();
+        await page.getByRole('tab', { name: 'Orders', exact: true }).click();
         const source = (await f.admin('query($id:ID!){order(id:$id){code}}', { id: orderId })).data.order;
         await page.getByRole('row').filter({ hasText: source.code })
-            .getByRole('button', { name: 'Open / فتح', exact: true }).click();
-        await page.getByRole('heading', { name: 'Order items & shipping / بنود الطلب والشحن', exact: true }).waitFor();
-        await page.getByRole('link', { name: 'Advanced order details / تفاصيل الطلب المتقدمة', exact: true }).waitFor();
+            .getByRole('button', { name: 'Open', exact: true }).click();
+        await page.getByRole('heading', { name: 'Order items & shipping', exact: true }).waitFor();
+        await page.getByRole('link', { name: 'Advanced order details', exact: true }).waitFor();
         await page.screenshot({ path: path.join(artifacts, 'superadmin-single-commerce-navigation.png'), fullPage: true });
         await page.getByRole('button').filter({ hasText: /skillverse-eg/ }).first().click();
         await page.getByText('Default channel', { exact: true }).last().click();
@@ -106,7 +106,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             assert.equal(
                 await page
                     .getByRole('link', {
-                        name: 'Shop operations / إدارة المتجر',
+                        name: 'Shop operations',
                         exact: true,
                     })
                     .count(),
@@ -120,7 +120,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             assert.equal(
                 await page
                     .getByRole('tab', {
-                        name: 'Team & sellers / الحسابات والبائعون',
+                        name: 'Team & sellers',
                         exact: true,
                     })
                     .count(),
@@ -139,7 +139,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
                 0,
             );
             await page
-                .getByRole('button', { name: 'Add product / إضافة منتج' })
+                .getByRole('button', { name: 'Add product' })
                 .click();
             const form = page.getByRole('form', { name: 'Product editor' });
             await form
@@ -153,21 +153,24 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             assert.equal(await slug.inputValue(), 'custom-robot-kit');
             await productName.fill('Browser Seller Robot');
             const details = form.getByRole('textbox', { name: 'Details (English)', exact: true });
-            await details.fill('Included accessories');
-            await details.press('ControlOrMeta+a');
-            await form.getByRole('button', { name: 'Bold / عريض' }).first().click();
-            assert.equal(await details.locator('strong').innerText(), 'Included accessories');
-            await details.press('ArrowRight');
-            await details.press('Enter');
-            await form.getByRole('button', { name: 'Bullets / نقاط' }).first().click();
+            await details.click();
+            await page.keyboard.type('Included accessories');
+            await page.keyboard.press('Enter');
             await page.keyboard.type('USB cable');
+            const tools = form.getByRole('group', {name: 'Details (English)', exact: true});
+            await tools.getByRole('button', {name: 'Bullets', exact: true}).click();
             assert.equal(await details.locator('li').innerText(), 'USB cable');
-            const remove = form.getByRole('button', { name: 'Remove variant / حذف الإصدار' });
+            await details.locator('p').filter({hasText: 'Included accessories'}).click();
+            await page.keyboard.press('Home');
+            await page.keyboard.press('Shift+End');
+            await tools.getByRole('button', {name: 'Bold', exact: true}).click();
+            assert.equal(await details.locator('strong').innerText(), 'Included accessories');
+            const remove = form.getByRole('button', { name: 'Remove variant' });
             assert.ok(await remove.first().isDisabled());
-            await form.getByRole('button', { name: 'Add variant / إضافة إصدار' }).click();
+            await form.getByRole('button', { name: 'Add variant' }).click();
             for (const width of [1500, 390]) {
                 await page.setViewportSize({ width, height: 1000 });
-                const checkbox = form.getByRole('checkbox', { name: 'Available / متاح' }).nth(1);
+                const checkbox = form.getByRole('checkbox', { name: 'Available' }).nth(1);
                 await remove.nth(1).scrollIntoViewIfNeeded();
                 const box = await checkbox.boundingBox();
                 const button = await remove.nth(1).boundingBox();
@@ -181,21 +184,21 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             await remove.nth(1).click();
             assert.equal(await remove.count(), 1);
             await form
-                .getByLabel('Variant name / اسم الإصدار', { exact: true })
+                .getByLabel('Variant name', { exact: true })
                 .fill('Browser robot');
             await form
                 .getByLabel('SKU', { exact: true })
                 .fill('BROWSER-SELLER-SKU');
             await form
-                .getByLabel('Price (EGP) / السعر بالجنيه', { exact: true })
+                .getByLabel('Price (EGP)', { exact: true })
                 .fill('145');
-            await form.getByLabel('Stock / الكمية', { exact: true }).fill('7');
+            await form.getByLabel('Stock', { exact: true }).fill('7');
             await form
-                .getByRole('button', { name: 'Save product / حفظ المنتج' })
+                .getByRole('button', { name: 'Save product' })
                 .click();
             await page
                 .getByRole('status')
-                .filter({ hasText: 'Saved / تم الحفظ' })
+                .filter({ hasText: 'Saved' })
                 .waitFor();
             await page
                 .getByRole('cell', {
@@ -204,14 +207,14 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
                 })
                 .waitFor();
             await page.getByRole('row').filter({hasText: 'Browser Seller Robot'})
-                .getByRole('button', {name: 'Edit / تعديل'}).click();
+                .getByRole('button', {name: 'Edit'}).click();
             await form.getByRole('textbox', {name: 'Details (English)'}).locator('li').waitFor();
             assert.equal(await details.locator('strong').first().innerText(), 'Included accessories');
             assert.equal(await details.locator('li').innerText(), 'USB cable');
             assert.equal(await slug.inputValue(), 'custom-robot-kit');
             await page
                 .getByRole('tab', {
-                    name: 'Delivery rates / أسعار التوصيل',
+                    name: 'Delivery rates',
                     exact: true,
                 })
                 .click();
@@ -222,7 +225,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
                 })
                 .waitFor();
             await page
-                .getByRole('tab', { name: 'Orders / الطلبات', exact: true })
+                .getByRole('tab', { name: 'Orders', exact: true })
                 .click();
             const source = (
                 await f.admin('query($id:ID!){order(id:$id){code}}', {
@@ -233,7 +236,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
                 .getByRole('row')
                 .filter({ hasText: source.code })
                 .getByRole('button', {
-                    name: 'View items / عرض البنود',
+                    name: 'View items',
                     exact: true,
                 })
                 .click();
@@ -249,14 +252,14 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             );
             assert.equal(
                 await page
-                    .getByRole('tab', { name: 'Payments / الدفع', exact: true })
+                    .getByRole('tab', { name: 'Payments', exact: true })
                     .count(),
                 0,
             );
             assert.equal(
                 await page
                     .getByRole('tab', {
-                        name: 'Settings / الإعدادات',
+                        name: 'Settings',
                         exact: true,
                     })
                     .count(),
@@ -265,7 +268,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             assert.equal(
                 await page
                     .getByRole('button', {
-                        name: 'Create pending refund / تسجيل استرداد معلق',
+                        name: 'Create pending refund',
                         exact: true,
                     })
                     .count(),
@@ -299,15 +302,15 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             );
             await page
                 .getByRole('tab', {
-                    name: 'Team & sellers / الحسابات والبائعون',
+                    name: 'Team & sellers',
                     exact: true,
                 })
                 .click();
             await page
-                .getByRole('heading', { name: 'Create account / إنشاء حساب' })
+                .getByRole('heading', { name: 'Create account' })
                 .waitFor();
             await page
-                .getByRole('tab', { name: 'Payments / الدفع', exact: true })
+                .getByRole('tab', { name: 'Payments', exact: true })
                 .click();
             await page
                 .getByRole('heading', { name: 'Cash on Delivery', exact: true })
@@ -317,17 +320,17 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             );
             await page
                 .getByRole('heading', {
-                    name: 'Shop operations / إدارة المتجر',
+                    name: 'Shop operations',
                     exact: true,
                 })
                 .waitFor();
             await page
-                .getByRole('tab', { name: 'Orders / الطلبات', exact: true })
+                .getByRole('tab', { name: 'Orders', exact: true })
                 .waitFor();
             assert.equal(
                 await page
                     .getByRole('tab', {
-                        name: 'Settings / الإعدادات',
+                        name: 'Settings',
                         exact: true,
                     })
                     .count(),
@@ -341,11 +344,11 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             await page
                 .getByRole('row')
                 .filter({ hasText: source.code })
-                .getByRole('button', { name: 'Open / فتح', exact: true })
+                .getByRole('button', { name: 'Open', exact: true })
                 .click();
             await page
                 .getByRole('heading', {
-                    name: 'Order items & shipping / بنود الطلب والشحن',
+                    name: 'Order items & shipping',
                     exact: true,
                 })
                 .waitFor();
@@ -360,7 +363,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             assert.equal(
                 await page
                     .getByRole('button', {
-                        name: 'Create pending refund / تسجيل استرداد معلق',
+                        name: 'Create pending refund',
                         exact: true,
                     })
                     .count(),
@@ -382,7 +385,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             });
             await page
                 .getByRole('heading', {
-                    name: 'Order items & shipping / بنود الطلب والشحن',
+                    name: 'Order items & shipping',
                     exact: true,
                 })
                 .scrollIntoViewIfNeeded();
@@ -400,14 +403,14 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             );
             await page
                 .getByRole('button', {
-                    name: 'Add product / إضافة منتج',
+                    name: 'Add product',
                     exact: true,
                 })
                 .waitFor();
             assert.equal(
                 await page
                     .getByRole('tab', {
-                        name: 'Products / المنتجات',
+                        name: 'Products',
                         exact: true,
                     })
                     .getAttribute('aria-selected'),
@@ -423,7 +426,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             );
             await page
                 .getByRole('heading', {
-                    name: 'Create account / إنشاء حساب',
+                    name: 'Create account',
                     exact: true,
                 })
                 .waitFor();
@@ -468,18 +471,18 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             await page
                 .getByRole('row')
                 .filter({ hasText: source.code })
-                .getByRole('button', { name: 'Open / فتح', exact: true })
+                .getByRole('button', { name: 'Open', exact: true })
                 .click();
             await page
                 .getByRole('button', {
-                    name: 'Download PDF / تحميل PDF',
+                    name: 'Download PDF',
                     exact: true,
                 })
                 .waitFor();
             assert.equal(
                 await page
                     .getByRole('heading', {
-                        name: 'Order items & shipping / بنود الطلب والشحن',
+                        name: 'Order items & shipping',
                         exact: true,
                     })
                     .count(),
@@ -488,7 +491,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             assert.equal(
                 await page
                     .getByRole('tab', {
-                        name: 'Products / المنتجات',
+                        name: 'Products',
                         exact: true,
                     })
                     .count(),
@@ -497,7 +500,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             assert.equal(
                 await page
                     .getByRole('tab', {
-                        name: 'Settings / الإعدادات',
+                        name: 'Settings',
                         exact: true,
                     })
                     .count(),
@@ -507,4 +510,28 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             await page.close();
         },
     );
+    await t.test('seller actions follow the saved Dashboard display language', async () => {
+        const email = 'vendor-b@example.invalid';
+        const page = await login(email);
+        const add = page.getByRole('button', {name: 'Add product', exact: true});
+        await add.waitFor();
+        await page.getByRole('button').filter({hasText: email}).click();
+        await page.getByText('Language', {exact: true}).click();
+        const dialog = page.getByRole('dialog');
+        await dialog.getByRole('combobox').first().click();
+        await page.getByRole('option', {name: /^en\s/i}).waitFor();
+        assert.equal(await page.getByRole('option').count(), 2);
+        await page.getByRole('option', {name: /^ar\s/i}).click();
+        await page.keyboard.press('Escape');
+        await page.getByRole('button', {name: 'إضافة منتج', exact: true}).waitFor();
+        await page.reload();
+        await page.getByRole('tab', {name: 'المنتجات', exact: true}).click();
+        await page.getByRole('button', {name: 'إضافة منتج', exact: true}).click();
+        const form = page.getByRole('form', {name: 'محرر المنتج'});
+        await form.getByRole('button', {name: 'حفظ المنتج', exact: true}).waitFor();
+        const toolbar = form.getByRole('group', {name: 'التفاصيل بالإنجليزية'});
+        assert.equal(await toolbar.getByRole('button', {name: 'عريض'}).getAttribute('title'), 'عريض');
+        assert.equal(await add.count(), 0);
+        await page.close();
+    });
 }

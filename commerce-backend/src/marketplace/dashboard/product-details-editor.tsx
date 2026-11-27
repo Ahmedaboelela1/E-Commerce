@@ -1,3 +1,4 @@
+import { useLingui } from '@vendure/dashboard';
 import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -21,6 +22,7 @@ export function ProductDetailsEditor({
     assets: { id: string; name: string; preview: string }[];
     onChange: (value: string) => void;
 }) {
+    const { _: t } = useLingui();
     const editor = useEditor({
         extensions,
         content: value,
@@ -49,31 +51,31 @@ export function ProductDetailsEditor({
     const buttons = [
         {
             icon: Bold,
-            name: 'Bold / عريض',
+            name: t('shop.Bold'),
             active: active?.bold,
             run: () => editor.chain().focus().toggleBold().run(),
         },
         {
             icon: Italic,
-            name: 'Italic / مائل',
+            name: t('shop.Italic'),
             active: active?.italic,
             run: () => editor.chain().focus().toggleItalic().run(),
         },
         {
             icon: Heading3,
-            name: 'Heading / عنوان',
+            name: t('shop.Heading'),
             active: active?.heading,
             run: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
         },
         {
             icon: List,
-            name: 'Bullets / نقاط',
+            name: t('shop.Bullets'),
             active: active?.bullets,
             run: () => editor.chain().focus().toggleBulletList().run(),
         },
         {
             icon: ListOrdered,
-            name: 'Numbering / ترقيم',
+            name: t('shop.Numbering'),
             active: active?.numbering,
             run: () => editor.chain().focus().toggleOrderedList().run(),
         },
@@ -98,7 +100,7 @@ export function ProductDetailsEditor({
                 {assets.length > 0 && (
                     <select
                         value=""
-                        aria-label="Insert product image / إدراج صورة المنتج"
+                        aria-label={t('shop.Insert product image')}
                         onChange={(e) => {
                             const asset = assets.find(
                                 (a) => String(a.id) === e.target.value,
@@ -115,7 +117,7 @@ export function ProductDetailsEditor({
                         }}
                     >
                         <option value="">
-                            Insert product image / إدراج صورة المنتج
+                            {t('shop.Insert product image')}
                         </option>
                         {assets.map((a) => (
                             <option key={a.id} value={a.id}>

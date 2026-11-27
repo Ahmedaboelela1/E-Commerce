@@ -23,19 +23,19 @@ export function resolveEgyptGovernorate(name: string): string | undefined {
 /** One editable Shipping Method per governorate; its calculator owns the price. */
 export const egyptGovernorateShippingChecker = new ShippingEligibilityChecker({
     code: 'egypt-governorate',
-    description: [{languageCode: LanguageCode.en, value: 'Egypt delivery by governorate / الشحن حسب المحافظة'}],
+    description: [{languageCode: LanguageCode.en, value: 'Egypt delivery by governorate'}, {languageCode: LanguageCode.ar, value: 'الشحن حسب المحافظة'}],
     args: {
         governorate: {
             type: 'string',
-            label: [{languageCode: LanguageCode.en, value: 'Governorate / المحافظة'}],
+            label: [{languageCode: LanguageCode.en, value: 'Governorate'}, {languageCode: LanguageCode.ar, value: 'المحافظة'}],
             ui: {
                 component: 'select-form-input',
                 options: egyptGovernorates.map(([value, en, ar]) => ({
                     value,
                     // Native Dashboard selects and summaries require localized labels.
                     label: [
-                        {languageCode: LanguageCode.en, value: `${ar} / ${en}`},
-                        {languageCode: LanguageCode.ar, value: `${ar} / ${en}`},
+                        {languageCode: LanguageCode.en, value: en},
+                        {languageCode: LanguageCode.ar, value: ar},
                     ],
                 })),
             },

@@ -421,7 +421,7 @@ export async function growthBrowserSuite(
             );
             await admin
                 .getByRole('heading', {
-                    name: 'Catalog tools / أدوات المنتجات',
+                    name: 'Catalog tools',
                     exact: true,
                 })
                 .waitFor();
@@ -442,24 +442,24 @@ export async function growthBrowserSuite(
                 .selectOption(f.product.id);
             await admin
                 .getByText(
-                    'Suite Test Robot — comparison & help / المقارنة والمساعدة',
+                    'Suite Test Robot — comparison & help',
                     {exact: true},
                 )
                 .waitFor();
             await admin
                 .getByRole('textbox', {
-                    name: 'Programming / البرمجة',
+                    name: 'Programming',
                     exact: true,
                 })
                 .fill('Browser Python specification');
             await admin
                 .getByRole('button', {
-                    name: 'Save product content / حفظ البيانات',
+                    name: 'Save product content',
                     exact: true,
                 })
                 .click();
             await admin
-                .getByText('Product content saved / تم حفظ بيانات المنتج', {
+                .getByText('Product content saved', {
                     exact: true,
                 })
                 .waitFor();
@@ -472,7 +472,7 @@ export async function growthBrowserSuite(
             );
             await admin
                 .getByRole('heading', {
-                    name: 'Customer care / خدمة العملاء',
+                    name: 'Customer care',
                     exact: true,
                 })
                 .waitFor();
@@ -480,22 +480,22 @@ export async function growthBrowserSuite(
                 .getByRole('row')
                 .filter({hasText: 'Browser Test School'});
             await quoteRow
-                .getByRole('button', {name: 'Open / فتح', exact: true})
+                .getByRole('button', {name: 'Open', exact: true})
                 .click();
             await admin
                 .getByLabel('Agreed delivery (EGP)', {exact: true})
                 .fill('115');
             await admin
                 .getByRole('button', {
-                    name: 'Publish offer / إرسال العرض',
+                    name: 'Publish offer',
                     exact: true,
                 })
                 .click();
             await admin
-                .getByText('Offer published / تم إرسال العرض', {exact: true})
+                .getByText('Offer published', {exact: true})
                 .waitFor();
             await admin
-                .getByRole('button', {name: 'Returns / المرتجعات', exact: true})
+                .getByRole('button', {name: 'Returns', exact: true})
                 .click();
             const returnRow = admin.getByRole('row').filter({
                 has: admin.getByRole('cell', {
@@ -504,7 +504,7 @@ export async function growthBrowserSuite(
                 }),
             });
             await returnRow
-                .getByRole('button', {name: 'Open / فتح', exact: true})
+                .getByRole('button', {name: 'Open', exact: true})
                 .click();
             await admin
                 .getByRole('button', {name: 'Private photo 1', exact: true})

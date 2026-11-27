@@ -1,4 +1,5 @@
 import {
+    useLingui,
     defineDashboardExtension,
     api,
     useChannel,
@@ -108,6 +109,7 @@ const amount = (v: number) =>
     }).format(v / 100);
 const css = `.sg{padding:24px;max-width:1400px;margin:auto}.sg h1{font-size:28px;font-weight:700}.sg h2{font-size:20px;font-weight:650;margin:12px 0}.sg h3{font-size:16px;font-weight:650;margin:10px 0}.sg p{margin:8px 0;font-size:14px;line-height:1.7}.sg .muted{color:var(--muted-foreground,#64748b);font-size:13px}.sg .box{border:1px solid var(--border,#dce5ed);border-radius:14px;padding:20px;margin:16px 0;background:var(--card,#fff)}.sg .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.sg label{display:block;font-size:13px;font-weight:600;margin:12px 0}.sg input:not([type=checkbox]),.sg select,.sg textarea{display:block;width:100%;border:1px solid var(--border,#d1dce5);border-radius:9px;background:var(--background,#fff);padding:10px;margin-top:5px;color:inherit}.sg button,.sg a.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--border,#d1dce5);border-radius:10px;padding:10px 16px;font-size:14px;font-weight:600;background:var(--background,#fff);cursor:pointer;text-decoration:none}.sg button.primary{background:#087e55;color:white;border-color:#087e55}.sg button:disabled,.sg fieldset:disabled{opacity:.5;cursor:not-allowed}.sg .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.sg .error{background:#fff0f1;color:#b91c1c;padding:14px;border-radius:10px}.sg .success{background:#eaf7ef;color:#087e55;padding:14px;border-radius:10px}.sg table{width:100%;border-collapse:collapse;font-size:14px}.sg th,.sg td{text-align:start;padding:12px;border-bottom:1px solid var(--border,#dce5ed);vertical-align:top}.sg .table{overflow:auto}.sg input[type=checkbox]{margin-inline-end:8px}.sg .prose{white-space:pre-wrap;overflow-wrap:anywhere}`;
 function useWork() {
+    const { _: t } = useLingui();
     const [busy, setBusy] = useState(false),
         [error, setError] = useState(''),
         [message, setMessage] = useState('');
@@ -118,7 +120,7 @@ function useWork() {
         try {
             await fn();
         } catch (e) {
-            setError(e instanceof Error ? e.message : 'Request failed');
+            setError(e instanceof Error ? e.message : t('shop.Request failed'));
         } finally {
             setBusy(false);
         }
@@ -148,6 +150,7 @@ function ProductPicker({
     onProduct?: (p: Product) => void;
     onVariant?: (v: Variant) => void;
 }) {
+    const { _: t } = useLingui();
     const [search, setSearch] = useState(''),
         [items, setItems] = useState<Product[]>([]),
         [selected, setSelected] = useState('');
@@ -171,11 +174,11 @@ function ProductPicker({
     }, []);
     return (
         <div className="box">
-            <h2>Choose catalog products / اختيار المنتجات</h2>
+            <h2>{t('shop.Choose catalog products')}</h2>
             <Feedback work={work} />
             <div className="grid">
                 <label>
-                    Product name / اسم المنتج
+                    {t('shop.Product name')}
                     <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -186,12 +189,12 @@ function ProductPicker({
                         disabled={work.busy}
                         onClick={() => void work.run(load)}
                     >
-                        Search / بحث
+                        {t('shop.Search')}
                     </button>
                 </div>
             </div>
             <label>
-                Product
+                {t('shop.Product')}
                 <select
                     value={selected}
                     onChange={(e) => {
@@ -200,7 +203,7 @@ function ProductPicker({
                         if (p) onProduct?.(p);
                     }}
                 >
-                    <option value="">Choose a product / اختر المنتج</option>
+                    <option value="">{t('shop.Choose a product')}</option>
                     {items.map((p) => (
                         <option key={p.id} value={p.id}>
                             {p.name}
@@ -223,6 +226,7 @@ function ProductPicker({
     );
 }
 function CatalogPage() {
+    const { _: t, i18n } = useLingui();
     const {activeChannel} = useChannel();
     const {hasPermissions:nativePermissions} = usePermissions();
     const hasPermissions=(permissions:string[])=>nativePermissions(permissions)||(nativePermissions(['ManageStore'])&&permissions.some(p=>['ReadOrder','UpdateOrder','ReadCatalog','UpdateCatalog','CreatePromotion'].includes(p)));
@@ -274,14 +278,13 @@ function CatalogPage() {
         };
     }, [product?.id, language]);
     if (!hasPermissions(['ReadCatalog']))
-        return <p>Catalog permission required.</p>;
+        return <p>{t('shop.Catalog permission required.')}</p>;
     return (
-        <div className="sg">
+        <div className="sg" dir={i18n.locale === 'ar' ? 'rtl' : 'ltr'}>
             <style>{css}</style>
-            <h1>Catalog tools / أدوات المنتجات</h1>
+            <h1>{t('shop.Catalog tools')}</h1>
             <p className="muted">
-                {activeChannel?.code} · Actual specifications, help resources
-                and stock-tracked product bundles
+                {activeChannel?.code} {t('shop.· Actual specifications, help resources and stock-tracked product bundles')}
             </p>
             <Feedback work={work} />
             <ProductPicker
@@ -328,22 +331,22 @@ function CatalogPage() {
                             );
                             setVersion(d.saveShopProductContent.version);
                             work.setMessage(
-                                'Product content saved / تم حفظ بيانات المنتج',
+                                t('shop.Product content saved'),
                             );
                         });
                     }}
                 >
                     <h2>
-                        {product.name} — comparison & help / المقارنة والمساعدة
+                        {product.name} {t('shop.— comparison & help')}
                     </h2>
                     <label>
-                        Language / اللغة
+                        {t('shop.Language')}
                         <select
                             value={language}
                             onChange={(e) => setLanguage(e.target.value)}
                         >
-                            <option value="en">English</option>
-                            <option value="ar">العربية</option>
+                            <option value="en">{t('shop.English')}</option>
+                            <option value="ar">{t('shop.Arabic')}</option>
                         </select>
                     </label>
                     <fieldset
@@ -354,17 +357,15 @@ function CatalogPage() {
                         }
                     >
                         <p className="muted">
-                            Only enter manufacturer-confirmed information. Empty
-                            fields appear as not provided. / أدخل المواصفات
-                            المعتمدة فقط.
+                            {t('shop.Only enter manufacturer-confirmed information. Empty fields appear as not provided.')}
                         </p>
                         <div className="grid">
                             {Object.entries({
-                                ageRange: 'Age range / العمر المناسب',
-                                programming: 'Programming / البرمجة',
-                                boxContents: 'In the box / محتويات العلبة',
+                                ageRange: t('shop.Age range'),
+                                programming: t('shop.Programming'),
+                                boxContents: t('shop.In the box'),
                                 competitions:
-                                    'Suitable competitions / المسابقات المناسبة',
+                                    t('shop.Suitable competitions'),
                             }).map(([key, label]) => (
                                 <label key={key}>
                                     {label}
@@ -388,12 +389,12 @@ function CatalogPage() {
                                 </label>
                             ))}
                         </div>
-                        <h3>Help resources / ملفات المساعدة</h3>
+                        <h3>{t('shop.Help resources')}</h3>
                         {content.resources.map((r, i) => (
                             <div className="box" key={i}>
                                 <div className="grid">
                                     <label>
-                                        Type
+                                        {t('shop.Type')}
                                         <select
                                             value={r.kind}
                                             onChange={(e) =>
@@ -420,12 +421,12 @@ function CatalogPage() {
                                                 'code',
                                                 'link',
                                             ].map((k) => (
-                                                <option key={k}>{k}</option>
+                                                <option key={k} value={k}>{t(`shop.resource.${k}`)}</option>
                                             ))}
                                         </select>
                                     </label>
                                     <label>
-                                        Title
+                                        {t('shop.Title')}
                                         <input
                                             value={r.title}
                                             maxLength={160}
@@ -450,7 +451,7 @@ function CatalogPage() {
                                         />
                                     </label>
                                     <label>
-                                        HTTPS link
+                                        {t('shop.HTTPS link')}
                                         <input
                                             type="url"
                                             value={r.url}
@@ -486,7 +487,7 @@ function CatalogPage() {
                                         })
                                     }
                                 >
-                                    Remove
+                                    {t('shop.Remove')}
                                 </button>
                             </div>
                         ))}
@@ -503,13 +504,13 @@ function CatalogPage() {
                                 })
                             }
                         >
-                            Add resource / إضافة ملف
+                            {t('shop.Add resource')}
                         </button>
-                        <h3>Frequently asked questions / الأسئلة الشائعة</h3>
+                        <h3>{t('shop.Frequently asked questions')}</h3>
                         {content.faqs.map((q, i) => (
                             <div className="box" key={i}>
                                 <label>
-                                    Question
+                                    {t('shop.Question')}
                                     <input
                                         value={q.question}
                                         required
@@ -533,7 +534,7 @@ function CatalogPage() {
                                     />
                                 </label>
                                 <label>
-                                    Answer
+                                    {t('shop.Answer')}
                                     <textarea
                                         value={q.answer}
                                         required
@@ -568,7 +569,7 @@ function CatalogPage() {
                                         })
                                     }
                                 >
-                                    Remove
+                                    {t('shop.Remove')}
                                 </button>
                             </div>
                         ))}
@@ -586,24 +587,24 @@ function CatalogPage() {
                                     })
                                 }
                             >
-                                Add question / إضافة سؤال
+                                {t('shop.Add question')}
                             </button>
                             <button className="primary">
-                                Save product content / حفظ البيانات
+                                {t('shop.Save product content')}
                             </button>
                         </div>
                     </fieldset>
                 </form>
             )}
             <section className="box">
-                <h2>Existing bundles / الباقات</h2>
+                <h2>{t('shop.Existing bundles')}</h2>
                 <div className="table">
                     <table>
                         <thead>
                             <tr>
-                                <th>Bundle</th>
-                                <th>Price</th>
-                                <th>Enabled</th>
+                                <th>{t('shop.Bundle')}</th>
+                                <th>{t('shop.Price')}</th>
+                                <th>{t('shop.Enabled')}</th>
                                 <th />
                             </tr>
                         </thead>
@@ -612,7 +613,7 @@ function CatalogPage() {
                                 <tr key={b.id}>
                                     <td>{b.name}</td>
                                     <td>{amount(b.price)}</td>
-                                    <td>{b.enabled ? 'Yes' : 'No'}</td>
+                                    <td>{b.enabled ? t('shop.Yes') : t('shop.No')}</td>
                                     <td>
                                         <button
                                             onClick={() =>
@@ -631,7 +632,7 @@ function CatalogPage() {
                                                 })
                                             }
                                         >
-                                            Edit / تعديل
+                                            {t('shop.Edit')}
                                         </button>
                                     </td>
                                 </tr>
@@ -644,13 +645,13 @@ function CatalogPage() {
                         disabled={!skip}
                         onClick={() => setSkip(Math.max(0, skip - 50))}
                     >
-                        Previous
+                        {t('shop.Previous')}
                     </button>
                     <button
                         disabled={skip + 50 >= total}
                         onClick={() => setSkip(skip + 50)}
                     >
-                        Next
+                        {t('shop.Next')}
                     </button>
                 </div>
             </section>
@@ -674,23 +675,20 @@ function CatalogPage() {
                         );
                         await loadBundles();
                         setBundle(emptyBundle());
-                        work.setMessage('Bundle saved / تم حفظ الباقة');
+                        work.setMessage(t('shop.Bundle saved'));
                     });
                 }}
             >
                 <h2>
-                    {bundle.id ? 'Edit bundle' : 'New bundle'} / باقة منتجات
+                    {bundle.id ? t('shop.Edit bundle') : t('shop.New bundle')}
                 </h2>
                 <p className="muted">
-                    Choose component variants above. Components remain separate
-                    stock-tracked order lines. Bundle savings require all
-                    components; coupon codes do not combine with bundle savings.
-                    / اختر المكونات من أعلى الصفحة.
+                    {t('shop.Choose component variants above. Components remain separate stock-tracked order lines. Bundle savings require all components; coupon codes do not combine with bundle savings.')}
                 </p>
                 <fieldset disabled={!canBundle || work.busy}>
                     <div className="grid">
                         <label>
-                            Name
+                            {t('shop.Name')}
                             <input
                                 value={bundle.name}
                                 required
@@ -701,7 +699,7 @@ function CatalogPage() {
                             />
                         </label>
                         <label>
-                            Bundle price (EGP, using channel tax settings)
+                            {t('shop.Bundle price (EGP, using channel tax settings)')}
                             <input
                                 type="number"
                                 min="0.01"
@@ -720,7 +718,7 @@ function CatalogPage() {
                         </label>
                     </div>
                     <label>
-                        Description
+                        {t('shop.Description')}
                         <textarea
                             rows={3}
                             maxLength={3000}
@@ -738,7 +736,7 @@ function CatalogPage() {
                             <label>
                                 {c.name || c.variantId} · {c.sku}
                                 <input
-                                    aria-label={`Quantity ${c.sku || c.variantId}`}
+                                    aria-label={`${t('shop.Quantity')} ${c.sku || c.variantId}`}
                                     type="number"
                                     min={1}
                                     max={100}
@@ -775,7 +773,7 @@ function CatalogPage() {
                                         })
                                     }
                                 >
-                                    Remove component
+                                    {t('shop.Remove component')}
                                 </button>
                             </div>
                         </div>
@@ -791,27 +789,26 @@ function CatalogPage() {
                                 })
                             }
                         />
-                        Publish bundle / نشر الباقة
+                        {t('shop.Publish bundle')}
                     </label>
                     <div className="actions">
                         <button
                             className="primary"
                             disabled={bundle.components.length < 2}
                         >
-                            Save bundle / حفظ الباقة
+                            {t('shop.Save bundle')}
                         </button>
                         <button
                             type="button"
                             onClick={() => setBundle(emptyBundle())}
                         >
-                            New / جديد
+                            {t('shop.New')}
                         </button>
                     </div>
                 </fieldset>
                 {!canBundle && (
                     <p className="muted">
-                        UpdateCatalog and CreatePromotion permissions are both
-                        required.
+                        {t('shop.UpdateCatalog and CreatePromotion permissions are both required.')}
                     </p>
                 )}
             </form>
@@ -819,6 +816,7 @@ function CatalogPage() {
     );
 }
 function CarePage() {
+    const { _: t, i18n } = useLingui();
     const {activeChannel} = useChannel();
     const {hasPermissions:nativePermissions} = usePermissions();
     const hasPermissions=(permissions:string[])=>nativePermissions(permissions)||(nativePermissions(['ManageStore'])&&permissions.some(p=>['ReadOrder','UpdateOrder','ReadCatalog','UpdateCatalog','CreatePromotion'].includes(p)));
@@ -898,12 +896,11 @@ function CarePage() {
         });
     };
     return (
-        <div className="sg">
+        <div className="sg" dir={i18n.locale === 'ar' ? 'rtl' : 'ltr'}>
             <style>{css}</style>
-            <h1>Customer care / خدمة العملاء</h1>
+            <h1>{t('shop.Customer care')}</h1>
             <p className="muted">
-                {activeChannel?.code} · Quotation requests, returns and
-                consent-based notifications
+                {activeChannel?.code} {t('shop.· Quotation requests, returns and consent-based notifications')}
             </p>
             <div className="actions">
                 {hasPermissions(['ReadOrder']) && (
@@ -915,7 +912,7 @@ function CarePage() {
                                 setReturn(null);
                             }}
                         >
-                            School quotes / عروض الأسعار
+                            {t('shop.School quotes')}
                         </button>
                         <button
                             onClick={() => {
@@ -924,13 +921,13 @@ function CarePage() {
                                 setQuote(null);
                             }}
                         >
-                            Returns / المرتجعات
+                            {t('shop.Returns')}
                         </button>
                     </>
                 )}
                 {hasPermissions(['ReadSettings']) && (
                     <button onClick={() => setTab('settings')}>
-                        Policies & notifications / الإعدادات
+                        {t('shop.Policies & notifications')}
                     </button>
                 )}
             </div>
@@ -941,10 +938,10 @@ function CarePage() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Request</th>
-                                    <th>Organization</th>
-                                    <th>Contact</th>
-                                    <th>Status</th>
+                                    <th>{t('shop.Request')}</th>
+                                    <th>{t('shop.Organization')}</th>
+                                    <th>{t('shop.Contact')}</th>
+                                    <th>{t('shop.Status')}</th>
                                     <th />
                                 </tr>
                             </thead>
@@ -963,7 +960,7 @@ function CarePage() {
                                             <button
                                                 onClick={() => openQuote(q)}
                                             >
-                                                Open / فتح
+                                                {t('shop.Open')}
                                             </button>
                                         </td>
                                     </tr>
@@ -974,7 +971,7 @@ function CarePage() {
                     {selectedQuote && offer && (
                         <div className="box">
                             <h2>
-                                Quotation #{selectedQuote.id} —{' '}
+                                {t('shop.Quotation #')}{selectedQuote.id} —{' '}
                                 {selectedQuote.organization}
                             </h2>
                             <p>
@@ -982,11 +979,7 @@ function CarePage() {
                             </p>
                             <p className="prose">{selectedQuote.notes}</p>
                             <p className="muted">
-                                Publishing sends the actual proposed prices and
-                                delivery charge to the customer. An accepted
-                                quote is finalized by creating a matching placed
-                                order in native Orders, then linking it here. /
-                                العرض لا ينشئ طلبًا أو تحصيلًا تلقائيًا.
+                                {t('shop.Publishing sends the actual proposed prices and delivery charge to the customer. An accepted quote is finalized by creating a matching placed order in native Orders, then linking it here.')}
                             </p>
                             <fieldset
                                 disabled={
@@ -1004,7 +997,7 @@ function CarePage() {
                                         <label>
                                             {i.name} · {i.sku}
                                             <input
-                                                aria-label={`Quote quantity ${i.sku}`}
+                                                aria-label={`${t('shop.Quote quantity')} ${i.sku}`}
                                                 type="number"
                                                 min={1}
                                                 max={10000}
@@ -1031,7 +1024,7 @@ function CarePage() {
                                             />
                                         </label>
                                         <label>
-                                            Unit price (EGP)
+                                            {t('shop.Unit price (EGP)')}
                                             <input
                                                 type="number"
                                                 min={0}
@@ -1065,7 +1058,7 @@ function CarePage() {
                                 ))}
                                 <div className="grid">
                                     <label>
-                                        Agreed delivery (EGP)
+                                        {t('shop.Agreed delivery (EGP)')}
                                         <input
                                             type="number"
                                             min={0}
@@ -1083,7 +1076,7 @@ function CarePage() {
                                         />
                                     </label>
                                     <label>
-                                        Offer expires
+                                        {t('shop.Offer expires')}
                                         <input
                                             type="date"
                                             value={offer.expiresAt.slice(0, 10)}
@@ -1099,7 +1092,7 @@ function CarePage() {
                                     </label>
                                 </div>
                                 <label>
-                                    Message to customer
+                                    {t('shop.Message to customer')}
                                     <textarea
                                         rows={3}
                                         value={offer.message}
@@ -1112,7 +1105,7 @@ function CarePage() {
                                     />
                                 </label>
                                 <p>
-                                    Total:{' '}
+                                    {t('shop.Total:')}{' '}
                                     <strong>
                                         {amount(
                                             offer.items.reduce(
@@ -1149,15 +1142,15 @@ function CarePage() {
                                                     await load();
                                                     work.setMessage(
                                                         publish
-                                                            ? 'Offer published / تم إرسال العرض'
-                                                            : 'Draft saved / تم حفظ المسودة',
+                                                            ? t('shop.Offer published')
+                                                            : t('shop.Draft saved'),
                                                     );
                                                 })
                                             }
                                         >
                                             {publish
-                                                ? 'Publish offer / إرسال العرض'
-                                                : 'Save draft / مسودة'}
+                                                ? t('shop.Publish offer')
+                                                : t('shop.Save draft')}
                                         </button>
                                     ))}
                                 </div>
@@ -1165,11 +1158,10 @@ function CarePage() {
                             {selectedQuote.status === 'accepted' && canEdit && (
                                 <div className="box">
                                     <a className="btn" href="/dashboard/orders">
-                                        Create the agreed order in Orders /
-                                        إنشاء الطلب
+                                        {t('shop.Create the agreed order in Orders')}
                                     </a>
                                     <label>
-                                        Matching placed order ID
+                                        {t('shop.Matching placed order ID')}
                                         <input
                                             value={orderId}
                                             onChange={(e) =>
@@ -1196,7 +1188,7 @@ function CarePage() {
                                             })
                                         }
                                     >
-                                        Link actual order / ربط الطلب
+                                        {t('shop.Link actual order')}
                                     </button>
                                 </div>
                             )}
@@ -1210,10 +1202,10 @@ function CarePage() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Request</th>
-                                    <th>Order</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
+                                    <th>{t('shop.Request')}</th>
+                                    <th>{t('shop.Order')}</th>
+                                    <th>{t('shop.Type')}</th>
+                                    <th>{t('shop.Status')}</th>
                                     <th />
                                 </tr>
                             </thead>
@@ -1234,7 +1226,7 @@ function CarePage() {
                                             <button
                                                 onClick={() => openReturn(r)}
                                             >
-                                                Open / فتح
+                                                {t('shop.Open')}
                                             </button>
                                         </td>
                                     </tr>
@@ -1244,12 +1236,12 @@ function CarePage() {
                     </div>
                     {selectedReturn && (
                         <div className="box">
-                            <h2>Return #{selectedReturn.id}</h2>
+                            <h2>{t('shop.Return #')}{selectedReturn.id}</h2>
                             <a
                                 className="btn"
                                 href={`/dashboard/orders/${selectedReturn.orderId}`}
                             >
-                                Open native order / إدارة الطلب
+                                {t('shop.Open native order')}
                             </a>
                             <p className="prose">{selectedReturn.reason}</p>
                             {selectedReturn.items.map((i, n) => (
@@ -1279,14 +1271,14 @@ function CarePage() {
                                                 })
                                             }
                                         >
-                                            Private photo {i + 1}
+                                            {t('shop.Private photo')} {i + 1}
                                         </button>
                                     ),
                                 )}
                             </div>
                             {photo && (
                                 <img
-                                    alt="Private return photo"
+                                    alt={t('shop.Private return photo')}
                                     src={`data:${photo.mimeType};base64,${photo.dataBase64}`}
                                     style={{
                                         maxHeight: 450,
@@ -1296,11 +1288,7 @@ function CarePage() {
                                 />
                             )}
                             <p className="muted">
-                                Inspect received items before manually adjusting
-                                stock. Process a real refund in Orders or create
-                                a replacement order before resolving. This
-                                screen does not send funds or automatically
-                                restock goods.
+                                {t('shop.Inspect received items before manually adjusting stock. Process a real refund in Orders or create a replacement order before resolving. This screen does not send funds or automatically restock goods.')}
                             </p>
                             <fieldset
                                 disabled={
@@ -1314,7 +1302,7 @@ function CarePage() {
                                 }
                             >
                                 <label>
-                                    Status
+                                    {t('shop.Status')}
                                     <select
                                         value={returnInput.status}
                                         onChange={(e) =>
@@ -1331,12 +1319,12 @@ function CarePage() {
                                             'resolved',
                                             'rejected',
                                         ].map((s) => (
-                                            <option key={s}>{s}</option>
+                                            <option key={s} value={s}>{t(`shop.return.${s}`)}</option>
                                         ))}
                                     </select>
                                 </label>
                                 <label>
-                                    Message shown to customer
+                                    {t('shop.Message shown to customer')}
                                     <textarea
                                         rows={3}
                                         value={returnInput.publicMessage}
@@ -1349,7 +1337,7 @@ function CarePage() {
                                     />
                                 </label>
                                 <label>
-                                    Internal staff notes
+                                    {t('shop.Internal staff notes')}
                                     <textarea
                                         rows={3}
                                         value={returnInput.internalNotes}
@@ -1364,7 +1352,7 @@ function CarePage() {
                                 {returnInput.status === 'resolved' && (
                                     <>
                                         <label>
-                                            Actual resolution
+                                            {t('shop.Actual resolution')}
                                             <select
                                                 value={returnInput.resolution}
                                                 onChange={(e) =>
@@ -1376,23 +1364,20 @@ function CarePage() {
                                                 }
                                             >
                                                 <option value="refund">
-                                                    Settled refund / مبلغ مسترد
-                                                    فعليًا
+                                                    {t('shop.Settled refund')}
                                                 </option>
                                                 <option value="exchange">
-                                                    Placed replacement order /
-                                                    طلب استبدال
+                                                    {t('shop.Placed replacement order')}
                                                 </option>
                                                 <option value="unpaid-cancelled">
-                                                    Unpaid order cancelled /
-                                                    إلغاء طلب غير محصل
+                                                    {t('shop.Unpaid order cancelled')}
                                                 </option>
                                             </select>
                                         </label>
                                         {returnInput.resolution ===
                                             'refund' && (
                                             <label>
-                                                Actual settled refund ID
+                                                {t('shop.Actual settled refund ID')}
                                                 <input
                                                     value={returnInput.refundId}
                                                     onChange={(e) =>
@@ -1408,7 +1393,7 @@ function CarePage() {
                                         {returnInput.resolution ===
                                             'exchange' && (
                                             <label>
-                                                Replacement order ID
+                                                {t('shop.Replacement order ID')}
                                                 <input
                                                     value={
                                                         returnInput.exchangeOrderId
@@ -1443,12 +1428,12 @@ function CarePage() {
                                             openReturn(d.updateShopReturn);
                                             await load();
                                             work.setMessage(
-                                                'Return updated / تم تحديث الطلب',
+                                                t('shop.Return updated'),
                                             );
                                         })
                                     }
                                 >
-                                    Save status / حفظ الحالة
+                                    {t('shop.Save status')}
                                 </button>
                             </fieldset>
                         </div>
@@ -1461,13 +1446,13 @@ function CarePage() {
                         disabled={!skip}
                         onClick={() => setSkip(Math.max(0, skip - 30))}
                     >
-                        Previous
+                        {t('shop.Previous')}
                     </button>
                     <button
                         disabled={skip + 30 >= total}
                         onClick={() => setSkip(skip + 30)}
                     >
-                        Next
+                        {t('shop.Next')}
                     </button>
                 </div>
             )}
@@ -1485,12 +1470,12 @@ function CarePage() {
                             );
                             setSettings(d.saveShopGrowthSettings);
                             work.setMessage(
-                                'Settings saved / تم حفظ الإعدادات',
+                                t('shop.Settings saved'),
                             );
                         });
                     }}
                 >
-                    <h2>Return window & mail / المرتجعات والرسائل</h2>
+                    <h2>{t('shop.Return window & mail')}</h2>
                     <fieldset
                         disabled={
                             !hasPermissions(['UpdateSettings']) || work.busy
@@ -1507,11 +1492,10 @@ function CarePage() {
                                     })
                                 }
                             />
-                            Enable online return requests after publishing your
-                            actual policy / تفعيل طلبات المرتجعات
+                            {t('shop.Enable online return requests after publishing your actual policy')}
                         </label>
                         <label>
-                            Actual return window in days
+                            {t('shop.Actual return window in days')}
                             <input
                                 type="number"
                                 min={0}
@@ -1538,8 +1522,7 @@ function CarePage() {
                                     })
                                 }
                             />
-                            Send requested back-in-stock alerts / تنبيهات عودة
-                            التوافر
+                            {t('shop.Send requested back-in-stock alerts')}
                         </label>
                         <label>
                             <input
@@ -1552,11 +1535,10 @@ function CarePage() {
                                     })
                                 }
                             />
-                            Enable cart reminders only for customers who opted
-                            in / تذكير السلة بموافقة العميل
+                            {t('shop.Enable cart reminders only for customers who opted in')}
                         </label>
                         <label>
-                            Hours of cart inactivity
+                            {t('shop.Hours of cart inactivity')}
                             <input
                                 type="number"
                                 min={1}
@@ -1571,13 +1553,10 @@ function CarePage() {
                             />
                         </label>
                         <p className="muted">
-                            At most one reminder per cart. Email and the job
-                            queue must be running; unsubscribe links are
-                            included. New cart-reminder consent is off by
-                            default.
+                            {t('shop.At most one reminder per cart. Email and the job queue must be running; unsubscribe links are included. New cart-reminder consent is off by default.')}
                         </p>
                         <div className="actions">
-                            <button className="primary">Save / حفظ</button>
+                            <button className="primary">{t('shop.Save')}</button>
                             <button
                                 type="button"
                                 onClick={() =>
@@ -1591,12 +1570,12 @@ function CarePage() {
                                             'mutation{runShopCustomerNotifications}',
                                         );
                                         work.setMessage(
-                                            `Stock alerts: ${d.runShopCustomerNotifications.stockNotifications}; cart reminders: ${d.runShopCustomerNotifications.cartReminders}`,
+                                            t('shop.Notification counts', {stock: d.runShopCustomerNotifications.stockNotifications, carts: d.runShopCustomerNotifications.cartReminders}),
                                         );
                                     })
                                 }
                             >
-                                Run notification check / فحص التنبيهات
+                                {t('shop.Run notification check')}
                             </button>
                         </div>
                     </fieldset>
@@ -1621,7 +1600,7 @@ defineDashboardExtension({
                 requiresPermission: ['ReadCatalog','ManageStore'],
                 sectionId: 'catalog',
                 id: 'shop-catalog-tools',
-                title: 'Catalog tools / أدوات المنتجات',
+                title: 'shop.Catalog tools',
             },
             component: () => <ChannelRoute page="catalog" />,
         },
@@ -1631,7 +1610,7 @@ defineDashboardExtension({
                 requiresPermission: ['ReadOrder','ManageStore'],
                 sectionId: 'sales',
                 id: 'shop-customer-care',
-                title: 'Customer care / خدمة العملاء',
+                title: 'shop.Customer care',
             },
             component: () => <ChannelRoute page="care" />,
         },

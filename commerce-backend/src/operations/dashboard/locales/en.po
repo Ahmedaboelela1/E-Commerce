@@ -1,0 +1,1248 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en\n"
+
+#. js-lingui-explicit-id
+msgid "shop.— comparison & help"
+msgstr "— comparison & help"
+
+#. js-lingui-explicit-id
+msgid "shop.· Actual specifications, help resources and stock-tracked product bundles"
+msgstr "· Actual specifications, help resources and stock-tracked product bundles"
+
+#. js-lingui-explicit-id
+msgid "shop.· Quotation requests, returns and consent-based notifications"
+msgstr "· Quotation requests, returns and consent-based notifications"
+
+#. js-lingui-explicit-id
+msgid "shop.Active"
+msgstr "Active"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual cash collection"
+msgstr "Actual cash collection"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual refund reference"
+msgstr "Actual refund reference"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual resolution"
+msgstr "Actual resolution"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual return window in days"
+msgstr "Actual return window in days"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual settled refund ID"
+msgstr "Actual settled refund ID"
+
+#. js-lingui-explicit-id
+msgid "shop.Add bank transfer"
+msgstr "Add bank transfer"
+
+#. js-lingui-explicit-id
+msgid "shop.Add cash on delivery"
+msgstr "Add cash on delivery"
+
+#. js-lingui-explicit-id
+msgid "shop.Add governorate rate"
+msgstr "Add governorate rate"
+
+#. js-lingui-explicit-id
+msgid "shop.Add product"
+msgstr "Add product"
+
+#. js-lingui-explicit-id
+msgid "shop.Add question"
+msgstr "Add question"
+
+#. js-lingui-explicit-id
+msgid "shop.Add resource"
+msgstr "Add resource"
+
+#. js-lingui-explicit-id
+msgid "shop.Add variant"
+msgstr "Add variant"
+
+#. js-lingui-explicit-id
+msgid "shop.Admin"
+msgstr "Admin"
+
+#. js-lingui-explicit-id
+msgid "shop.Advanced order details"
+msgstr "Advanced order details"
+
+#. js-lingui-explicit-id
+msgid "shop.Advanced product options"
+msgstr "Advanced product options"
+
+#. js-lingui-explicit-id
+msgid "shop.Advanced shipping settings"
+msgstr "Advanced shipping settings"
+
+#. js-lingui-explicit-id
+msgid "shop.Age range"
+msgstr "Age range"
+
+#. js-lingui-explicit-id
+msgid "shop.Agreed delivery (EGP)"
+msgstr "Agreed delivery (EGP)"
+
+#. js-lingui-explicit-id
+msgid "shop.Allocated"
+msgstr "Allocated"
+
+#. js-lingui-explicit-id
+msgid "shop.Amount"
+msgstr "Amount"
+
+#. js-lingui-explicit-id
+msgid "shop.Amounts describe orders placed in the selected period and their current payment/refund state."
+msgstr "Amounts describe orders placed in the selected period and their current payment/refund state."
+
+#. js-lingui-explicit-id
+msgid "shop.Answer"
+msgstr "Answer"
+
+#. js-lingui-explicit-id
+msgid "shop.Approve"
+msgstr "Approve"
+
+#. js-lingui-explicit-id
+msgid "shop.Approved"
+msgstr "Approved"
+
+#. js-lingui-explicit-id
+msgid "shop.Arabic"
+msgstr "Arabic"
+
+#. js-lingui-explicit-id
+msgid "shop.Aramex"
+msgstr "Aramex"
+
+#. js-lingui-explicit-id
+msgid "shop.At most one reminder per cart. Email and the job queue must be running; unsubscribe links are included. New cart-reminder consent is off by default."
+msgstr "At most one reminder per cart. Email and the job queue must be running; unsubscribe links are included. New cart-reminder consent is off by default."
+
+#. js-lingui-explicit-id
+msgid "shop.Available"
+msgstr "Available"
+
+#. js-lingui-explicit-id
+msgid "shop.Available stock threshold"
+msgstr "Available stock threshold"
+
+#. js-lingui-explicit-id
+msgid "shop.Awaiting call"
+msgstr "Awaiting call"
+
+#. js-lingui-explicit-id
+msgid "shop.Awaiting collection"
+msgstr "Awaiting collection"
+
+#. js-lingui-explicit-id
+msgid "shop.Bold"
+msgstr "Bold"
+
+#. js-lingui-explicit-id
+msgid "shop.Bullets"
+msgstr "Bullets"
+
+#. js-lingui-explicit-id
+msgid "shop.Bundle"
+msgstr "Bundle"
+
+#. js-lingui-explicit-id
+msgid "shop.Bundle price (EGP, using channel tax settings)"
+msgstr "Bundle price (EGP, using channel tax settings)"
+
+#. js-lingui-explicit-id
+msgid "shop.Bundle saved"
+msgstr "Bundle saved"
+
+#. js-lingui-explicit-id
+msgid "shop.Call status saved"
+msgstr "Call status saved"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancel order"
+msgstr "Cancel order"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancel shipment"
+msgstr "Cancel shipment"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancel the whole order"
+msgstr "Cancel the whole order"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancellation and refunds are separate actions. A refund stays pending until the money is actually returned."
+msgstr "Cancellation and refunds are separate actions. A refund stays pending until the money is actually returned."
+
+#. js-lingui-explicit-id
+msgid "shop.Cancellation reason"
+msgstr "Cancellation reason"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancelled"
+msgstr "Cancelled"
+
+#. js-lingui-explicit-id
+msgid "shop.Carrier"
+msgstr "Carrier"
+
+#. js-lingui-explicit-id
+msgid "shop.Catalog permission required."
+msgstr "Catalog permission required."
+
+#. js-lingui-explicit-id
+msgid "shop.Catalog tools"
+msgstr "Catalog tools"
+
+#. js-lingui-explicit-id
+msgid "shop.Central order management"
+msgstr "Central order management"
+
+#. js-lingui-explicit-id
+msgid "shop.Check stock and alerts"
+msgstr "Check stock and alerts"
+
+#. js-lingui-explicit-id
+msgid "shop.Choose a product"
+msgstr "Choose a product"
+
+#. js-lingui-explicit-id
+msgid "shop.Choose catalog products"
+msgstr "Choose catalog products"
+
+#. js-lingui-explicit-id
+msgid "shop.Choose component variants above. Components remain separate stock-tracked order lines. Bundle savings require all components; coupon codes do not combine with bundle savings."
+msgstr "Choose component variants above. Components remain separate stock-tracked order lines. Bundle savings require all components; coupon codes do not combine with bundle savings."
+
+#. js-lingui-explicit-id
+msgid "shop.Close"
+msgstr "Close"
+
+#. js-lingui-explicit-id
+msgid "shop.Code"
+msgstr "Code"
+
+#. js-lingui-explicit-id
+msgid "shop.Collected"
+msgstr "Collected"
+
+#. js-lingui-explicit-id
+msgid "shop.Collected, net refunds"
+msgstr "Collected, net refunds"
+
+#. js-lingui-explicit-id
+msgid "shop.Collection belongs to store management. Card payments remain unavailable."
+msgstr "Collection belongs to store management. Card payments remain unavailable."
+
+#. js-lingui-explicit-id
+msgid "shop.Collection reference"
+msgstr "Collection reference"
+
+#. js-lingui-explicit-id
+msgid "shop.Confirm actual refund"
+msgstr "Confirm actual refund"
+
+#. js-lingui-explicit-id
+msgid "shop.Confirm receipt and settle payment"
+msgstr "Confirm receipt and settle payment"
+
+#. js-lingui-explicit-id
+msgid "shop.Confirm, verify payment, then ship manually"
+msgstr "Confirm, verify payment, then ship manually"
+
+#. js-lingui-explicit-id
+msgid "shop.Confirmed"
+msgstr "Confirmed"
+
+#. js-lingui-explicit-id
+msgid "shop.Contact"
+msgstr "Contact"
+
+#. js-lingui-explicit-id
+msgid "shop.Could not load data"
+msgstr "Could not load data"
+
+#. js-lingui-explicit-id
+msgid "shop.Coupon created. Manage it in Marketing → Promotions"
+msgstr "Coupon created. Manage it in Marketing → Promotions"
+
+#. js-lingui-explicit-id
+msgid "shop.Coupons"
+msgstr "Coupons"
+
+#. js-lingui-explicit-id
+msgid "shop.Create account"
+msgstr "Create account"
+
+#. js-lingui-explicit-id
+msgid "shop.Create coupon"
+msgstr "Create coupon"
+
+#. js-lingui-explicit-id
+msgid "shop.Create pending refund"
+msgstr "Create pending refund"
+
+#. js-lingui-explicit-id
+msgid "shop.Create the agreed order in Orders"
+msgstr "Create the agreed order in Orders"
+
+#. js-lingui-explicit-id
+msgid "shop.Customer"
+msgstr "Customer"
+
+#. js-lingui-explicit-id
+msgid "shop.Customer care"
+msgstr "Customer care"
+
+#. js-lingui-explicit-id
+msgid "shop.Customer declined"
+msgstr "Customer declined"
+
+#. js-lingui-explicit-id
+msgid "shop.Delivery charge (EGP)"
+msgstr "Delivery charge (EGP)"
+
+#. js-lingui-explicit-id
+msgid "shop.Delivery description"
+msgstr "Delivery description"
+
+#. js-lingui-explicit-id
+msgid "shop.Delivery rate"
+msgstr "Delivery rate"
+
+#. js-lingui-explicit-id
+msgid "shop.Delivery rates"
+msgstr "Delivery rates"
+
+#. js-lingui-explicit-id
+msgid "shop.Description"
+msgstr "Description"
+
+#. js-lingui-explicit-id
+msgid "shop.Description (Arabic)"
+msgstr "Description (Arabic)"
+
+#. js-lingui-explicit-id
+msgid "shop.Description (English)"
+msgstr "Description (English)"
+
+#. js-lingui-explicit-id
+msgid "shop.Details (Arabic)"
+msgstr "Details (Arabic)"
+
+#. js-lingui-explicit-id
+msgid "shop.Details (English)"
+msgstr "Details (English)"
+
+#. js-lingui-explicit-id
+msgid "shop.Disable seller"
+msgstr "Disable seller"
+
+#. js-lingui-explicit-id
+msgid "shop.Disabled"
+msgstr "Disabled"
+
+#. js-lingui-explicit-id
+msgid "shop.Disabling a seller hides their products and blocks their workspace. Re-enabling does not republish products."
+msgstr "Disabling a seller hides their products and blocks their workspace. Re-enabling does not republish products."
+
+#. js-lingui-explicit-id
+msgid "shop.Discount %"
+msgstr "Discount %"
+
+#. js-lingui-explicit-id
+msgid "shop.Discount coupon"
+msgstr "Discount coupon"
+
+#. js-lingui-explicit-id
+msgid "shop.Dispatch now"
+msgstr "Dispatch now"
+
+#. js-lingui-explicit-id
+msgid "shop.Download PDF"
+msgstr "Download PDF"
+
+#. js-lingui-explicit-id
+msgid "shop.Download receipt"
+msgstr "Download receipt"
+
+#. js-lingui-explicit-id
+msgid "shop.Draft saved"
+msgstr "Draft saved"
+
+#. js-lingui-explicit-id
+msgid "shop.Edit"
+msgstr "Edit"
+
+#. js-lingui-explicit-id
+msgid "shop.Edit bundle"
+msgstr "Edit bundle"
+
+#. js-lingui-explicit-id
+msgid "shop.Edit method"
+msgstr "Edit method"
+
+#. js-lingui-explicit-id
+msgid "shop.Edit product"
+msgstr "Edit product"
+
+#. js-lingui-explicit-id
+msgid "shop.Email"
+msgstr "Email"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable cart reminders only for customers who opted in"
+msgstr "Enable cart reminders only for customers who opted in"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable coupon"
+msgstr "Enable coupon"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable online return requests after publishing your actual policy"
+msgstr "Enable online return requests after publishing your actual policy"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable seller"
+msgstr "Enable seller"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable stock alerts"
+msgstr "Enable stock alerts"
+
+#. js-lingui-explicit-id
+msgid "shop.Enabled"
+msgstr "Enabled"
+
+#. js-lingui-explicit-id
+msgid "shop.English"
+msgstr "English"
+
+#. js-lingui-explicit-id
+msgid "shop.Enter the actual seller details before customers can download invoices."
+msgstr "Enter the actual seller details before customers can download invoices."
+
+#. js-lingui-explicit-id
+msgid "shop.Existing bundles"
+msgstr "Existing bundles"
+
+#. js-lingui-explicit-id
+msgid "shop.Expires at"
+msgstr "Expires at"
+
+#. js-lingui-explicit-id
+msgid "shop.Frequently asked questions"
+msgstr "Frequently asked questions"
+
+#. js-lingui-explicit-id
+msgid "shop.From"
+msgstr "From"
+
+#. js-lingui-explicit-id
+msgid "shop.Governorate"
+msgstr "Governorate"
+
+#. js-lingui-explicit-id
+msgid "shop.Heading"
+msgstr "Heading"
+
+#. js-lingui-explicit-id
+msgid "shop.Help resources"
+msgstr "Help resources"
+
+#. js-lingui-explicit-id
+msgid "shop.Hidden"
+msgstr "Hidden"
+
+#. js-lingui-explicit-id
+msgid "shop.Hours of cart inactivity"
+msgstr "Hours of cart inactivity"
+
+#. js-lingui-explicit-id
+msgid "shop.HTTPS link"
+msgstr "HTTPS link"
+
+#. js-lingui-explicit-id
+msgid "shop.I checked actual receipt in the receiving account"
+msgstr "I checked actual receipt in the receiving account"
+
+#. js-lingui-explicit-id
+msgid "shop.I verified actual cash receipt"
+msgstr "I verified actual cash receipt"
+
+#. js-lingui-explicit-id
+msgid "shop.In the box"
+msgstr "In the box"
+
+#. js-lingui-explicit-id
+msgid "shop.Initial password"
+msgstr "Initial password"
+
+#. js-lingui-explicit-id
+msgid "shop.Insert product image"
+msgstr "Insert product image"
+
+#. js-lingui-explicit-id
+msgid "shop.Inspect received items before manually adjusting stock. Process a real refund in Orders or create a replacement order before resolving. This screen does not send funds or automatically restock goods."
+msgstr "Inspect received items before manually adjusting stock. Process a real refund in Orders or create a replacement order before resolving. This screen does not send funds or automatically restock goods."
+
+#. js-lingui-explicit-id
+msgid "shop.Internal call notes"
+msgstr "Internal call notes"
+
+#. js-lingui-explicit-id
+msgid "shop.Internal staff notes"
+msgstr "Internal staff notes"
+
+#. js-lingui-explicit-id
+msgid "shop.Invoice"
+msgstr "Invoice"
+
+#. js-lingui-explicit-id
+msgid "shop.Invoice prefix"
+msgstr "Invoice prefix"
+
+#. js-lingui-explicit-id
+msgid "shop.Invoice seller"
+msgstr "Invoice seller"
+
+#. js-lingui-explicit-id
+msgid "shop.Italic"
+msgstr "Italic"
+
+#. js-lingui-explicit-id
+msgid "shop.Item"
+msgstr "Item"
+
+#. js-lingui-explicit-id
+msgid "shop.Keep at least one variant"
+msgstr "Keep at least one variant"
+
+#. js-lingui-explicit-id
+msgid "shop.Language"
+msgstr "Language"
+
+#. js-lingui-explicit-id
+msgid "shop.Legal seller address"
+msgstr "Legal seller address"
+
+#. js-lingui-explicit-id
+msgid "shop.Legal seller name"
+msgstr "Legal seller name"
+
+#. js-lingui-explicit-id
+msgid "shop.Link actual order"
+msgstr "Link actual order"
+
+#. js-lingui-explicit-id
+msgid "shop.Low stock alerts are opt-in. Set recipient and threshold in Settings"
+msgstr "Low stock alerts are opt-in. Set recipient and threshold in Settings"
+
+#. js-lingui-explicit-id
+msgid "shop.Mark delivered"
+msgstr "Mark delivered"
+
+#. js-lingui-explicit-id
+msgid "shop.Matching placed order ID"
+msgstr "Matching placed order ID"
+
+#. js-lingui-explicit-id
+msgid "shop.Message shown to customer"
+msgstr "Message shown to customer"
+
+#. js-lingui-explicit-id
+msgid "shop.Message to customer"
+msgstr "Message to customer"
+
+#. js-lingui-explicit-id
+msgid "shop.Minimum order, currency units"
+msgstr "Minimum order, currency units"
+
+#. js-lingui-explicit-id
+msgid "shop.Most ordered products"
+msgstr "Most ordered products"
+
+#. js-lingui-explicit-id
+msgid "shop.Name"
+msgstr "Name"
+
+#. js-lingui-explicit-id
+msgid "shop.Name (Arabic)"
+msgstr "Name (Arabic)"
+
+#. js-lingui-explicit-id
+msgid "shop.Name (English)"
+msgstr "Name (English)"
+
+#. js-lingui-explicit-id
+msgid "shop.New"
+msgstr "New"
+
+#. js-lingui-explicit-id
+msgid "shop.New bundle"
+msgstr "New bundle"
+
+#. js-lingui-explicit-id
+msgid "shop.New combinations of sizes or colors for this product must be configured by SuperAdmin. You can edit existing variants here."
+msgstr "New combinations of sizes or colors for this product must be configured by SuperAdmin. You can edit existing variants here."
+
+#. js-lingui-explicit-id
+msgid "shop.New product"
+msgstr "New product"
+
+#. js-lingui-explicit-id
+msgid "shop.New, unique email. Share the password privately and let the user change it from their profile."
+msgstr "New, unique email. Share the password privately and let the user change it from their profile."
+
+#. js-lingui-explicit-id
+msgid "shop.Next"
+msgstr "Next"
+
+#. js-lingui-explicit-id
+msgid "shop.No"
+msgstr "No"
+
+#. js-lingui-explicit-id
+msgid "shop.No orders yet"
+msgstr "No orders yet"
+
+#. js-lingui-explicit-id
+msgid "shop.No products yet"
+msgstr "No products yet"
+
+#. js-lingui-explicit-id
+msgid "shop.Notification email"
+msgstr "Notification email"
+
+#. js-lingui-explicit-id
+msgid "shop.Numbering"
+msgstr "Numbering"
+
+#. js-lingui-explicit-id
+msgid "shop.Offer expires"
+msgstr "Offer expires"
+
+#. js-lingui-explicit-id
+msgid "shop.Offer published"
+msgstr "Offer published"
+
+#. js-lingui-explicit-id
+msgid "shop.On hand"
+msgstr "On hand"
+
+#. js-lingui-explicit-id
+msgid "shop.One use per customer. Additional product/category promotions are managed in Marketing → Promotions."
+msgstr "One use per customer. Additional product/category promotions are managed in Marketing → Promotions."
+
+#. js-lingui-explicit-id
+msgid "shop.Only enter manufacturer-confirmed information. Empty fields appear as not provided."
+msgstr "Only enter manufacturer-confirmed information. Empty fields appear as not provided."
+
+#. js-lingui-explicit-id
+msgid "shop.Open"
+msgstr "Open"
+
+#. js-lingui-explicit-id
+msgid "shop.Open native order"
+msgstr "Open native order"
+
+#. js-lingui-explicit-id
+msgid "shop.Opening Shop operations"
+msgstr "Opening Shop operations"
+
+#. js-lingui-explicit-id
+msgid "shop.Order"
+msgstr "Order"
+
+#. js-lingui-explicit-id
+msgid "shop.Order code"
+msgstr "Order code"
+
+#. js-lingui-explicit-id
+msgid "shop.Order items & shipping"
+msgstr "Order items & shipping"
+
+#. js-lingui-explicit-id
+msgid "shop.Order items and shipping"
+msgstr "Order items and shipping"
+
+#. js-lingui-explicit-id
+msgid "shop.Order value"
+msgstr "Order value"
+
+#. js-lingui-explicit-id
+msgid "shop.orders"
+msgstr "orders"
+
+#. js-lingui-explicit-id
+msgid "shop.Orders"
+msgstr "Orders"
+
+#. js-lingui-explicit-id
+msgid "shop.Organization"
+msgstr "Organization"
+
+#. js-lingui-explicit-id
+msgid "shop.Other carrier"
+msgstr "Other carrier"
+
+#. js-lingui-explicit-id
+msgid "shop.Payment"
+msgstr "Payment"
+
+#. js-lingui-explicit-id
+msgid "shop.Payment method"
+msgstr "Payment method"
+
+#. js-lingui-explicit-id
+msgid "shop.Payments"
+msgstr "Payments"
+
+#. js-lingui-explicit-id
+msgid "shop.Payments are collected centrally. Confirm delivery only after the parcel arrives."
+msgstr "Payments are collected centrally. Confirm delivery only after the parcel arrives."
+
+#. js-lingui-explicit-id
+msgid "shop.Pending"
+msgstr "Pending"
+
+#. js-lingui-explicit-id
+msgid "shop.Phone"
+msgstr "Phone"
+
+#. js-lingui-explicit-id
+msgid "shop.Phone confirmation"
+msgstr "Phone confirmation"
+
+#. js-lingui-explicit-id
+msgid "shop.Placed replacement order"
+msgstr "Placed replacement order"
+
+#. js-lingui-explicit-id
+msgid "shop.Policies & notifications"
+msgstr "Policies & notifications"
+
+#. js-lingui-explicit-id
+msgid "shop.Previous"
+msgstr "Previous"
+
+#. js-lingui-explicit-id
+msgid "shop.Price"
+msgstr "Price"
+
+#. js-lingui-explicit-id
+msgid "shop.Price (EGP)"
+msgstr "Price (EGP)"
+
+#. js-lingui-explicit-id
+msgid "shop.Prices exclude store tax"
+msgstr "Prices exclude store tax"
+
+#. js-lingui-explicit-id
+msgid "shop.Prices include store tax"
+msgstr "Prices include store tax"
+
+#. js-lingui-explicit-id
+msgid "shop.Private photo"
+msgstr "Private photo"
+
+#. js-lingui-explicit-id
+msgid "shop.Private return photo"
+msgstr "Private return photo"
+
+#. js-lingui-explicit-id
+msgid "shop.Product"
+msgstr "Product"
+
+#. js-lingui-explicit-id
+msgid "shop.Product / variant"
+msgstr "Product / variant"
+
+#. js-lingui-explicit-id
+msgid "shop.Product content saved"
+msgstr "Product content saved"
+
+#. js-lingui-explicit-id
+msgid "shop.Product editor"
+msgstr "Product editor"
+
+#. js-lingui-explicit-id
+msgid "shop.Product images"
+msgstr "Product images"
+
+#. js-lingui-explicit-id
+msgid "shop.Product name"
+msgstr "Product name"
+
+#. js-lingui-explicit-id
+msgid "shop.Products"
+msgstr "Products"
+
+#. js-lingui-explicit-id
+msgid "shop.Programming"
+msgstr "Programming"
+
+#. js-lingui-explicit-id
+msgid "shop.Public receiving instructions"
+msgstr "Public receiving instructions"
+
+#. js-lingui-explicit-id
+msgid "shop.Publish bundle"
+msgstr "Publish bundle"
+
+#. js-lingui-explicit-id
+msgid "shop.Publish offer"
+msgstr "Publish offer"
+
+#. js-lingui-explicit-id
+msgid "shop.Published"
+msgstr "Published"
+
+#. js-lingui-explicit-id
+msgid "shop.Publishing sends the actual proposed prices and delivery charge to the customer. An accepted quote is finalized by creating a matching placed order in native Orders, then linking it here."
+msgstr "Publishing sends the actual proposed prices and delivery charge to the customer. An accepted quote is finalized by creating a matching placed order in native Orders, then linking it here."
+
+#. js-lingui-explicit-id
+msgid "shop.Quantity"
+msgstr "Quantity"
+
+#. js-lingui-explicit-id
+msgid "shop.Question"
+msgstr "Question"
+
+#. js-lingui-explicit-id
+msgid "shop.Quotation #"
+msgstr "Quotation #"
+
+#. js-lingui-explicit-id
+msgid "shop.Rates are charged separately for each seller. No carrier API is used."
+msgstr "Rates are charged separately for each seller. No carrier API is used."
+
+#. js-lingui-explicit-id
+msgid "shop.Reason"
+msgstr "Reason"
+
+#. js-lingui-explicit-id
+msgid "shop.Reason for rejecting proof"
+msgstr "Reason for rejecting proof"
+
+#. js-lingui-explicit-id
+msgid "shop.Receipt confirmed"
+msgstr "Receipt confirmed"
+
+#. js-lingui-explicit-id
+msgid "shop.Record actual dispatch"
+msgstr "Record actual dispatch"
+
+#. js-lingui-explicit-id
+msgid "shop.Record cash received"
+msgstr "Record cash received"
+
+#. js-lingui-explicit-id
+msgid "shop.Refund amount (EGP)"
+msgstr "Refund amount (EGP)"
+
+#. js-lingui-explicit-id
+msgid "shop.Refunded"
+msgstr "Refunded"
+
+#. js-lingui-explicit-id
+msgid "shop.Reject"
+msgstr "Reject"
+
+#. js-lingui-explicit-id
+msgid "shop.Reject proof"
+msgstr "Reject proof"
+
+#. js-lingui-explicit-id
+msgid "shop.Rejected"
+msgstr "Rejected"
+
+#. js-lingui-explicit-id
+msgid "shop.Remove"
+msgstr "Remove"
+
+#. js-lingui-explicit-id
+msgid "shop.Remove component"
+msgstr "Remove component"
+
+#. js-lingui-explicit-id
+msgid "shop.Remove variant"
+msgstr "Remove variant"
+
+#. js-lingui-explicit-id
+msgid "shop.Replacement order ID"
+msgstr "Replacement order ID"
+
+#. js-lingui-explicit-id
+msgid "shop.Request"
+msgstr "Request"
+
+#. js-lingui-explicit-id
+msgid "shop.Request failed"
+msgstr "Request failed"
+
+#. js-lingui-explicit-id
+msgid "shop.Return #"
+msgstr "Return #"
+
+#. js-lingui-explicit-id
+msgid "shop.Return updated"
+msgstr "Return updated"
+
+#. js-lingui-explicit-id
+msgid "shop.Return window & mail"
+msgstr "Return window & mail"
+
+#. js-lingui-explicit-id
+msgid "shop.Returns"
+msgstr "Returns"
+
+#. js-lingui-explicit-id
+msgid "shop.Review status"
+msgstr "Review status"
+
+#. js-lingui-explicit-id
+msgid "shop.Reviews"
+msgstr "Reviews"
+
+#. js-lingui-explicit-id
+msgid "shop.Role"
+msgstr "Role"
+
+#. js-lingui-explicit-id
+msgid "shop.Run notification check"
+msgstr "Run notification check"
+
+#. js-lingui-explicit-id
+msgid "shop.Sales"
+msgstr "Sales"
+
+#. js-lingui-explicit-id
+msgid "shop.Save"
+msgstr "Save"
+
+#. js-lingui-explicit-id
+msgid "shop.Save bundle"
+msgstr "Save bundle"
+
+#. js-lingui-explicit-id
+msgid "shop.Save callback"
+msgstr "Save callback"
+
+#. js-lingui-explicit-id
+msgid "shop.Save draft"
+msgstr "Save draft"
+
+#. js-lingui-explicit-id
+msgid "shop.Save method"
+msgstr "Save method"
+
+#. js-lingui-explicit-id
+msgid "shop.Save product"
+msgstr "Save product"
+
+#. js-lingui-explicit-id
+msgid "shop.Save product content"
+msgstr "Save product content"
+
+#. js-lingui-explicit-id
+msgid "shop.Save rate"
+msgstr "Save rate"
+
+#. js-lingui-explicit-id
+msgid "shop.Save status"
+msgstr "Save status"
+
+#. js-lingui-explicit-id
+msgid "shop.Saved"
+msgstr "Saved"
+
+#. js-lingui-explicit-id
+msgid "shop.School quotes"
+msgstr "School quotes"
+
+#. js-lingui-explicit-id
+msgid "shop.Search"
+msgstr "Search"
+
+#. js-lingui-explicit-id
+msgid "shop.Seller"
+msgstr "Seller"
+
+#. js-lingui-explicit-id
+msgid "shop.Seller code"
+msgstr "Seller code"
+
+#. js-lingui-explicit-id
+msgid "shop.Sellers"
+msgstr "Sellers"
+
+#. js-lingui-explicit-id
+msgid "shop.Send requested back-in-stock alerts"
+msgstr "Send requested back-in-stock alerts"
+
+#. js-lingui-explicit-id
+msgid "shop.Sent once per low-stock episode, reset after restocking. Email and the job queue must be running."
+msgstr "Sent once per low-stock episode, reset after restocking. Email and the job queue must be running."
+
+#. js-lingui-explicit-id
+msgid "shop.Settings"
+msgstr "Settings"
+
+#. js-lingui-explicit-id
+msgid "shop.Settings saved"
+msgstr "Settings saved"
+
+#. js-lingui-explicit-id
+msgid "shop.Settled refund"
+msgstr "Settled refund"
+
+#. js-lingui-explicit-id
+msgid "shop.Shipment recorded"
+msgstr "Shipment recorded"
+
+#. js-lingui-explicit-id
+msgid "shop.Shipments"
+msgstr "Shipments"
+
+#. js-lingui-explicit-id
+msgid "shop.Shipping"
+msgstr "Shipping"
+
+#. js-lingui-explicit-id
+msgid "shop.Shop operations"
+msgstr "Shop operations"
+
+#. js-lingui-explicit-id
+msgid "shop.Show report"
+msgstr "Show report"
+
+#. js-lingui-explicit-id
+msgid "shop.SKU"
+msgstr "SKU"
+
+#. js-lingui-explicit-id
+msgid "shop.Starts at"
+msgstr "Starts at"
+
+#. js-lingui-explicit-id
+msgid "shop.State"
+msgstr "State"
+
+#. js-lingui-explicit-id
+msgid "shop.Status"
+msgstr "Status"
+
+#. js-lingui-explicit-id
+msgid "shop.Stock"
+msgstr "Stock"
+
+#. js-lingui-explicit-id
+msgid "shop.Stock alerts"
+msgstr "Stock alerts"
+
+#. js-lingui-explicit-id
+msgid "shop.Stock check completed"
+msgstr "Stock check completed"
+
+#. js-lingui-explicit-id
+msgid "shop.Store-owned product"
+msgstr "Store-owned product"
+
+#. js-lingui-explicit-id
+msgid "shop.Store-owned products"
+msgstr "Store-owned products"
+
+#. js-lingui-explicit-id
+msgid "shop.Suitable competitions"
+msgstr "Suitable competitions"
+
+#. js-lingui-explicit-id
+msgid "shop.Tax registration, if applicable"
+msgstr "Tax registration, if applicable"
+
+#. js-lingui-explicit-id
+msgid "shop.Team & sellers"
+msgstr "Team & sellers"
+
+#. js-lingui-explicit-id
+msgid "shop.Telephone confirmation:"
+msgstr "Telephone confirmation:"
+
+#. js-lingui-explicit-id
+msgid "shop.The money was actually returned"
+msgstr "The money was actually returned"
+
+#. js-lingui-explicit-id
+msgid "shop.Title"
+msgstr "Title"
+
+#. js-lingui-explicit-id
+msgid "shop.To"
+msgstr "To"
+
+#. js-lingui-explicit-id
+msgid "shop.Total"
+msgstr "Total"
+
+#. js-lingui-explicit-id
+msgid "shop.Total uses"
+msgstr "Total uses"
+
+#. js-lingui-explicit-id
+msgid "shop.Total:"
+msgstr "Total:"
+
+#. js-lingui-explicit-id
+msgid "shop.Track"
+msgstr "Track"
+
+#. js-lingui-explicit-id
+msgid "shop.Tracking number"
+msgstr "Tracking number"
+
+#. js-lingui-explicit-id
+msgid "shop.Transfer"
+msgstr "Transfer"
+
+#. js-lingui-explicit-id
+msgid "shop.Transfer receipt"
+msgstr "Transfer receipt"
+
+#. js-lingui-explicit-id
+msgid "shop.Type"
+msgstr "Type"
+
+#. js-lingui-explicit-id
+msgid "shop.Unable to save"
+msgstr "Unable to save"
+
+#. js-lingui-explicit-id
+msgid "shop.Unit price (EGP)"
+msgstr "Unit price (EGP)"
+
+#. js-lingui-explicit-id
+msgid "shop.Units"
+msgstr "Units"
+
+#. js-lingui-explicit-id
+msgid "shop.Unpaid order cancelled"
+msgstr "Unpaid order cancelled"
+
+#. js-lingui-explicit-id
+msgid "shop.Unreachable"
+msgstr "Unreachable"
+
+#. js-lingui-explicit-id
+msgid "shop.UpdateCatalog and CreatePromotion permissions are both required."
+msgstr "UpdateCatalog and CreatePromotion permissions are both required."
+
+#. js-lingui-explicit-id
+msgid "shop.Upload failed"
+msgstr "Upload failed"
+
+#. js-lingui-explicit-id
+msgid "shop.Upload image, max 5 MB"
+msgstr "Upload image, max 5 MB"
+
+#. js-lingui-explicit-id
+msgid "shop.URL slug"
+msgstr "URL slug"
+
+#. js-lingui-explicit-id
+msgid "shop.Variant name"
+msgstr "Variant name"
+
+#. js-lingui-explicit-id
+msgid "shop.Variants & stock"
+msgstr "Variants & stock"
+
+#. js-lingui-explicit-id
+msgid "shop.Verified transfer reference"
+msgstr "Verified transfer reference"
+
+#. js-lingui-explicit-id
+msgid "shop.View items"
+msgstr "View items"
+
+#. js-lingui-explicit-id
+msgid "shop.View private receipt"
+msgstr "View private receipt"
+
+#. js-lingui-explicit-id
+msgid "shop.Yes"
+msgstr "Yes"
+
+#. js-lingui-explicit-id
+msgid "shop.Your items + delivery"
+msgstr "Your items + delivery"
+
+#. js-lingui-explicit-id
+msgid "shop.Your products, stock and order items only"
+msgstr "Your products, stock and order items only"
+
+#. js-lingui-explicit-id
+msgid "shop.Dispatch"
+msgstr "Dispatch"
+
+#. js-lingui-explicit-id
+msgid "shop.Quote quantity"
+msgstr "Quote quantity"
+
+#. js-lingui-explicit-id
+msgid "shop.resource.manual"
+msgstr "Manual"
+
+#. js-lingui-explicit-id
+msgid "shop.resource.video"
+msgstr "Video"
+
+#. js-lingui-explicit-id
+msgid "shop.resource.code"
+msgstr "Code"
+
+#. js-lingui-explicit-id
+msgid "shop.resource.link"
+msgstr "Link"
+
+#. js-lingui-explicit-id
+msgid "shop.return.requested"
+msgstr "Requested"
+
+#. js-lingui-explicit-id
+msgid "shop.return.authorized"
+msgstr "Authorized"
+
+#. js-lingui-explicit-id
+msgid "shop.return.received"
+msgstr "Received"
+
+#. js-lingui-explicit-id
+msgid "shop.return.resolved"
+msgstr "Resolved"
+
+#. js-lingui-explicit-id
+msgid "shop.return.rejected"
+msgstr "Rejected"
+
+#. js-lingui-explicit-id
+msgid "shop.Declining a call blocks dispatch. Cancel the order below to release reserved stock."
+msgstr "Declining a call blocks dispatch. Cancel the order below to release reserved stock."
+
+#. js-lingui-explicit-id
+msgid "shop.Declining a call blocks dispatch. Cancel the actual order in Orders to release reserved stock."
+msgstr "Declining a call blocks dispatch. Cancel the actual order in Orders to release reserved stock."
+
+#. js-lingui-explicit-id
+msgid "shop.Notification counts"
+msgstr "Stock alerts: {stock}; cart reminders: {carts}"

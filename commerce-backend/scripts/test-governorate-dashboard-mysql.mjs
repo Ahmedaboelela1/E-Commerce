@@ -45,12 +45,12 @@ test('native Dashboard governorate selection, shipping price and saved configura
     await page.getByRole('button',{name:'Select Shipping Eligibility Checker',exact:true}).click();
     await page.getByRole('menuitem',{name:/Egypt delivery by governorate/}).click();
     // Newly added required args may automatically open their editor.
-    const governorate=page.getByRole('button',{name:'Governorate / المحافظة',exact:true});
+    const governorate=page.getByRole('button',{name:'Governorate',exact:true});
     await governorate.waitFor();
     if(await governorate.getAttribute('aria-expanded')!=='true')await governorate.click();
     await page.getByRole('combobox').filter({hasText:/Select an option/}).click();
     assert.equal((await page.getByRole('option').allTextContents()).filter(text=>text.trim()).length,27);
-    await page.getByRole('option',{name:'القاهرة / Cairo',exact:true}).click();
+    await page.getByRole('option',{name:'Cairo',exact:true}).click();
     await page.getByTestId('page-heading').click();
     await page.getByRole('button',{name:'Select Shipping Calculator',exact:true}).click();
     await page.getByRole('menuitem',{name:/Default Flat-Rate Shipping Calculator/}).click();
@@ -67,8 +67,8 @@ test('native Dashboard governorate selection, shipping price and saved configura
     assert.equal(saved.calculator.args.find(a=>a.name==='rate').value,'11500');
     await page.reload();
     await governorate.click();
-    await page.getByRole('combobox').filter({hasText:'القاهرة / Cairo'}).click();
-    await page.getByRole('option',{name:'الجيزة / Giza',exact:true}).click();
+    await page.getByRole('combobox').filter({hasText:'Cairo'}).click();
+    await page.getByRole('option',{name:'Giza',exact:true}).click();
     await page.getByTestId('page-heading').click();
     await page.getByRole('button',{name:'Update',exact:true}).click();
     await page.getByText('Successfully updated shipping method',{exact:true}).waitFor();
