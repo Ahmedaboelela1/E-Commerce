@@ -2,7 +2,16 @@
 .sv-details-editor h4 { margin-bottom: .5rem; font-weight: 600; }
 .sv-details-tools { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin-bottom: .4rem; }
 .sv-market .sv-details-tools select { width: auto; max-width: 100%; }
-.sv-details-tools button[aria-pressed=true] { background: #087f5b; color: white; }
+.sv-market .sv-details-tools button {
+    display: inline-grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 6px;
+}
+.sv-market .sv-details-tools button:hover { background: var(--muted, #edf2f1); }
+.sv-market .sv-details-tools button[aria-pressed=true] { background: #087f5b; color: white; }
 .sv-details-editor .tiptap { min-height: 11rem; padding: .9rem; border: 1px solid #cbd5e1; border-radius: .5rem; overflow-wrap: anywhere; }
 .sv-details-editor .tiptap:focus-visible { outline: 3px solid #93c5fd; }
 .sv-details-editor .tiptap p { margin-block: .5em; }

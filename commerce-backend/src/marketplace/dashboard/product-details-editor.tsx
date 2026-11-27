@@ -1,6 +1,7 @@
 import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import { Bold, Italic, Heading3, List, ListOrdered } from 'lucide-react';
 
 const extensions = [
     StarterKit.configure({ heading: { levels: [3] }, link: false }),
@@ -47,26 +48,31 @@ export function ProductDetailsEditor({
     if (!editor) return null;
     const buttons = [
         {
+            icon: Bold,
             name: 'Bold / عريض',
             active: active?.bold,
             run: () => editor.chain().focus().toggleBold().run(),
         },
         {
+            icon: Italic,
             name: 'Italic / مائل',
             active: active?.italic,
             run: () => editor.chain().focus().toggleItalic().run(),
         },
         {
+            icon: Heading3,
             name: 'Heading / عنوان',
             active: active?.heading,
             run: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
         },
         {
+            icon: List,
             name: 'Bullets / نقاط',
             active: active?.bullets,
             run: () => editor.chain().focus().toggleBulletList().run(),
         },
         {
+            icon: ListOrdered,
             name: 'Numbering / ترقيم',
             active: active?.numbering,
             run: () => editor.chain().focus().toggleOrderedList().run(),
@@ -76,15 +82,17 @@ export function ProductDetailsEditor({
         <div className="sv-details-editor">
             <h4>{label}</h4>
             <div className="sv-details-tools" role="group" aria-label={label}>
-                {buttons.map((button) => (
+                {buttons.map(({ icon: Icon, name, active, run }) => (
                     <button
-                        key={button.name}
+                        key={name}
+                        title={name}
+                        aria-label={name}
                         type="button"
-                        aria-pressed={Boolean(button.active)}
+                        aria-pressed={Boolean(active)}
                         onMouseDown={(e) => e.preventDefault()}
-                        onClick={button.run}
+                        onClick={run}
                     >
-                        {button.name}
+                        <Icon size={18} aria-hidden="true" focusable="false" />
                     </button>
                 ))}
                 {assets.length > 0 && (
