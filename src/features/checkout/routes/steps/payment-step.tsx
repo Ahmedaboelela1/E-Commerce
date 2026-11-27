@@ -35,21 +35,24 @@ export default function PaymentStep({ onComplete }: PaymentStepProps) {
     <div className="space-y-6">
       <h3 className="font-semibold">{t('selectPaymentMethod')}</h3>
 
-      <RadioGroup value={selectedPaymentMethodCode || ''} onValueChange={setSelectedPaymentMethodCode}>
+      <RadioGroup
+        value={selectedPaymentMethodCode || ''}
+        onValueChange={setSelectedPaymentMethodCode}
+        className="auto-rows-fr grid-cols-[minmax(0,1fr)]"
+      >
         {offlineMethods.map((method) => (
-          <Label key={method.code} htmlFor={method.code} className="cursor-pointer">
-            <Card className="p-4">
-              <div className="flex items-center gap-3">
-                <RadioGroupItem value={method.code} id={method.code} />
-                {getOfflinePaymentType(method) === 'bank-transfer'
-                  ? <Landmark className="h-5 w-5 text-muted-foreground" />
-                  : <Banknote className="h-5 w-5 text-muted-foreground" />}
-                <div className="flex-1">
-                  <p className="font-medium">{getOfflinePaymentType(method)==='bank-transfer'?t('bankTransfer'):t('cashOnDelivery')}</p><p className="text-xs text-muted-foreground">{method.name}</p>
-                  {method.description && (
-                    <p className="text-sm text-muted-foreground mt-1" dangerouslySetInnerHTML={{ __html: method.description }} />
-                  )}
-                </div>
+          <Label key={method.code} htmlFor={method.code} className="block min-w-0 cursor-pointer">
+            <Card className="h-full w-full flex-row items-center gap-3 p-4">
+              <RadioGroupItem value={method.code} id={method.code} />
+              {getOfflinePaymentType(method) === 'bank-transfer'
+                ? <Landmark aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
+                : <Banknote aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />}
+              <div className="min-w-0 flex-1 space-y-1 wrap-anywhere">
+                <p className="font-medium">{getOfflinePaymentType(method) === 'bank-transfer' ? t('bankTransfer') : t('cashOnDelivery')}</p>
+                <p className="text-xs text-muted-foreground">{method.name}</p>
+                {method.description && (
+                  <div className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: method.description }} />
+                )}
               </div>
             </Card>
           </Label>
