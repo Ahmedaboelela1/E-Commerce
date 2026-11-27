@@ -519,6 +519,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         await page.getByText('Language', {exact: true}).click();
         const dialog = page.getByRole('dialog');
         await dialog.getByRole('combobox').first().click();
+        await page.getByRole('option', {name: /^en\s/i}).waitFor();
         assert.equal(await page.getByRole('option').count(), 2);
         await page.getByRole('option', {name: /^ar\s/i}).click();
         await page.keyboard.press('Escape');
