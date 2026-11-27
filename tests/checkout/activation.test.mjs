@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import React from 'react';
+import {convert} from 'html-to-text';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {loadTypeScriptModule as load} from '../helpers/load-typescript-module.mjs';
 import {isOfflinePaymentMethod} from '../../src/features/checkout/offline-payments.ts';
@@ -29,13 +30,14 @@ test('cart and authenticated checkout are open with the legacy flag missing or f
 
             const provider = () => null;
             const page = load('src/features/checkout/routes/page.tsx', {
+                'html-to-text': {convert},
                 '@/features/currency/currency-server': {getActiveCurrencyCode: async () => 'EGP'},
                 '@/platform/i18n/server': {getRouteLocale: locale},
                 'next-intl/server': {getTranslations: text},
                 '@/platform/vendure/api': {query: async document => {
                     if (document === documents.GetActiveOrderForCheckoutQuery) return {data: {activeOrder: {state:'AddingItems',lines:[{id:'l1'}]}}};
                     if (document === documents.GetEligiblePaymentMethodsQuery) return {data: {eligiblePaymentMethods: [{code:'cash-on-delivery',isEligible:true},{code:'bank-transfer',isEligible:true},{code:'visa',isEligible:true}]}};
-                    return {data: {eligibleShippingMethods:[],activeCustomer:{addresses:[]}}};
+                    return {data: {eligibleShippingMethods:[{description:'<p></p>'},{description:'<p>Delivery &amp; collection</p>'}],activeCustomer:{addresses:[]}}};
                 }},
                 '@/features/checkout/graphql': documents,
                 '@/features/account/graphql': {GetCustomerAddressesQuery:'addresses'},
@@ -49,6 +51,7 @@ test('cart and authenticated checkout are open with the legacy flag missing or f
             });
             const tree = await page.default();
             const checkout = React.Children.toArray(tree.props.children).find(child => child.type === provider);
+            assert.deepEqual(checkout.props.shippingMethods.map(method => method.description), ['', 'Delivery & collection']);
             assert.ok(checkout);assert.equal(checkout.props.isGuest, false);
             assert.deepEqual(checkout.props.paymentMethods.map(method => method.code), ['cash-on-delivery','bank-transfer']);
         }
@@ -60,6 +63,7 @@ test('cart and authenticated checkout are open with the legacy flag missing or f
 
 test('opening checkout does not bypass the signed-in customer requirement', async () => {
     const page = load('src/features/checkout/routes/page.tsx', {
+        'html-to-text': {convert},
         '@/features/currency/currency-server': {}, '@/platform/i18n/server': {getRouteLocale: locale},
         'next-intl/server': {}, '@/platform/vendure/api': {query: () => assert.fail('guest must not query order data')},
         '@/features/checkout/graphql': documents, '@/features/account/graphql': {},

@@ -24,6 +24,7 @@ export function consolidateCommerceNavigation(config: NavMenuConfig): NavMenuCon
         { items: [
             BUILT_IN_NAV_ITEM_IDS.Products,
             BUILT_IN_NAV_ITEM_IDS.ProductVariants,
+            BUILT_IN_NAV_ITEM_IDS.ShippingMethods,
         ] },
         // Preserve native tools for legacy roles without the replacement tabs,
         // and for global setup on Vendure's system/default channel.

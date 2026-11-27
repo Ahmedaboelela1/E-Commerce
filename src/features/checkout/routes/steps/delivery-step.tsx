@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
-import { Card } from '@/components/ui/card';
 import { Loader2, Truck } from 'lucide-react';
 import { useRouter } from '@/platform/i18n/navigation';
 import { useCheckout } from '../checkout-provider';
@@ -59,7 +58,7 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
 
   return (
     <div className="space-y-6">
-      <h3 className="font-semibold">{t('selectShippingMethod')}</h3>
+
 
       {groups.length > 1 && <p className="text-sm text-muted-foreground">{t('sellerDeliveryNotice')}</p>}
       {groups.map(group => <fieldset key={group} className="space-y-3">
@@ -67,33 +66,29 @@ export default function DeliveryStep({ onComplete }: DeliveryStepProps) {
         {!shippingMethods.some(method=>method.deliveryGroup===group)&&<p role="alert" className="text-destructive">{t('noSellerDelivery')}</p>}
         <RadioGroup value={selection[group] || ''} onValueChange={id => setSelection(previous => ({...previous,[group]:id}))}>
         {shippingMethods.filter(method => method.deliveryGroup === group).map((method) => (
-          <Label key={method.id} htmlFor={method.id} className="cursor-pointer">
-            <Card className="p-4">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3 flex-1">
+          <Label key={method.id} htmlFor={method.id} className="block w-full cursor-pointer rounded-xl border p-4 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/5 focus-within:ring-2 focus-within:ring-primary">
+              <span className="flex w-full items-center justify-between gap-3">
+                <span className="flex min-w-0 flex-1 items-center gap-3">
                   <RadioGroupItem value={method.id} id={method.id} />
-                  <Truck className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="font-medium">{method.name}</p>
+                  <Truck aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
+                  <span className="min-w-0 break-words">
+                    <span className="block font-medium">{method.name}</span>
                     {method.description && (
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <span className="mt-1 block text-sm text-muted-foreground">
                         {method.description}
-                      </p>
+                      </span>
                     )}
-                  </div>
-                </div>
-                <div className="text-end flex-shrink-0">
-                  <p className="font-semibold">
+                  </span>
+                </span>
+                <span className="shrink-0 text-end font-semibold">
                     {method.priceWithTax === 0
                       ? t('free')
                       : (method.priceWithTax / 100).toLocaleString(intlLocale, {
                           style: 'currency',
                           currency: order.currencyCode,
                         })}
-                  </p>
-                </div>
-              </div>
-            </Card>
+                </span>
+              </span>
           </Label>
         ))}
       </RadioGroup>

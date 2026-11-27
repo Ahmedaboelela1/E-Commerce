@@ -142,10 +142,11 @@ const deliveryGuard: OrderProcess<never> = {
         for (const checker of config.shippingOptions
             .shippingEligibilityCheckers || []) {
             const original = checker.check.bind(checker);
-            checker.check = (ctx, order, args, method) =>
-                order.lines.some((line) => line.sellerChannelId == null)
-                    ? original(ctx, order, args, method)
-                    : Promise.resolve(false);
+            checker.check = async (ctx, order, args, method) => {
+                if (!order.lines.some(line => line.sellerChannelId == null)) return false;
+                if (!await original(ctx, order, args, method)) return false;
+                return !await shipping.supersededFreeMethod(ctx, order, method);
+            };
         }
         config.shippingOptions.shippingEligibilityCheckers.push(
             sellerDeliveryChecker,

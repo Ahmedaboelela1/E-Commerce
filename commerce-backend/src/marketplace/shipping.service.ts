@@ -8,6 +8,7 @@ import {
     OrderService,
     Product,
     RequestContext,
+    RequestContextCacheService,
     ShippingLine,
     ShippingMethod,
     ShippingMethodService,
@@ -31,6 +32,7 @@ export class MarketplaceShippingService {
         private access: MarketplaceAccessService,
         private methods: ShippingMethodService,
         private orders: OrderService,
+        private requestCache: RequestContextCacheService,
     ) {}
 
     async lineOwner(ctx: RequestContext, line: OrderLine) {
@@ -110,6 +112,38 @@ export class MarketplaceShippingService {
         ];
     }
 
+    /** A general free delivery must not compete with the same carrier's local tariff. */
+    async supersededFreeMethod(ctx: RequestContext, order: Order, method: ShippingMethod) {
+        const minimum = method.checker.args.find(arg => arg.name === 'orderMinimum')?.value;
+        const rate = method.calculator.args.find(arg => arg.name === 'rate')?.value;
+        if (method.checker.code !== 'default-shipping-eligibility-checker' ||
+            method.calculator.code !== 'default-shipping-calculator' ||
+            Number(minimum ?? 0) !== 0 || Number(rate) !== 0 ||
+            ctx.channel.code !== 'skillverse-eg' || ctx.currencyCode !== 'EGP' ||
+            order.shippingAddress?.countryCode !== 'EG') return false;
+
+        const area = resolveEgyptGovernorate(order.shippingAddress.province || '');
+        const labels = egyptGovernorates.find(row => row[0] === area);
+        if (!labels) return false;
+        const methods = await this.requestCache.get(ctx, 'marketplace:delivery-methods:' + ctx.channelId,
+            () => this.methods.getActiveShippingMethods(ctx));
+        const general = methods.find(item => String(item.id) === String(method.id));
+        if (!general) return false;
+        const normalize = (value: string) => value.normalize('NFKC').toLowerCase()
+            .replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+        const areas = labels.map(normalize);
+        return methods.some(local =>
+            local.checker.code === 'egypt-governorate' &&
+            local.checker.args.some(arg => arg.name === 'governorate' && arg.value === area) &&
+            general.translations.some(base => local.translations.some(translation => {
+                if (translation.languageCode !== base.languageCode) return false;
+                const carrier = normalize(base.name);
+                const name = normalize(translation.name);
+                return !!carrier && (carrier === name || areas.some(label =>
+                    name === carrier + ' ' + label || name === label + ' ' + carrier));
+            })));
+    }
+
     async eligible(
         ctx: RequestContext,
         order: Order,
@@ -163,6 +197,9 @@ export class MarketplaceShippingService {
         for (const line of order.shippingLines || []) {
             if (!line.shippingMethodId)
                 return 'Select delivery for every seller';
+            const method = await this.methods.findOne(ctx, line.shippingMethodId);
+            if (!method || await this.supersededFreeMethod(ctx, order, method))
+                return 'Choose the current delivery rate / اختر سعر التوصيل الحالي';
             selected.push((await this.group(ctx, line.shippingMethodId)).id);
         }
         if (

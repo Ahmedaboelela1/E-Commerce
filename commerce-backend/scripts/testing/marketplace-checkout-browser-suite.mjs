@@ -58,7 +58,7 @@ export async function marketplaceCheckoutBrowserSuite(
                     vendorId: seller.id,
                     governorate: 'cairo',
                     name: 'Seller parcel delivery',
-                    description: 'Synthetic separate delivery',
+                    description: '<p>Synthetic separate delivery</p>',
                     rate: 2000,
                 },
             },
@@ -78,6 +78,22 @@ export async function marketplaceCheckoutBrowserSuite(
     await shop(
         'mutation{setOrderShippingAddress(input:{fullName:"Shared buyer",streetLine1:"Synthetic test address",city:"Cairo",province:"cairo",countryCode:"EG",phoneNumber:"01012345678"}){__typename}}',
     );
+    await t.test('a matching Cairo tariff supersedes the legacy free carrier quote', async () => {
+        const generic = (await f.admin(
+            'mutation($input:CreateShippingMethodInput!){createShippingMethod(input:$input){id}}',
+            {input: {
+                code: 'suite-aramex-general', fulfillmentHandler: 'manual-fulfillment',
+                checker: {code: 'default-shipping-eligibility-checker', arguments: [{name: 'orderMinimum', value: '0'}]},
+                calculator: {code: 'default-shipping-calculator', arguments: [
+                    {name: 'rate', value: '0'}, {name: 'includesTax', value: 'include'}, {name: 'taxRate', value: '0'},
+                ]},
+                translations: [{languageCode:'en', name:'Suite Aramex', description:'<p></p>'}],
+            }},
+        )).data.createShippingMethod;
+        const quotes = (await shop('{eligibleShippingMethods{id}}')).data.eligibleShippingMethods;
+        assert.ok(quotes.some(method => method.id === f.shipping.id));
+        assert.ok(!quotes.some(method => method.id === generic.id));
+    });
     // Simulate a legacy single-method selection. The UI must return to Delivery,
     // because the newly added seller has not received a delivery selection yet.
     await shop(
@@ -130,6 +146,7 @@ export async function marketplaceCheckoutBrowserSuite(
             await delivery
                 .getByText('Seller parcel delivery', { exact: true })
                 .waitFor();
+            await delivery.getByText('Synthetic separate delivery', {exact: true}).waitFor();
             assert.equal(await delivery.locator('fieldset').count(), 2);
             await delivery
                 .getByRole('button', {
