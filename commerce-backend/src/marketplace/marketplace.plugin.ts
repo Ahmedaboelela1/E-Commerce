@@ -49,7 +49,11 @@ const sellerDeliveryChecker = new ShippingEligibilityChecker({
     description: [
         {
             languageCode: LanguageCode.en,
-            value: 'Seller delivery by governorate / توصيل البائع حسب المحافظة',
+            value: 'Seller delivery by governorate',
+        },
+        {
+            languageCode: LanguageCode.ar,
+            value: 'توصيل البائع حسب المحافظة',
         },
     ],
     args: {
@@ -63,11 +67,11 @@ const sellerDeliveryChecker = new ShippingEligibilityChecker({
                     label: [
                         {
                             languageCode: LanguageCode.en,
-                            value: `${ar} / ${en}`,
+                            value: en,
                         },
                         {
                             languageCode: LanguageCode.ar,
-                            value: `${ar} / ${en}`,
+                            value: ar,
                         },
                     ],
                 })),

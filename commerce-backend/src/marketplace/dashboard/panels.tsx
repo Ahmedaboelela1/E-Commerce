@@ -1,4 +1,4 @@
-import { api, useChannel } from '@vendure/dashboard';
+import { useLingui, api, useChannel } from '@vendure/dashboard';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { ProductDetailsEditor } from './product-details-editor';
 import './product-details-editor.css';
@@ -134,6 +134,7 @@ export type SellingSection =
     | 'accounts';
 
 export function SellingSectionPanel({ section }: { section: SellingSection }) {
+    const { _: t, i18n } = useLingui();
     const tab = section;
     const { activeChannel } = useChannel();
     const [access, setAccess] = useState<Access | null>(null),
@@ -209,10 +210,10 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
         try {
             await action();
             await refresh();
-            setMessage('Saved / تم الحفظ');
+            setMessage(t('shop.Saved'));
         } catch (e) {
             setError(
-                e instanceof Error ? e.message : 'Unable to save / تعذر الحفظ',
+                e instanceof Error ? e.message : t('shop.Unable to save'),
             );
         } finally {
             setBusy(false);
@@ -240,7 +241,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                         <>
                             <div className="actions">
                                 <label>
-                                    Search / بحث
+                                    {t('shop.Search')}
                                     <input
                                         value={search}
                                         onChange={(e) => {
@@ -253,18 +254,18 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                     className="primary"
                                     onClick={() => setEdit(blankProduct())}
                                 >
-                                    Add product / إضافة منتج
+                                    {t('shop.Add product')}
                                 </button>
                             </div>
                             <div className="panel scroll">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Product / المنتج</th>
-                                            <th>Seller / البائع</th>
-                                            <th>Status / الحالة</th>
-                                            <th>Price / السعر</th>
-                                            <th>Stock / المخزون</th>
+                                            <th>{t('shop.Product')}</th>
+                                            <th>{t('shop.Seller')}</th>
+                                            <th>{t('shop.Status')}</th>
+                                            <th>{t('shop.Price')}</th>
+                                            <th>{t('shop.Stock')}</th>
                                             <th />
                                         </tr>
                                     </thead>
@@ -275,8 +276,8 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                 <td>{p.seller}</td>
                                                 <td>
                                                     {p.enabled
-                                                        ? 'Published / منشور'
-                                                        : 'Hidden / مخفي'}
+                                                        ? t('shop.Published')
+                                                        : t('shop.Hidden')}
                                                 </td>
                                                 <td>
                                                     {p.variants
@@ -301,7 +302,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                             setEdit(p)
                                                         }
                                                     >
-                                                        Edit / تعديل
+                                                        {t('shop.Edit')}
                                                     </button>
                                                 </td>
                                             </tr>
@@ -309,7 +310,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                     </tbody>
                                 </table>
                                 {!products.length && (
-                                    <p>No products yet / لا توجد منتجات</p>
+                                    <p>{t('shop.No products yet')}</p>
                                 )}
                             </div>
                             {edit && (
@@ -335,23 +336,20 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                     {tab === 'orders' && (
                         <>
                             <p>
-                                Payments are collected centrally. Confirm
-                                delivery only after the parcel arrives. /
-                                التحصيل عند الإدارة؛ حدّث التسليم بعد وصول
-                                الشحنة فعليًا.
+                                {t('shop.Payments are collected centrally. Confirm delivery only after the parcel arrives.')}
                             </p>
                             <div className="panel scroll">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Order / الطلب</th>
-                                            <th>Customer / العميل</th>
+                                            <th>{t('shop.Order')}</th>
+                                            <th>{t('shop.Customer')}</th>
                                             <th>
                                                 {access.kind === 'seller'
-                                                    ? 'Your items + delivery / قيمة بنودك وشحنها'
-                                                    : 'Total / الإجمالي'}
+                                                    ? t('shop.Your items + delivery')
+                                                    : t('shop.Total')}
                                             </th>
-                                            <th>Payment / الدفع</th>
+                                            <th>{t('shop.Payment')}</th>
                                             <th />
                                         </tr>
                                     </thead>
@@ -368,8 +366,8 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                 </td>
                                                 <td>
                                                     {o.paid
-                                                        ? 'Collected / محصّل'
-                                                        : 'Awaiting collection / بانتظار التحصيل'}
+                                                        ? t('shop.Collected')
+                                                        : t('shop.Awaiting collection')}
                                                 </td>
                                                 <td>
                                                     <button
@@ -377,7 +375,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                             setSelected(o)
                                                         }
                                                     >
-                                                        View items / عرض البنود
+                                                        {t('shop.View items')}
                                                     </button>
                                                 </td>
                                             </tr>
@@ -385,7 +383,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                     </tbody>
                                 </table>
                                 {!orders.length && (
-                                    <p>No orders yet / لا توجد طلبات</p>
+                                    <p>{t('shop.No orders yet')}</p>
                                 )}
                             </div>
                             {selected && (
@@ -415,7 +413,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                 disabled={skip === 0}
                                 onClick={() => setSkip(Math.max(0, skip - 30))}
                             >
-                                Previous / السابق
+                                {t('shop.Previous')}
                             </button>
                             <span>
                                 {skip + 1}–{Math.min(skip + 30, total)} /{' '}
@@ -425,19 +423,17 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                 disabled={skip + 30 >= total}
                                 onClick={() => setSkip(skip + 30)}
                             >
-                                Next / التالي
+                                {t('shop.Next')}
                             </button>
                         </div>
                     )}
                     {tab === 'delivery' && (
                         <>
                             {access.superAdmin && <a href="/dashboard/shipping-methods">
-                                Advanced shipping settings / إعدادات الشحن المتقدمة
+                                {t('shop.Advanced shipping settings')}
                             </a>}
                             <p>
-                                Rates are charged separately for each seller. No
-                                carrier API is used. / لكل بائع مصاريف شحن
-                                مستقلة، والتسليم لشركة الشحن يدوي.
+                                {t('shop.Rates are charged separately for each seller. No carrier API is used.')}
                             </p>
                             <button
                                 className="primary"
@@ -451,16 +447,16 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                     })
                                 }
                             >
-                                Add governorate rate / إضافة سعر محافظة
+                                {t('shop.Add governorate rate')}
                             </button>
                             <div className="panel scroll">
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Seller / البائع</th>
-                                            <th>Governorate / المحافظة</th>
-                                            <th>Name / الاسم</th>
-                                            <th>Price / السعر</th>
+                                            <th>{t('shop.Seller')}</th>
+                                            <th>{t('shop.Governorate')}</th>
+                                            <th>{t('shop.Name')}</th>
+                                            <th>{t('shop.Price')}</th>
                                             <th />
                                         </tr>
                                     </thead>
@@ -490,7 +486,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                             setRate(row)
                                                         }
                                                     >
-                                                        Edit / تعديل
+                                                        {t('shop.Edit')}
                                                     </button>
                                                 </td>
                                             </tr>
@@ -512,11 +508,11 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                         });
                                     }}
                                 >
-                                    <h2>Delivery rate / سعر التوصيل</h2>
+                                    <h2>{t('shop.Delivery rate')}</h2>
                                     <div className="grid">
                                         {access.kind === 'admin' && (
                                             <label>
-                                                Seller / البائع
+                                                {t('shop.Seller')}
                                                 <select
                                                     value={rate.vendorId || ''}
                                                     disabled={!!rate.id}
@@ -534,8 +530,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                     }
                                                 >
                                                     <option value="">
-                                                        Store-owned products /
-                                                        منتجات المتجر
+                                                        {t('shop.Store-owned products')}
                                                     </option>
                                                     {vendors
                                                         .filter((v) => v.active)
@@ -551,7 +546,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                             </label>
                                         )}
                                         <label>
-                                            Governorate / المحافظة
+                                            {t('shop.Governorate')}
                                             <select
                                                 value={rate.governorate}
                                                 disabled={!!rate.id}
@@ -569,14 +564,14 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                             key={id}
                                                             value={id}
                                                         >
-                                                            {ar} / {en}
+                                                            {i18n.locale === 'ar' ? ar : en}
                                                         </option>
                                                     ),
                                                 )}
                                             </select>
                                         </label>
                                         <label>
-                                            Name / الاسم
+                                            {t('shop.Name')}
                                             <input
                                                 required
                                                 value={rate.name}
@@ -589,8 +584,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                             />
                                         </label>
                                         <label>
-                                            Delivery charge (EGP) / السعر
-                                            بالجنيه
+                                            {t('shop.Delivery charge (EGP)')}
                                             <input
                                                 type="number"
                                                 min="0"
@@ -611,7 +605,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                         </label>
                                     </div>
                                     <label>
-                                        Delivery description / وصف التوصيل
+                                        {t('shop.Delivery description')}
                                         <textarea
                                             value={rate.description}
                                             onChange={(e) =>
@@ -627,13 +621,13 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                             className="primary"
                                             type="submit"
                                         >
-                                            Save rate / حفظ السعر
+                                            {t('shop.Save rate')}
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setRate(null)}
                                         >
-                                            Close / إغلاق
+                                            {t('shop.Close')}
                                         </button>
                                     </div>
                                 </form>
@@ -643,9 +637,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                     {tab === 'payments' && access.kind === 'admin' && (
                         <>
                             <p>
-                                Collection belongs to store management. Card
-                                payments remain unavailable. / الإدارة مسؤولة عن
-                                التحصيل. الدفع بالكروت غير مفعّل.
+                                {t('shop.Collection belongs to store management. Card payments remain unavailable.')}
                             </p>
                             <div className="actions">
                                 {['cash-on-delivery', 'bank-transfer']
@@ -668,7 +660,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                 })
                                             }
                                         >
-                                            Add {type}
+                                            {type === 'cash-on-delivery' ? t('shop.Add cash on delivery') : t('shop.Add bank transfer')}
                                         </button>
                                     ))}
                             </div>
@@ -677,12 +669,12 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                     <h3>{p.name}</h3>
                                     <p>
                                         {p.enabled
-                                            ? 'Enabled / مفعل'
-                                            : 'Disabled / معطل'}{' '}
+                                            ? t('shop.Enabled')
+                                            : t('shop.Disabled')}{' '}
                                         · {p.type}
                                     </p>
                                     <button onClick={() => setPayment(p)}>
-                                        Edit method / تعديل الطريقة
+                                        {t('shop.Edit method')}
                                     </button>
                                 </div>
                             ))}
@@ -700,10 +692,10 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                         });
                                     }}
                                 >
-                                    <h2>Payment method / طريقة الدفع</h2>
+                                    <h2>{t('shop.Payment method')}</h2>
                                     <div className="grid">
                                         <label>
-                                            Name / الاسم
+                                            {t('shop.Name')}
                                             <input
                                                 required
                                                 value={payment.name}
@@ -716,7 +708,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                             />
                                         </label>
                                         <label>
-                                            Code / الكود
+                                            {t('shop.Code')}
                                             <input
                                                 required
                                                 disabled={!!payment.id}
@@ -731,8 +723,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                         </label>
                                     </div>
                                     <label>
-                                        Public receiving instructions / بيانات
-                                        الاستقبال المنشورة
+                                        {t('shop.Public receiving instructions')}
                                         <textarea
                                             required={
                                                 payment.type === 'bank-transfer'
@@ -759,18 +750,18 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                                     })
                                                 }
                                             />{' '}
-                                            Enabled / مفعل
+                                            {t('shop.Enabled')}
                                         </span>
                                     </label>
                                     <div className="actions">
                                         <button className="primary">
-                                            Save method / حفظ الطريقة
+                                            {t('shop.Save method')}
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setPayment(null)}
                                         >
-                                            Close / إغلاق
+                                            {t('shop.Close')}
                                         </button>
                                     </div>
                                 </form>
@@ -784,21 +775,17 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                 run={run}
                             />
                             <div className="panel">
-                                <h2>Sellers / البائعون</h2>
+                                <h2>{t('shop.Sellers')}</h2>
                                 <p>
-                                    Disabling a seller hides their products and
-                                    blocks their workspace. Re-enabling does not
-                                    republish products. / إيقاف البائع يخفي
-                                    منتجاته ويمنع دخوله؛ إعادة التفعيل لا تنشر
-                                    المنتجات تلقائيًا.
+                                    {t('shop.Disabling a seller hides their products and blocks their workspace. Re-enabling does not republish products.')}
                                 </p>
                                 {vendors.map((v) => (
                                     <div className="actions" key={v.id}>
                                         <span>
                                             {v.name} · {v.code} ·{' '}
                                             {v.active
-                                                ? 'Active / مفعل'
-                                                : 'Disabled / موقوف'}
+                                                ? t('shop.Active')
+                                                : t('shop.Disabled')}
                                         </span>
                                         <button
                                             onClick={() =>
@@ -815,8 +802,8 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                             }
                                         >
                                             {v.active
-                                                ? 'Disable seller / إيقاف البائع'
-                                                : 'Enable seller / تفعيل البائع'}
+                                                ? t('shop.Disable seller')
+                                                : t('shop.Enable seller')}
                                         </button>
                                     </div>
                                 ))}
@@ -842,6 +829,7 @@ function ProductEditor({
     save: (input: unknown) => Promise<void>;
     close: () => void;
 }) {
+    const { _: t } = useLingui();
     const [p, set] = useState(product),
         [customSlug, setCustomSlug] = useState(Boolean(product.slug)),
         [uploadError, setUploadError] = useState(''),
@@ -855,7 +843,7 @@ function ProductEditor({
     return (
         <form
             className="panel"
-            aria-label="Product editor"
+            aria-label={t('shop.Product editor')}
             onSubmit={(e) => {
                 e.preventDefault();
                 void save({
@@ -878,18 +866,18 @@ function ProductEditor({
         >
             <h2>
                 {p.id
-                    ? 'Edit product / تعديل المنتج'
-                    : 'New product / منتج جديد'}
+                    ? t('shop.Edit product')
+                    : t('shop.New product')}
             </h2>
             <p>
                 {access.pricesIncludeTax
-                    ? 'Prices include store tax / الأسعار شاملة ضريبة المتجر'
-                    : 'Prices exclude store tax / الأسعار قبل ضريبة المتجر'}
+                    ? t('shop.Prices include store tax')
+                    : t('shop.Prices exclude store tax')}
             </p>
             <div className="grid">
                 {access.kind === 'admin' && (
                     <label>
-                        Seller / البائع
+                        {t('shop.Seller')}
                         <select
                             value={p.ownerId || ''}
                             disabled={!!p.id || p.assets.length > 0}
@@ -903,7 +891,7 @@ function ProductEditor({
                             }
                         >
                             <option value="">
-                                Store-owned product / منتج المتجر
+                                {t('shop.Store-owned product')}
                             </option>
                             {vendors
                                 .filter((v) => v.active)
@@ -916,7 +904,7 @@ function ProductEditor({
                     </label>
                 )}
                 <label>
-                    Name (English)
+                    {t('shop.Name (English)')}
                     <input
                         required
                         value={p.name}
@@ -924,7 +912,7 @@ function ProductEditor({
                     />
                 </label>
                 <label>
-                    URL slug
+                    {t('shop.URL slug')}
                     <input
                         required
                         value={slug}
@@ -939,7 +927,7 @@ function ProductEditor({
                     />
                 </label>
                 <label>
-                    الاسم بالعربية
+                    {t('shop.Name (Arabic)')}
                     <input
                         dir="rtl"
                         value={arName}
@@ -948,32 +936,32 @@ function ProductEditor({
                 </label>
             </div>
             <label>
-                Description (English)
+                {t('shop.Description (English)')}
                 <textarea
                     value={p.description}
                     onChange={(e) => field('description', e.target.value)}
                 />
             </label>
             <label>
-                الوصف بالعربية
+                {t('shop.Description (Arabic)')}
                 <textarea
                     dir="rtl"
                     value={arDescription}
                     onChange={(e) => setArDescription(e.target.value)}
                 />
             </label>
-            <ProductDetailsEditor label="Details (English)" direction="ltr" value={p.detailsEn || ''} assets={p.assets}
+            <ProductDetailsEditor label={t('shop.Details (English)')} direction="ltr" value={p.detailsEn || ''} assets={p.assets}
                 onChange={detailsEn => set(prev => ({ ...prev, detailsEn }))}/>
-            <ProductDetailsEditor label="التفاصيل بالعربية" direction="rtl" value={p.detailsAr || ''} assets={p.assets}
+            <ProductDetailsEditor label={t('shop.Details (Arabic)')} direction="rtl" value={p.detailsAr || ''} assets={p.assets}
                 onChange={detailsAr => set(prev => ({ ...prev, detailsAr }))}/>
-            <h3>Variants & stock / الإصدارات والمخزون</h3>
+            <h3>{t('shop.Variants & stock')}</h3>
             {p.variants.map((v, index) => (
                 <div
                     className="grid"
                     key={v.id == null ? `draft-${index}` : `saved-${v.id}`}
                 >
                     <label>
-                        Variant name / اسم الإصدار
+                        {t('shop.Variant name')}
                         <input
                             required
                             value={v.name}
@@ -990,7 +978,7 @@ function ProductEditor({
                         />
                     </label>
                     <label>
-                        SKU
+                        {t('shop.SKU')}
                         <input
                             required
                             value={v.sku}
@@ -1007,7 +995,7 @@ function ProductEditor({
                         />
                     </label>
                     <label>
-                        Price (EGP) / السعر بالجنيه
+                        {t('shop.Price (EGP)')}
                         <input
                             required
                             type="number"
@@ -1033,7 +1021,7 @@ function ProductEditor({
                         />
                     </label>
                     <label>
-                        Stock / الكمية
+                        {t('shop.Stock')}
                         <input
                             required
                             type="number"
@@ -1077,16 +1065,16 @@ function ProductEditor({
                                         })
                                     }
                                 />{' '}
-                                Available / متاح
+                                {t('shop.Available')}
                             </span>
                         </label>
                         <button
                             type="button"
-                            aria-label="Remove variant / حذف الإصدار"
+                            aria-label={t('shop.Remove variant')}
                             disabled={p.variants.length === 1}
                             title={
                                 p.variants.length === 1
-                                    ? 'Keep at least one variant / يلزم إصدار واحد على الأقل'
+                                    ? t('shop.Keep at least one variant')
                                     : undefined
                             }
                             onClick={() =>
@@ -1098,7 +1086,7 @@ function ProductEditor({
                                 }))
                             }
                         >
-                            Remove / حذف
+                            {t('shop.Remove')}
                         </button>
                     </div>
                 </div>
@@ -1122,24 +1110,21 @@ function ProductEditor({
                     })
                 }
             >
-                Add variant / إضافة إصدار
+                {t('shop.Add variant')}
             </button>
             {p.canAddVariants === false && (
                 <p>
-                    New combinations of sizes or colors for this product must be
-                    configured by SuperAdmin. You can edit existing variants
-                    here. / إضافة مقاسات أو ألوان جديدة لهذا المنتج تتم من
-                    SuperAdmin؛ يمكنك تعديل الإصدارات الحالية هنا.
+                    {t('shop.New combinations of sizes or colors for this product must be configured by SuperAdmin. You can edit existing variants here.')}
                 </p>
             )}
             {p.id && access.superAdmin && (
                 <p>
                     <a href={`/dashboard/products/${p.id}`}>
-                        Advanced product options / خيارات المنتج المتقدمة
+                        {t('shop.Advanced product options')}
                     </a>
                 </p>
             )}
-            <h3>Product images / صور المنتج</h3>
+            <h3>{t('shop.Product images')}</h3>
             <div className="images">
                 {p.assets.map((image) => (
                     <figure key={image.id}>
@@ -1156,14 +1141,14 @@ function ProductEditor({
                                     })
                                 }
                             >
-                                Remove / إزالة
+                                {t('shop.Remove')}
                             </button>
                         </figcaption>
                     </figure>
                 ))}
             </div>
             <label>
-                Upload image, max 5 MB / رفع صورة
+                {t('shop.Upload image, max 5 MB')}
                 <input
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
@@ -1185,7 +1170,7 @@ function ProductEditor({
                                 },
                             );
                             if (!result.success)
-                                throw Error('Upload failed / تعذر رفع الصورة');
+                                throw Error(t('shop.Upload failed'));
                             set((prev) => ({
                                 ...prev,
                                 assets: [
@@ -1197,7 +1182,7 @@ function ProductEditor({
                             setUploadError(
                                 error instanceof Error
                                     ? error.message
-                                    : 'Upload failed',
+                                    : t('shop.Upload failed'),
                             );
                         } finally {
                             setUploading(false);
@@ -1220,15 +1205,15 @@ function ProductEditor({
                             set({ ...p, enabled: e.target.checked })
                         }
                     />{' '}
-                    Published / منشور
+                    {t('shop.Published')}
                 </span>
             </label>
             <div className="actions">
                 <button className="primary" disabled={uploading}>
-                    Save product / حفظ المنتج
+                    {t('shop.Save product')}
                 </button>
                 <button type="button" onClick={close}>
-                    Close / إغلاق
+                    {t('shop.Close')}
                 </button>
             </div>
         </form>
@@ -1242,6 +1227,7 @@ function AccountForm({
     superAdmin: boolean;
     run: (action: () => Promise<unknown>) => Promise<void>;
 }) {
+    const { _: t } = useLingui();
     const [kind, setKind] = useState('seller');
     async function submit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -1257,32 +1243,30 @@ function AccountForm({
     }
     return (
         <form className="panel" onSubmit={submit}>
-            <h2>Create account / إنشاء حساب</h2>
+            <h2>{t('shop.Create account')}</h2>
             <p>
-                New, unique email. Share the password privately and let the user
-                change it from their profile. / بريد جديد غير مستخدم. شارك كلمة
-                المرور بشكل خاص ويمكن تغييرها من الحساب.
+                {t('shop.New, unique email. Share the password privately and let the user change it from their profile.')}
             </p>
             <div className="grid">
                 <label>
-                    Role / الدور
+                    {t('shop.Role')}
                     <select
                         value={kind}
                         onChange={(e) => setKind(e.target.value)}
                     >
-                        <option value="seller">Seller / بائع</option>
+                        <option value="seller">{t('shop.Seller')}</option>
                         {superAdmin && (
-                            <option value="admin">Admin / مسؤول المتجر</option>
+                            <option value="admin">{t('shop.Admin')}</option>
                         )}
                     </select>
                 </label>
                 <label>
-                    Name / الاسم
+                    {t('shop.Name')}
                     <input required name="name" autoComplete="off" />
                 </label>
                 {kind === 'seller' && (
                     <label>
-                        Seller code / كود البائع
+                        {t('shop.Seller code')}
                         <input
                             required
                             name="code"
@@ -1292,7 +1276,7 @@ function AccountForm({
                     </label>
                 )}
                 <label>
-                    Email / البريد
+                    {t('shop.Email')}
                     <input
                         required
                         type="email"
@@ -1301,7 +1285,7 @@ function AccountForm({
                     />
                 </label>
                 <label>
-                    Initial password / كلمة المرور
+                    {t('shop.Initial password')}
                     <input
                         required
                         type="password"
@@ -1311,7 +1295,7 @@ function AccountForm({
                     />
                 </label>
             </div>
-            <button className="primary">Create account / إنشاء الحساب</button>
+            <button className="primary">{t('shop.Create account')}</button>
         </form>
     );
 }
@@ -1326,12 +1310,13 @@ function OrderPanel({
     run: (action: () => Promise<unknown>) => Promise<void>;
     reload: () => Promise<void>;
 }) {
+    const { _: t } = useLingui();
     const [quantities, setQuantities] = useState<Record<string, number>>({});
     return (
         <section className="panel">
             <h2>
                 {embedded
-                    ? 'Order items & shipping / بنود الطلب والشحن'
+                    ? t('shop.Order items & shipping')
                     : order.code}
             </h2>
             <p>
@@ -1341,7 +1326,7 @@ function OrderPanel({
             </p>
             {!embedded && (
                 <p>
-                    Telephone confirmation / تأكيد الاتصال: {order.phoneStatus}
+                    {t('shop.Telephone confirmation:')} {order.phoneStatus}
                 </p>
             )}
             <form
@@ -1372,11 +1357,11 @@ function OrderPanel({
                     <table>
                         <thead>
                             <tr>
-                                <th>Item / المنتج</th>
-                                <th>SKU</th>
-                                <th>Quantity / العدد</th>
-                                <th>Amount / القيمة</th>
-                                <th>Dispatch now / شحن الآن</th>
+                                <th>{t('shop.Item')}</th>
+                                <th>{t('shop.SKU')}</th>
+                                <th>{t('shop.Quantity')}</th>
+                                <th>{t('shop.Amount')}</th>
+                                <th>{t('shop.Dispatch now')}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1393,7 +1378,7 @@ function OrderPanel({
                                     </td>
                                     <td>
                                         <input
-                                            aria-label={`Dispatch ${line.sku}`}
+                                            aria-label={`${t('shop.Dispatch')} ${line.sku}`}
                                             type="number"
                                             min="0"
                                             max={line.remaining}
@@ -1416,11 +1401,11 @@ function OrderPanel({
                 </div>
                 <div className="grid">
                     <label>
-                        Carrier / شركة الشحن
+                        {t('shop.Carrier')}
                         <input required name="carrier" />
                     </label>
                     <label>
-                        Tracking number / رقم التتبع
+                        {t('shop.Tracking number')}
                         <input required name="trackingCode" />
                     </label>
                 </div>
@@ -1428,17 +1413,14 @@ function OrderPanel({
                     className="primary"
                     disabled={!Object.values(quantities).some((n) => n > 0)}
                 >
-                    Record actual dispatch / تسجيل الشحن الفعلي
+                    {t('shop.Record actual dispatch')}
                 </button>
             </form>
             {order.payments && (
                 <section className="panel">
-                    <h3>Central order management / إدارة الطلب والتحصيل</h3>
+                    <h3>{t('shop.Central order management')}</h3>
                     <p>
-                        Cancellation and refunds are separate actions. A refund
-                        stays pending until the money is actually returned. /
-                        إلغاء الطلب منفصل عن رد المبلغ؛ الاسترداد يظل معلقًا حتى
-                        رد الفلوس فعليًا.
+                        {t('shop.Cancellation and refunds are separate actions. A refund stays pending until the money is actually returned.')}
                     </p>
                     {order.state !== 'Cancelled' && (
                         <form
@@ -1455,16 +1437,15 @@ function OrderPanel({
                             }}
                         >
                             <label>
-                                Cancellation reason / سبب الإلغاء
+                                {t('shop.Cancellation reason')}
                                 <input required name="reason" maxLength={255} />
                             </label>
                             <label>
                                 <span>
-                                    <input type="checkbox" required /> Cancel
-                                    the whole order / إلغاء الطلب بالكامل
+                                    <input type="checkbox" required /> {t('shop.Cancel the whole order')}
                                 </span>
                             </label>
-                            <button>Cancel order / إلغاء الطلب</button>
+                            <button>{t('shop.Cancel order')}</button>
                         </form>
                     )}
                     {order.payments
@@ -1495,7 +1476,7 @@ function OrderPanel({
                                 >
                                     <div className="grid">
                                         <label>
-                                            Refund amount (EGP) / قيمة الاسترداد
+                                            {t('shop.Refund amount (EGP)')}
                                             <input
                                                 required
                                                 type="number"
@@ -1521,7 +1502,7 @@ function OrderPanel({
                                             />
                                         </label>
                                         <label>
-                                            Reason / السبب
+                                            {t('shop.Reason')}
                                             <input
                                                 name="reason"
                                                 required
@@ -1530,8 +1511,7 @@ function OrderPanel({
                                         </label>
                                     </div>
                                     <button>
-                                        Create pending refund / تسجيل استرداد
-                                        معلق
+                                        {t('shop.Create pending refund')}
                                     </button>
                                 </form>
                                 {p.refunds.map((r) => (
@@ -1571,8 +1551,7 @@ function OrderPanel({
                                                 }}
                                             >
                                                 <label>
-                                                    Actual refund reference /
-                                                    مرجع رد المبلغ
+                                                    {t('shop.Actual refund reference')}
                                                     <input
                                                         name="reference"
                                                         required
@@ -1585,14 +1564,11 @@ function OrderPanel({
                                                             type="checkbox"
                                                             required
                                                         />{' '}
-                                                        The money was actually
-                                                        returned / تم رد المبلغ
-                                                        فعليًا
+                                                        {t('shop.The money was actually returned')}
                                                     </span>
                                                 </label>
                                                 <button>
-                                                    Confirm actual refund /
-                                                    تأكيد رد المبلغ
+                                                    {t('shop.Confirm actual refund')}
                                                 </button>
                                             </form>
                                         )}
@@ -1602,7 +1578,7 @@ function OrderPanel({
                         ))}
                 </section>
             )}
-            <h3>Shipments / الشحنات</h3>
+            <h3>{t('shop.Shipments')}</h3>
             {order.fulfillments.map((f) => (
                 <div key={f.id} className="actions">
                     <span>
@@ -1620,7 +1596,7 @@ function OrderPanel({
                                 })
                             }
                         >
-                            Mark delivered / تم التسليم
+                            {t('shop.Mark delivered')}
                         </button>
                     )}
                     {f.editable && ['Pending', 'Shipped'].includes(f.state) && (
@@ -1635,7 +1611,7 @@ function OrderPanel({
                                 })
                             }
                         >
-                            Cancel shipment / إلغاء الشحنة
+                            {t('shop.Cancel shipment')}
                         </button>
                     )}
                 </div>
@@ -1655,6 +1631,7 @@ export function SellingOrderDetails({
     reloadKey?: string;
     onChange: () => Promise<void>;
 }) {
+    const { _: t } = useLingui();
     const [order, setOrder] = useState<Order | null>(null),
         [error, setError] = useState(''),
         [message, setMessage] = useState(''),
@@ -1688,12 +1665,12 @@ export function SellingOrderDetails({
             await action();
             setOrder(await refresh());
             await onChange();
-            setMessage('Saved / تم الحفظ');
+            setMessage(t('shop.Saved'));
         } catch (error) {
             setError(
                 error instanceof Error
                     ? error.message
-                    : 'Unable to save / تعذر الحفظ',
+                    : t('shop.Unable to save'),
             );
         } finally {
             setBusy(false);
@@ -1702,7 +1679,7 @@ export function SellingOrderDetails({
     return (
         <section
             className="sv-market sv-market-embedded"
-            aria-label="Order items and shipping"
+            aria-label={t('shop.Order items and shipping')}
         >
             <style>{styles}</style>
             {error && (

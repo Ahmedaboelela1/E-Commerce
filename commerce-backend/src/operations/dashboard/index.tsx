@@ -1,5 +1,6 @@
 import {SellingSectionPanel,SellingOrderDetails,type SellingSection} from '../../marketplace/dashboard';
 import {
+    useLingui,
     defineDashboardExtension,
     api,
     useChannel,
@@ -109,6 +110,7 @@ const dateValue = (date: Date) =>
     `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
 function OperationsPage() {
+    const { _: t, i18n } = useLingui();
     const {activeChannel} = useChannel();
     const {hasPermissions} = usePermissions();
     const storeAdmin = hasPermissions(['ManageStore']);
@@ -118,16 +120,16 @@ function OperationsPage() {
     const canManageCatalog=storeAdmin||sellerOnly;
     const integratedOrderManagement=storeAdmin&&activeChannel?.code!=='__default_channel__';
     const tabDefinitions:[string,string,boolean][]=[
-        ['orders','Orders / الطلبات',canReadOrders||sellerOnly],
-        ['products','Products / المنتجات',canManageCatalog],
-        ['reports','Sales / المبيعات',allowed('ReadOrder')],
-        ['inventory','Stock / المخزون',allowed('ReadCatalog')],
-        ['delivery','Delivery rates / أسعار التوصيل',canManageCatalog],
-        ['payments','Payments / الدفع',storeAdmin],
-        ['accounts','Team & sellers / الحسابات والبائعون',storeAdmin],
-        ['reviews','Reviews / التقييمات',allowed('ReadCatalog')],
-        ['coupons','Coupons / الكوبونات',allowed('CreatePromotion')],
-        ['settings','Settings / الإعدادات',hasPermissions(['ReadSettings'])],
+        ['orders',t('shop.Orders'),canReadOrders||sellerOnly],
+        ['products',t('shop.Products'),canManageCatalog],
+        ['reports',t('shop.Sales'),allowed('ReadOrder')],
+        ['inventory',t('shop.Stock'),allowed('ReadCatalog')],
+        ['delivery',t('shop.Delivery rates'),canManageCatalog],
+        ['payments',t('shop.Payments'),storeAdmin],
+        ['accounts',t('shop.Team & sellers'),storeAdmin],
+        ['reviews',t('shop.Reviews'),allowed('ReadCatalog')],
+        ['coupons',t('shop.Coupons'),allowed('CreatePromotion')],
+        ['settings',t('shop.Settings'),hasPermissions(['ReadSettings'])],
     ];
     const tabs=tabDefinitions.filter(([, ,visible])=>visible);
     const [requestedTab, setTab] = useState(()=>typeof window==='undefined'?'orders':new URLSearchParams(window.location.search).get('tab')||'orders');
@@ -181,7 +183,7 @@ function OperationsPage() {
         try {
             await action();
         } catch (e) {
-            setError(e instanceof Error ? e.message : 'Request failed');
+            setError(e instanceof Error ? e.message : t('shop.Request failed'));
         } finally {
             setBusy(false);
         }
@@ -250,7 +252,7 @@ function OperationsPage() {
     }, [activeChannel?.id]);
     useEffect(() => {
         void loadTab().catch((e) =>
-            setError(e instanceof Error ? e.message : 'Could not load data'),
+            setError(e instanceof Error ? e.message : t('shop.Could not load data')),
         );
     }, [loadTab, activeChannel?.id]);
     const permissions = allowed;
@@ -260,11 +262,11 @@ function OperationsPage() {
     };
 
     return (
-        <div className="sv-suite">
+        <div className="sv-suite" dir={i18n.locale === 'ar' ? 'rtl' : 'ltr'}>
             <style>{css}</style>
-            <h1>Shop operations / إدارة المتجر</h1>
+            <h1>{t('shop.Shop operations')}</h1>
             <p className="sv-muted">
-                {activeChannel?.code} · {sellerOnly?'Your products, stock and order items only / منتجاتك ومخزونك وبنود طلباتك فقط':'Confirm, verify payment, then ship manually / تأكيد الطلب والتحصيل ثم الشحن اليدوي'}
+                {activeChannel?.code} · {sellerOnly?t('shop.Your products, stock and order items only'):t('shop.Confirm, verify payment, then ship manually')}
             </p>
             <div className="sv-tabs" role="tablist">
                 {tabs.map(([key, title]) => (
@@ -307,7 +309,7 @@ function OperationsPage() {
                         }}
                     >
                         <label>
-                            Order code / رقم الطلب
+                            {t('shop.Order code')}
                             <input
                                 value={search}
                                 onChange={(e) => {
@@ -316,18 +318,18 @@ function OperationsPage() {
                                 }}
                             />
                         </label>
-                        <button disabled={busy}>Search / بحث</button>
+                        <button disabled={busy}>{t('shop.Search')}</button>
                     </form>
                     <div className="sv-box sv-table">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Order</th>
-                                    <th>Customer</th>
-                                    <th>State</th>
-                                    <th>Phone</th>
-                                    <th>Transfer</th>
-                                    <th>Total</th>
+                                    <th>{t('shop.Order')}</th>
+                                    <th>{t('shop.Customer')}</th>
+                                    <th>{t('shop.State')}</th>
+                                    <th>{t('shop.Phone')}</th>
+                                    <th>{t('shop.Transfer')}</th>
+                                    <th>{t('shop.Total')}</th>
                                     <th />
                                 </tr>
                             </thead>
@@ -350,26 +352,26 @@ function OperationsPage() {
                                                     )
                                                 }
                                             >
-                                                Open / فتح
+                                                {t('shop.Open')}
                                             </button>
                                         </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                        <p>{total} orders</p>
+                        <p>{total} {t('shop.orders')}</p>
                         <div className="sv-actions">
                             <button
                                 disabled={!skip}
                                 onClick={() => setSkip(Math.max(0, skip - 30))}
                             >
-                                Previous
+                                {t('shop.Previous')}
                             </button>
                             <button
                                 disabled={skip + 30 >= total}
                                 onClick={() => setSkip(skip + 30)}
                             >
-                                Next
+                                {t('shop.Next')}
                             </button>
                         </div>
                     </div>
@@ -385,15 +387,15 @@ function OperationsPage() {
                                 className="sv-btn"
                                 href={`/dashboard/orders/${selected.id}`}
                             >
-                                Advanced order details / تفاصيل الطلب المتقدمة
+                                {t('shop.Advanced order details')}
                             </a>}
 
-                            {permissions('UpdateOrder') && selected.payments.some(p=>p.offlineType==='cash-on-delivery'&&p.state==='Authorized') && <form className="sv-box" onSubmit={e=>{e.preventDefault();const form=e.currentTarget;const data=new FormData(form);void run(async()=>{await request('mutation($id:ID!,$reference:String!){confirmStoreCashReceipt(orderId:$id,confirmed:true,reference:$reference)}',{id:selected.id,reference:String(data.get('cashReference')||'')});await refreshOrder();form.reset();});}}><h3>Actual cash collection / التحصيل الفعلي</h3><label>Collection reference / مرجع التحصيل<input name="cashReference" required maxLength={120}/></label><label><input type="checkbox" required/> I verified actual cash receipt / تحققت من استلام النقد فعليًا</label><button className="sv-primary" disabled={busy}>Record cash received / تسجيل استلام النقد</button></form>}
+                            {permissions('UpdateOrder') && selected.payments.some(p=>p.offlineType==='cash-on-delivery'&&p.state==='Authorized') && <form className="sv-box" onSubmit={e=>{e.preventDefault();const form=e.currentTarget;const data=new FormData(form);void run(async()=>{await request('mutation($id:ID!,$reference:String!){confirmStoreCashReceipt(orderId:$id,confirmed:true,reference:$reference)}',{id:selected.id,reference:String(data.get('cashReference')||'')});await refreshOrder();form.reset();});}}><h3>{t('shop.Actual cash collection')}</h3><label>{t('shop.Collection reference')}<input name="cashReference" required maxLength={120}/></label><label><input type="checkbox" required/> {t('shop.I verified actual cash receipt')}</label><button className="sv-primary" disabled={busy}>{t('shop.Record cash received')}</button></form>}
                             {permissions('UpdateOrder') && (
                                 <>
                                     <div className="sv-grid">
                                         <label>
-                                            Phone confirmation / حالة الاتصال
+                                            {t('shop.Phone confirmation')}
                                             <select
                                                 value={phoneStatus}
                                                 onChange={(e) =>
@@ -403,24 +405,21 @@ function OperationsPage() {
                                                 }
                                             >
                                                 <option value="pending">
-                                                    Awaiting call / بانتظار
-                                                    الاتصال
+                                                    {t('shop.Awaiting call')}
                                                 </option>
                                                 <option value="confirmed">
-                                                    Confirmed / تم التأكيد
+                                                    {t('shop.Confirmed')}
                                                 </option>
                                                 <option value="unreachable">
-                                                    Unreachable / تعذّر التواصل
+                                                    {t('shop.Unreachable')}
                                                 </option>
                                                 <option value="cancelled">
-                                                    Customer declined / العميل
-                                                    رفض الطلب
+                                                    {t('shop.Customer declined')}
                                                 </option>
                                             </select>
                                         </label>
                                         <label>
-                                            Internal call notes / ملاحظات
-                                            المكالمة
+                                            {t('shop.Internal call notes')}
                                             <textarea
                                                 maxLength={2000}
                                                 rows={3}
@@ -448,19 +447,19 @@ function OperationsPage() {
                                                 );
                                                 await refreshOrder();
                                                 setMessage(
-                                                    'Call status saved / تم حفظ حالة الاتصال',
+                                                    t('shop.Call status saved'),
                                                 );
                                             })
                                         }
                                     >
-                                        Save callback / حفظ الاتصال
+                                        {t('shop.Save callback')}
                                     </button>
                                     <p className="sv-muted">
-                                        {integratedOrderManagement?'Declining a call blocks dispatch. Cancel the order below to release reserved stock.':'Declining a call blocks dispatch. Cancel the actual order in Orders to release reserved stock.'}
+                                        {integratedOrderManagement?t('shop.Declining a call blocks dispatch. Cancel the order below to release reserved stock.'):t('shop.Declining a call blocks dispatch. Cancel the actual order in Orders to release reserved stock.')}
                                     </p>
                                 </>
                             )}
-                            <h2>Transfer / التحويل</h2>
+                            <h2>{t('shop.Transfer')}</h2>
                             <p>
                                 {selected.receiptStatus} ·{' '}
                                 {selected.transferReference}
@@ -483,14 +482,14 @@ function OperationsPage() {
                                         })
                                     }
                                 >
-                                    View private receipt / عرض الإيصال
+                                    {t('shop.View private receipt')}
                                 </button>
                             )}
                             {receipt && (
                                 <div>
                                     <img
                                         src={`data:${receipt.mimeType};base64,${receipt.dataBase64}`}
-                                        alt="Transfer receipt"
+                                        alt={t('shop.Transfer receipt')}
                                         style={{
                                             maxWidth: '100%',
                                             maxHeight: 500,
@@ -498,7 +497,7 @@ function OperationsPage() {
                                         }}
                                     />
                                     <button onClick={() => download(receipt)}>
-                                        Download receipt
+                                        {t('shop.Download receipt')}
                                     </button>
                                 </div>
                             )}
@@ -510,8 +509,7 @@ function OperationsPage() {
                                 ) && (
                                     <div className="sv-box">
                                         <label>
-                                            Verified transfer reference / مرجع
-                                            التحويل
+                                            {t('shop.Verified transfer reference')}
                                             <input
                                                 maxLength={120}
                                                 value={reference}
@@ -530,9 +528,7 @@ function OperationsPage() {
                                                     )
                                                 }
                                             />
-                                            I checked actual receipt in the
-                                            receiving account / تحققت من وصول
-                                            المبلغ فعليًا
+                                            {t('shop.I checked actual receipt in the receiving account')}
                                         </label>
                                         <button
                                             className="sv-primary"
@@ -552,17 +548,15 @@ function OperationsPage() {
                                                     );
                                                     await refreshOrder();
                                                     setMessage(
-                                                        'Receipt confirmed / تم تأكيد استلام التحويل',
+                                                        t('shop.Receipt confirmed'),
                                                     );
                                                 })
                                             }
                                         >
-                                            Confirm receipt and settle payment /
-                                            تأكيد التحصيل
+                                            {t('shop.Confirm receipt and settle payment')}
                                         </button>
                                         <label>
-                                            Reason for rejecting proof / سبب رفض
-                                            الإيصال
+                                            {t('shop.Reason for rejecting proof')}
                                             <textarea
                                                 value={rejectNote}
                                                 onChange={(e) =>
@@ -591,12 +585,12 @@ function OperationsPage() {
                                                 })
                                             }
                                         >
-                                            Reject proof / رفض الإيصال
+                                            {t('shop.Reject proof')}
                                         </button>
                                     </div>
                                 )}
                             {integratedOrderManagement ? <SellingOrderDetails key={selected.id} orderId={selected.id} reloadKey={`${selected.version}:${selected.phoneStatus}:${selected.payments.map(payment=>payment.state).join(',')}`} onChange={refreshOrder}/> : <>
-                            <h2>Shipping / الشحن</h2>
+                            <h2>{t('shop.Shipping')}</h2>
                             {selected.shipments?.map((s) => (
                                 <p key={s.id}>
                                     {s.carrier} · {s.trackingCode} · {s.state}{' '}
@@ -606,7 +600,7 @@ function OperationsPage() {
                                             target="_blank"
                                             rel="noreferrer"
                                         >
-                                            Track
+                                            {t('shop.Track')}
                                         </a>
                                     )}
                                 </p>
@@ -615,7 +609,7 @@ function OperationsPage() {
                                 <>
                                     <div className="sv-grid">
                                         <label>
-                                            Carrier / شركة الشحن
+                                            {t('shop.Carrier')}
                                             <select
                                                 value={carrier}
                                                 onChange={(e) =>
@@ -623,16 +617,16 @@ function OperationsPage() {
                                                 }
                                             >
                                                 <option value="aramex">
-                                                    Aramex
+                                                    {t('shop.Aramex')}
                                                 </option>
                                                 <option value="dhl">DHL</option>
                                                 <option value="other">
-                                                    Other carrier
+                                                    {t('shop.Other carrier')}
                                                 </option>
                                             </select>
                                         </label>
                                         <label>
-                                            Tracking number / رقم التتبع
+                                            {t('shop.Tracking number')}
                                             <input
                                                 value={tracking}
                                                 maxLength={120}
@@ -657,18 +651,17 @@ function OperationsPage() {
                                                 );
                                                 await refreshOrder();
                                                 setMessage(
-                                                    'Shipment recorded / تم تسجيل الشحنة',
+                                                    t('shop.Shipment recorded'),
                                                 );
                                             })
                                         }
                                     >
-                                        Record actual dispatch / تسجيل تسليم
-                                        الشحنة
+                                        {t('shop.Record actual dispatch')}
                                     </button>
                                 </>
                             )}
                             </>}
-                            <h2>Invoice / الفاتورة</h2>
+                            <h2>{t('shop.Invoice')}</h2>
                             <button
                                 disabled={busy}
                                 onClick={() =>
@@ -683,7 +676,7 @@ function OperationsPage() {
                                     })
                                 }
                             >
-                                Download PDF / تحميل PDF
+                                {t('shop.Download PDF')}
                             </button>
                         </div>
                     )}
@@ -713,7 +706,7 @@ function OperationsPage() {
                         }}
                     >
                         <label>
-                            From / من
+                            {t('shop.From')}
                             <input
                                 type="date"
                                 value={from}
@@ -722,7 +715,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            To / إلى
+                            {t('shop.To')}
                             <input
                                 type="date"
                                 value={to}
@@ -731,7 +724,7 @@ function OperationsPage() {
                             />
                         </label>
                         <button disabled={busy}>
-                            Show report / عرض التقرير
+                            {t('shop.Show report')}
                         </button>
                     </form>
                     {report && (
@@ -739,30 +732,30 @@ function OperationsPage() {
                             <div className="sv-grid">
                                 {[
                                     ['Orders', report.orderCount],
-                                    ['Cancelled', report.cancelledCount],
+                                    [t('shop.Cancelled'), report.cancelledCount],
                                     [
-                                        'Order value',
+                                        t('shop.Order value'),
                                         money(
                                             report.gross,
                                             report.currencyCode,
                                         ),
                                     ],
                                     [
-                                        'Collected, net refunds',
+                                        t('shop.Collected, net refunds'),
                                         money(
                                             report.collected,
                                             report.currencyCode,
                                         ),
                                     ],
                                     [
-                                        'Awaiting collection',
+                                        t('shop.Awaiting collection'),
                                         money(
                                             report.pending,
                                             report.currencyCode,
                                         ),
                                     ],
                                     [
-                                        'Refunded',
+                                        t('shop.Refunded'),
                                         money(
                                             report.refunded,
                                             report.currencyCode,
@@ -776,16 +769,15 @@ function OperationsPage() {
                                 ))}
                             </div>
                             <p className="sv-muted">
-                                Amounts describe orders placed in the selected
-                                period and their current payment/refund state.
+                                {t('shop.Amounts describe orders placed in the selected period and their current payment/refund state.')}
                             </p>
                             <div className="sv-box">
-                                <h2>Most ordered products / الأكثر طلبًا</h2>
+                                <h2>{t('shop.Most ordered products')}</h2>
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Product / variant</th>
-                                            <th>Units</th>
+                                            <th>{t('shop.Product / variant')}</th>
+                                            <th>{t('shop.Units')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -811,8 +803,7 @@ function OperationsPage() {
             {tab === 'inventory' && permissions('ReadCatalog') && (
                 <>
                     <p>
-                        Low stock alerts are opt-in. Set recipient and threshold
-                        in Settings / فعّل تنبيهات المخزون من الإعدادات.
+                        {t('shop.Low stock alerts are opt-in. Set recipient and threshold in Settings')}
                     </p>
                     {permissions('UpdateCatalog') && (
                         <button
@@ -824,23 +815,23 @@ function OperationsPage() {
                                     );
                                     await loadTab();
                                     setMessage(
-                                        'Stock check completed / تمت مراجعة المخزون',
+                                        t('shop.Stock check completed'),
                                     );
                                 })
                             }
                         >
-                            Check stock and alerts / مراجعة المخزون
+                            {t('shop.Check stock and alerts')}
                         </button>
                     )}
                     <div className="sv-box sv-table">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>SKU</th>
-                                    <th>Product</th>
-                                    <th>Available</th>
-                                    <th>Allocated</th>
-                                    <th>On hand</th>
+                                    <th>{t('shop.SKU')}</th>
+                                    <th>{t('shop.Product')}</th>
+                                    <th>{t('shop.Available')}</th>
+                                    <th>{t('shop.Allocated')}</th>
+                                    <th>{t('shop.On hand')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -865,13 +856,13 @@ function OperationsPage() {
                                     setStockSkip(Math.max(0, stockSkip - 50))
                                 }
                             >
-                                Previous
+                                {t('shop.Previous')}
                             </button>
                             <button
                                 disabled={stockSkip + 50 >= stockTotal}
                                 onClick={() => setStockSkip(stockSkip + 50)}
                             >
-                                Next
+                                {t('shop.Next')}
                             </button>
                         </div>
                     </div>
@@ -880,7 +871,7 @@ function OperationsPage() {
             {tab === 'reviews' && permissions('ReadCatalog') && (
                 <>
                     <label>
-                        Review status
+                        {t('shop.Review status')}
                         <select
                             value={reviewStatus}
                             onChange={(e) => {
@@ -889,10 +880,10 @@ function OperationsPage() {
                             }}
                         >
                             <option value="pending">
-                                Pending / بانتظار المراجعة
+                                {t('shop.Pending')}
                             </option>
-                            <option value="approved">Approved / معتمد</option>
-                            <option value="rejected">Rejected / مرفوض</option>
+                            <option value="approved">{t('shop.Approved')}</option>
+                            <option value="rejected">{t('shop.Rejected')}</option>
                         </select>
                     </label>
                     {reviews.map((r) => (
@@ -901,7 +892,7 @@ function OperationsPage() {
                                 {r.rating}/5 — {r.authorName}
                             </h2>
                             <a href={`/dashboard/products/${r.productId}`}>
-                                Product {r.productId}
+                                {t('shop.Product')} {r.productId}
                             </a>
                             <p className="sv-prose">{r.text}</p>
                             {permissions('UpdateCatalog') && (
@@ -925,8 +916,8 @@ function OperationsPage() {
                                             }
                                         >
                                             {status === 'approved'
-                                                ? 'Approve / اعتماد'
-                                                : 'Reject / رفض'}
+                                                ? t('shop.Approve')
+                                                : t('shop.Reject')}
                                         </button>
                                     ))}
                                 </div>
@@ -940,13 +931,13 @@ function OperationsPage() {
                                 setReviewSkip(Math.max(0, reviewSkip - 30))
                             }
                         >
-                            Previous
+                            {t('shop.Previous')}
                         </button>
                         <button
                             disabled={reviewSkip + 30 >= reviewTotal}
                             onClick={() => setReviewSkip(reviewSkip + 30)}
                         >
-                            Next
+                            {t('shop.Next')}
                         </button>
                     </div>
                 </>
@@ -979,15 +970,15 @@ function OperationsPage() {
                                 },
                             );
                             setMessage(
-                                'Coupon created. Manage it in Marketing → Promotions / تم إنشاء الكوبون',
+                                t('shop.Coupon created. Manage it in Marketing → Promotions'),
                             );
                         });
                     }}
                 >
-                    <h2>Discount coupon / كوبون خصم</h2>
+                    <h2>{t('shop.Discount coupon')}</h2>
                     <div className="sv-grid">
                         <label>
-                            Name
+                            {t('shop.Name')}
                             <input
                                 value={coupon.name}
                                 maxLength={100}
@@ -998,7 +989,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Code
+                            {t('shop.Code')}
                             <input
                                 value={coupon.code}
                                 maxLength={30}
@@ -1012,7 +1003,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Discount %
+                            {t('shop.Discount %')}
                             <input
                                 type="number"
                                 min={1}
@@ -1028,7 +1019,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Minimum order, currency units
+                            {t('shop.Minimum order, currency units')}
                             <input
                                 type="number"
                                 min={0}
@@ -1043,7 +1034,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Total uses
+                            {t('shop.Total uses')}
                             <input
                                 type="number"
                                 min={1}
@@ -1057,7 +1048,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Starts at
+                            {t('shop.Starts at')}
                             <input
                                 type="datetime-local"
                                 value={coupon.startsAt}
@@ -1070,7 +1061,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Expires at
+                            {t('shop.Expires at')}
                             <input
                                 type="datetime-local"
                                 value={coupon.endsAt}
@@ -1094,14 +1085,13 @@ function OperationsPage() {
                                 })
                             }
                         />
-                        Enable coupon / تفعيل الكوبون
+                        {t('shop.Enable coupon')}
                     </label>
                     <p className="sv-muted">
-                        One use per customer. Additional product/category
-                        promotions are managed in Marketing → Promotions.
+                        {t('shop.One use per customer. Additional product/category promotions are managed in Marketing → Promotions.')}
                     </p>
                     <button className="sv-primary" disabled={busy}>
-                        Create coupon / إنشاء الكوبون
+                        {t('shop.Create coupon')}
                     </button>
                 </form>
             )}
@@ -1118,18 +1108,17 @@ function OperationsPage() {
                                 {input: settings},
                             );
                             setSettings(d.saveShopOperationsSettings);
-                            setMessage('Settings saved / تم حفظ الإعدادات');
+                            setMessage(t('shop.Settings saved'));
                         });
                     }}
                 >
-                    <h2>Invoice seller / بيانات البائع</h2>
+                    <h2>{t('shop.Invoice seller')}</h2>
                     <p className="sv-muted">
-                        Enter the actual seller details before customers can
-                        download invoices.
+                        {t('shop.Enter the actual seller details before customers can download invoices.')}
                     </p>
                     <div className="sv-grid">
                         <label>
-                            Legal seller name
+                            {t('shop.Legal seller name')}
                             <input
                                 value={settings.sellerName || ''}
                                 maxLength={200}
@@ -1142,7 +1131,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Tax registration, if applicable
+                            {t('shop.Tax registration, if applicable')}
                             <input
                                 value={settings.sellerTaxId || ''}
                                 maxLength={100}
@@ -1155,7 +1144,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Invoice prefix
+                            {t('shop.Invoice prefix')}
                             <input
                                 value={settings.invoicePrefix || 'SV'}
                                 maxLength={20}
@@ -1171,7 +1160,7 @@ function OperationsPage() {
                         </label>
                     </div>
                     <label>
-                        Legal seller address
+                        {t('shop.Legal seller address')}
                         <textarea
                             rows={3}
                             maxLength={1000}
@@ -1184,10 +1173,10 @@ function OperationsPage() {
                             }
                         />
                     </label>
-                    <h2>Stock alerts / تنبيهات المخزون</h2>
+                    <h2>{t('shop.Stock alerts')}</h2>
                     <div className="sv-grid">
                         <label>
-                            Available stock threshold
+                            {t('shop.Available stock threshold')}
                             <input
                                 type="number"
                                 min={0}
@@ -1204,7 +1193,7 @@ function OperationsPage() {
                             />
                         </label>
                         <label>
-                            Notification email
+                            {t('shop.Notification email')}
                             <input
                                 type="email"
                                 value={settings.notificationEmail || ''}
@@ -1228,17 +1217,16 @@ function OperationsPage() {
                                 })
                             }
                         />
-                        Enable stock alerts / تفعيل التنبيهات
+                        {t('shop.Enable stock alerts')}
                     </label>
                     <p className="sv-muted">
-                        Sent once per low-stock episode, reset after restocking.
-                        Email and the job queue must be running.
+                        {t('shop.Sent once per low-stock episode, reset after restocking. Email and the job queue must be running.')}
                     </p>
                     <button
                         className="sv-primary"
                         disabled={busy || !permissions('UpdateSettings')}
                     >
-                        Save / حفظ
+                        {t('shop.Save')}
                     </button>
                 </form>
             )}
@@ -1261,7 +1249,7 @@ defineDashboardExtension({
                 requiresPermission: ['ReadOrder','ManageStore','SellOwnProducts'],
                 sectionId: 'sales',
                 id: 'shop-operations',
-                title: 'Shop operations / إدارة المتجر',
+                title: 'shop.Shop operations',
             },
             component: () => <OperationsRoute />,
         },

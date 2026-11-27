@@ -1,7 +1,8 @@
-import { defineDashboardExtension } from '@vendure/dashboard';
+import { useLingui, defineDashboardExtension } from '@vendure/dashboard';
 import { useEffect } from 'react';
 
 function LegacySellingRedirect() {
+    const { _: t } = useLingui();
     useEffect(() => {
         const old = new URLSearchParams(window.location.search).get('tab');
         const tab =
@@ -19,7 +20,7 @@ function LegacySellingRedirect() {
         destination.hash = '';
         window.location.replace(destination.href);
     }, []);
-    return <p>Opening Shop operations / جارٍ فتح إدارة المتجر…</p>;
+    return <p>{t('shop.Opening Shop operations')}</p>;
 }
 
 defineDashboardExtension({

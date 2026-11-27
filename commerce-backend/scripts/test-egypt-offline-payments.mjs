@@ -70,5 +70,7 @@ test('governorate labels support native Dashboard translation lookup for all 27 
             assert.ok(label?.trim(),`${option.value} needs a ${languageCode} label`);
         }
     }
-    assert.equal(options.find(option=>option.value==='cairo').label.find(label=>label.languageCode==='en').value,'القاهرة / Cairo');
+    const cairo = options.find(option => option.value === 'cairo');
+    assert.equal(cairo.label.find(label => label.languageCode === 'en').value, 'Cairo');
+    assert.equal(cairo.label.find(label => label.languageCode === 'ar').value, 'القاهرة');
 });

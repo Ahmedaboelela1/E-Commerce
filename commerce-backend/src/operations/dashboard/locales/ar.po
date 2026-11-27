@@ -1,0 +1,1248 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ar\n"
+
+#. js-lingui-explicit-id
+msgid "shop.— comparison & help"
+msgstr "— المقارنة والمساعدة"
+
+#. js-lingui-explicit-id
+msgid "shop.· Actual specifications, help resources and stock-tracked product bundles"
+msgstr "· المواصفات وملفات المساعدة وباقات المنتجات المرتبطة بالمخزون"
+
+#. js-lingui-explicit-id
+msgid "shop.· Quotation requests, returns and consent-based notifications"
+msgstr "· طلبات عروض الأسعار والمرتجعات والإشعارات بموافقة العميل"
+
+#. js-lingui-explicit-id
+msgid "shop.Active"
+msgstr "مفعل"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual cash collection"
+msgstr "التحصيل الفعلي"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual refund reference"
+msgstr "مرجع رد المبلغ"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual resolution"
+msgstr "القرار النهائي"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual return window in days"
+msgstr "مهلة الإرجاع الفعلية بالأيام"
+
+#. js-lingui-explicit-id
+msgid "shop.Actual settled refund ID"
+msgstr "معرّف الاسترداد المنفّذ"
+
+#. js-lingui-explicit-id
+msgid "shop.Add bank transfer"
+msgstr "إضافة التحويل البنكي"
+
+#. js-lingui-explicit-id
+msgid "shop.Add cash on delivery"
+msgstr "إضافة الدفع عند الاستلام"
+
+#. js-lingui-explicit-id
+msgid "shop.Add governorate rate"
+msgstr "إضافة سعر محافظة"
+
+#. js-lingui-explicit-id
+msgid "shop.Add product"
+msgstr "إضافة منتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Add question"
+msgstr "إضافة سؤال"
+
+#. js-lingui-explicit-id
+msgid "shop.Add resource"
+msgstr "إضافة ملف"
+
+#. js-lingui-explicit-id
+msgid "shop.Add variant"
+msgstr "إضافة إصدار"
+
+#. js-lingui-explicit-id
+msgid "shop.Admin"
+msgstr "مسؤول المتجر"
+
+#. js-lingui-explicit-id
+msgid "shop.Advanced order details"
+msgstr "تفاصيل الطلب المتقدمة"
+
+#. js-lingui-explicit-id
+msgid "shop.Advanced product options"
+msgstr "خيارات المنتج المتقدمة"
+
+#. js-lingui-explicit-id
+msgid "shop.Advanced shipping settings"
+msgstr "إعدادات الشحن المتقدمة"
+
+#. js-lingui-explicit-id
+msgid "shop.Age range"
+msgstr "العمر المناسب"
+
+#. js-lingui-explicit-id
+msgid "shop.Agreed delivery (EGP)"
+msgstr "رسوم التوصيل المتفق عليها بالجنيه"
+
+#. js-lingui-explicit-id
+msgid "shop.Allocated"
+msgstr "المحجوز"
+
+#. js-lingui-explicit-id
+msgid "shop.Amount"
+msgstr "القيمة"
+
+#. js-lingui-explicit-id
+msgid "shop.Amounts describe orders placed in the selected period and their current payment/refund state."
+msgstr "تعرض المبالغ الطلبات المقدّمة خلال الفترة المحددة وحالة التحصيل والاسترداد الحالية."
+
+#. js-lingui-explicit-id
+msgid "shop.Answer"
+msgstr "الإجابة"
+
+#. js-lingui-explicit-id
+msgid "shop.Approve"
+msgstr "اعتماد"
+
+#. js-lingui-explicit-id
+msgid "shop.Approved"
+msgstr "معتمد"
+
+#. js-lingui-explicit-id
+msgid "shop.Arabic"
+msgstr "العربية"
+
+#. js-lingui-explicit-id
+msgid "shop.Aramex"
+msgstr "أرامكس"
+
+#. js-lingui-explicit-id
+msgid "shop.At most one reminder per cart. Email and the job queue must be running; unsubscribe links are included. New cart-reminder consent is off by default."
+msgstr "يُرسل تذكير واحد لكل سلة بموافقة العميل، ويتضمن رابط إلغاء الاشتراك. يتطلب الإرسال تشغيل البريد وقائمة المهام. التذكيرات متوقفة افتراضيًا."
+
+#. js-lingui-explicit-id
+msgid "shop.Available"
+msgstr "متاح"
+
+#. js-lingui-explicit-id
+msgid "shop.Available stock threshold"
+msgstr "حد المخزون المتاح"
+
+#. js-lingui-explicit-id
+msgid "shop.Awaiting call"
+msgstr "بانتظار الاتصال"
+
+#. js-lingui-explicit-id
+msgid "shop.Awaiting collection"
+msgstr "بانتظار التحصيل"
+
+#. js-lingui-explicit-id
+msgid "shop.Bold"
+msgstr "عريض"
+
+#. js-lingui-explicit-id
+msgid "shop.Bullets"
+msgstr "نقاط"
+
+#. js-lingui-explicit-id
+msgid "shop.Bundle"
+msgstr "باقة"
+
+#. js-lingui-explicit-id
+msgid "shop.Bundle price (EGP, using channel tax settings)"
+msgstr "سعر الباقة بالجنيه وفق إعدادات ضريبة القناة"
+
+#. js-lingui-explicit-id
+msgid "shop.Bundle saved"
+msgstr "تم حفظ الباقة"
+
+#. js-lingui-explicit-id
+msgid "shop.Call status saved"
+msgstr "تم حفظ حالة الاتصال"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancel order"
+msgstr "إلغاء الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancel shipment"
+msgstr "إلغاء الشحنة"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancel the whole order"
+msgstr "إلغاء الطلب بالكامل"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancellation and refunds are separate actions. A refund stays pending until the money is actually returned."
+msgstr "إلغاء الطلب منفصل عن رد المبلغ؛ الاسترداد يظل معلقًا حتى رد الفلوس فعليًا."
+
+#. js-lingui-explicit-id
+msgid "shop.Cancellation reason"
+msgstr "سبب الإلغاء"
+
+#. js-lingui-explicit-id
+msgid "shop.Cancelled"
+msgstr "ملغى"
+
+#. js-lingui-explicit-id
+msgid "shop.Carrier"
+msgstr "شركة الشحن"
+
+#. js-lingui-explicit-id
+msgid "shop.Catalog permission required."
+msgstr "تحتاج إلى صلاحية إدارة الكتالوج."
+
+#. js-lingui-explicit-id
+msgid "shop.Catalog tools"
+msgstr "أدوات المنتجات"
+
+#. js-lingui-explicit-id
+msgid "shop.Central order management"
+msgstr "إدارة الطلب والتحصيل"
+
+#. js-lingui-explicit-id
+msgid "shop.Check stock and alerts"
+msgstr "مراجعة المخزون"
+
+#. js-lingui-explicit-id
+msgid "shop.Choose a product"
+msgstr "اختر المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Choose catalog products"
+msgstr "اختيار المنتجات"
+
+#. js-lingui-explicit-id
+msgid "shop.Choose component variants above. Components remain separate stock-tracked order lines. Bundle savings require all components; coupon codes do not combine with bundle savings."
+msgstr "اختر إصدارات المنتجات المكوّنة للباقة من أعلى الصفحة. يُتابع مخزون كل مكوّن كبند مستقل في الطلب. يتطلب خصم الباقة إضافة جميع المكوّنات، ولا يُجمع مع الكوبونات."
+
+#. js-lingui-explicit-id
+msgid "shop.Close"
+msgstr "إغلاق"
+
+#. js-lingui-explicit-id
+msgid "shop.Code"
+msgstr "الكود"
+
+#. js-lingui-explicit-id
+msgid "shop.Collected"
+msgstr "محصّل"
+
+#. js-lingui-explicit-id
+msgid "shop.Collected, net refunds"
+msgstr "المحصّل بعد خصم المبالغ المستردة"
+
+#. js-lingui-explicit-id
+msgid "shop.Collection belongs to store management. Card payments remain unavailable."
+msgstr "الإدارة مسؤولة عن التحصيل. الدفع بالكروت غير مفعّل."
+
+#. js-lingui-explicit-id
+msgid "shop.Collection reference"
+msgstr "مرجع التحصيل"
+
+#. js-lingui-explicit-id
+msgid "shop.Confirm actual refund"
+msgstr "تأكيد رد المبلغ"
+
+#. js-lingui-explicit-id
+msgid "shop.Confirm receipt and settle payment"
+msgstr "تأكيد التحصيل"
+
+#. js-lingui-explicit-id
+msgid "shop.Confirm, verify payment, then ship manually"
+msgstr "تأكيد الطلب والتحصيل ثم الشحن اليدوي"
+
+#. js-lingui-explicit-id
+msgid "shop.Confirmed"
+msgstr "تم التأكيد"
+
+#. js-lingui-explicit-id
+msgid "shop.Contact"
+msgstr "بيانات التواصل"
+
+#. js-lingui-explicit-id
+msgid "shop.Could not load data"
+msgstr "تعذر تحميل البيانات"
+
+#. js-lingui-explicit-id
+msgid "shop.Coupon created. Manage it in Marketing → Promotions"
+msgstr "تم إنشاء الكوبون. يمكنك إدارته من قسم التسويق ثم العروض الترويجية."
+
+#. js-lingui-explicit-id
+msgid "shop.Coupons"
+msgstr "الكوبونات"
+
+#. js-lingui-explicit-id
+msgid "shop.Create account"
+msgstr "إنشاء الحساب"
+
+#. js-lingui-explicit-id
+msgid "shop.Create coupon"
+msgstr "إنشاء الكوبون"
+
+#. js-lingui-explicit-id
+msgid "shop.Create pending refund"
+msgstr "تسجيل استرداد معلق"
+
+#. js-lingui-explicit-id
+msgid "shop.Create the agreed order in Orders"
+msgstr "إنشاء الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Customer"
+msgstr "العميل"
+
+#. js-lingui-explicit-id
+msgid "shop.Customer care"
+msgstr "خدمة العملاء"
+
+#. js-lingui-explicit-id
+msgid "shop.Customer declined"
+msgstr "العميل رفض الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Delivery charge (EGP)"
+msgstr "السعر بالجنيه"
+
+#. js-lingui-explicit-id
+msgid "shop.Delivery description"
+msgstr "وصف التوصيل"
+
+#. js-lingui-explicit-id
+msgid "shop.Delivery rate"
+msgstr "سعر التوصيل"
+
+#. js-lingui-explicit-id
+msgid "shop.Delivery rates"
+msgstr "أسعار التوصيل"
+
+#. js-lingui-explicit-id
+msgid "shop.Description"
+msgstr "الوصف"
+
+#. js-lingui-explicit-id
+msgid "shop.Description (Arabic)"
+msgstr "الوصف بالعربية"
+
+#. js-lingui-explicit-id
+msgid "shop.Description (English)"
+msgstr "الوصف بالإنجليزية"
+
+#. js-lingui-explicit-id
+msgid "shop.Details (Arabic)"
+msgstr "التفاصيل بالعربية"
+
+#. js-lingui-explicit-id
+msgid "shop.Details (English)"
+msgstr "التفاصيل بالإنجليزية"
+
+#. js-lingui-explicit-id
+msgid "shop.Disable seller"
+msgstr "إيقاف البائع"
+
+#. js-lingui-explicit-id
+msgid "shop.Disabled"
+msgstr "موقوف"
+
+#. js-lingui-explicit-id
+msgid "shop.Disabling a seller hides their products and blocks their workspace. Re-enabling does not republish products."
+msgstr "إيقاف البائع يخفي منتجاته ويمنع دخوله؛ إعادة التفعيل لا تنشر المنتجات تلقائيًا."
+
+#. js-lingui-explicit-id
+msgid "shop.Discount %"
+msgstr "نسبة الخصم"
+
+#. js-lingui-explicit-id
+msgid "shop.Discount coupon"
+msgstr "كوبون خصم"
+
+#. js-lingui-explicit-id
+msgid "shop.Dispatch now"
+msgstr "شحن الآن"
+
+#. js-lingui-explicit-id
+msgid "shop.Download PDF"
+msgstr "تحميل PDF"
+
+#. js-lingui-explicit-id
+msgid "shop.Download receipt"
+msgstr "تنزيل الإيصال"
+
+#. js-lingui-explicit-id
+msgid "shop.Draft saved"
+msgstr "تم حفظ المسودة"
+
+#. js-lingui-explicit-id
+msgid "shop.Edit"
+msgstr "تعديل"
+
+#. js-lingui-explicit-id
+msgid "shop.Edit bundle"
+msgstr "تعديل الباقة"
+
+#. js-lingui-explicit-id
+msgid "shop.Edit method"
+msgstr "تعديل الطريقة"
+
+#. js-lingui-explicit-id
+msgid "shop.Edit product"
+msgstr "تعديل المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Email"
+msgstr "البريد"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable cart reminders only for customers who opted in"
+msgstr "تذكير السلة بموافقة العميل"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable coupon"
+msgstr "تفعيل الكوبون"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable online return requests after publishing your actual policy"
+msgstr "تفعيل طلبات المرتجعات"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable seller"
+msgstr "تفعيل البائع"
+
+#. js-lingui-explicit-id
+msgid "shop.Enable stock alerts"
+msgstr "تفعيل التنبيهات"
+
+#. js-lingui-explicit-id
+msgid "shop.Enabled"
+msgstr "مفعل"
+
+#. js-lingui-explicit-id
+msgid "shop.English"
+msgstr "الإنجليزية"
+
+#. js-lingui-explicit-id
+msgid "shop.Enter the actual seller details before customers can download invoices."
+msgstr "أدخل بيانات البائع الفعلية حتى يتمكن العملاء من تنزيل الفواتير."
+
+#. js-lingui-explicit-id
+msgid "shop.Existing bundles"
+msgstr "الباقات"
+
+#. js-lingui-explicit-id
+msgid "shop.Expires at"
+msgstr "ينتهي في"
+
+#. js-lingui-explicit-id
+msgid "shop.Frequently asked questions"
+msgstr "الأسئلة الشائعة"
+
+#. js-lingui-explicit-id
+msgid "shop.From"
+msgstr "من"
+
+#. js-lingui-explicit-id
+msgid "shop.Governorate"
+msgstr "المحافظة"
+
+#. js-lingui-explicit-id
+msgid "shop.Heading"
+msgstr "عنوان"
+
+#. js-lingui-explicit-id
+msgid "shop.Help resources"
+msgstr "ملفات المساعدة"
+
+#. js-lingui-explicit-id
+msgid "shop.Hidden"
+msgstr "مخفي"
+
+#. js-lingui-explicit-id
+msgid "shop.Hours of cart inactivity"
+msgstr "ساعات عدم نشاط السلة"
+
+#. js-lingui-explicit-id
+msgid "shop.HTTPS link"
+msgstr "رابط آمن"
+
+#. js-lingui-explicit-id
+msgid "shop.I checked actual receipt in the receiving account"
+msgstr "تحققت من وصول المبلغ فعليًا"
+
+#. js-lingui-explicit-id
+msgid "shop.I verified actual cash receipt"
+msgstr "تحققت من استلام النقد فعليًا"
+
+#. js-lingui-explicit-id
+msgid "shop.In the box"
+msgstr "محتويات العلبة"
+
+#. js-lingui-explicit-id
+msgid "shop.Initial password"
+msgstr "كلمة المرور"
+
+#. js-lingui-explicit-id
+msgid "shop.Insert product image"
+msgstr "إدراج صورة المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Inspect received items before manually adjusting stock. Process a real refund in Orders or create a replacement order before resolving. This screen does not send funds or automatically restock goods."
+msgstr "افحص الأصناف المستلمة قبل تعديل المخزون يدويًا. نفّذ رد المبلغ من الطلبات أو أنشئ طلب استبدال قبل إغلاق الحالة. رد المبلغ وإعادة الأصناف إلى المخزون يتطلبان إجراءً يدويًا."
+
+#. js-lingui-explicit-id
+msgid "shop.Internal call notes"
+msgstr "ملاحظات المكالمة"
+
+#. js-lingui-explicit-id
+msgid "shop.Internal staff notes"
+msgstr "ملاحظات داخلية للموظفين"
+
+#. js-lingui-explicit-id
+msgid "shop.Invoice"
+msgstr "الفاتورة"
+
+#. js-lingui-explicit-id
+msgid "shop.Invoice prefix"
+msgstr "بادئة رقم الفاتورة"
+
+#. js-lingui-explicit-id
+msgid "shop.Invoice seller"
+msgstr "بيانات البائع"
+
+#. js-lingui-explicit-id
+msgid "shop.Italic"
+msgstr "مائل"
+
+#. js-lingui-explicit-id
+msgid "shop.Item"
+msgstr "المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Keep at least one variant"
+msgstr "يلزم إصدار واحد على الأقل"
+
+#. js-lingui-explicit-id
+msgid "shop.Language"
+msgstr "اللغة"
+
+#. js-lingui-explicit-id
+msgid "shop.Legal seller address"
+msgstr "عنوان البائع القانوني"
+
+#. js-lingui-explicit-id
+msgid "shop.Legal seller name"
+msgstr "اسم البائع القانوني"
+
+#. js-lingui-explicit-id
+msgid "shop.Link actual order"
+msgstr "ربط الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Low stock alerts are opt-in. Set recipient and threshold in Settings"
+msgstr "لتفعيل تنبيهات انخفاض المخزون، حدّد بريد المستلم وحدّ التنبيه من الإعدادات."
+
+#. js-lingui-explicit-id
+msgid "shop.Mark delivered"
+msgstr "تم التسليم"
+
+#. js-lingui-explicit-id
+msgid "shop.Matching placed order ID"
+msgstr "معرّف الطلب المطابق"
+
+#. js-lingui-explicit-id
+msgid "shop.Message shown to customer"
+msgstr "الرسالة الظاهرة للعميل"
+
+#. js-lingui-explicit-id
+msgid "shop.Message to customer"
+msgstr "رسالة إلى العميل"
+
+#. js-lingui-explicit-id
+msgid "shop.Minimum order, currency units"
+msgstr "الحد الأدنى للطلب بعملة المتجر"
+
+#. js-lingui-explicit-id
+msgid "shop.Most ordered products"
+msgstr "الأكثر طلبًا"
+
+#. js-lingui-explicit-id
+msgid "shop.Name"
+msgstr "الاسم"
+
+#. js-lingui-explicit-id
+msgid "shop.Name (Arabic)"
+msgstr "الاسم بالعربية"
+
+#. js-lingui-explicit-id
+msgid "shop.Name (English)"
+msgstr "الاسم بالإنجليزية"
+
+#. js-lingui-explicit-id
+msgid "shop.New"
+msgstr "جديد"
+
+#. js-lingui-explicit-id
+msgid "shop.New bundle"
+msgstr "باقة جديدة"
+
+#. js-lingui-explicit-id
+msgid "shop.New combinations of sizes or colors for this product must be configured by SuperAdmin. You can edit existing variants here."
+msgstr "إضافة مقاسات أو ألوان جديدة لهذا المنتج تتم من SuperAdmin؛ يمكنك تعديل الإصدارات الحالية هنا."
+
+#. js-lingui-explicit-id
+msgid "shop.New product"
+msgstr "منتج جديد"
+
+#. js-lingui-explicit-id
+msgid "shop.New, unique email. Share the password privately and let the user change it from their profile."
+msgstr "بريد جديد غير مستخدم. شارك كلمة المرور بشكل خاص ويمكن تغييرها من الحساب."
+
+#. js-lingui-explicit-id
+msgid "shop.Next"
+msgstr "التالي"
+
+#. js-lingui-explicit-id
+msgid "shop.No"
+msgstr "لا"
+
+#. js-lingui-explicit-id
+msgid "shop.No orders yet"
+msgstr "لا توجد طلبات"
+
+#. js-lingui-explicit-id
+msgid "shop.No products yet"
+msgstr "لا توجد منتجات"
+
+#. js-lingui-explicit-id
+msgid "shop.Notification email"
+msgstr "بريد الإشعارات"
+
+#. js-lingui-explicit-id
+msgid "shop.Numbering"
+msgstr "ترقيم"
+
+#. js-lingui-explicit-id
+msgid "shop.Offer expires"
+msgstr "تاريخ انتهاء العرض"
+
+#. js-lingui-explicit-id
+msgid "shop.Offer published"
+msgstr "تم إرسال العرض"
+
+#. js-lingui-explicit-id
+msgid "shop.On hand"
+msgstr "المتوفر بالمخزن"
+
+#. js-lingui-explicit-id
+msgid "shop.One use per customer. Additional product/category promotions are managed in Marketing → Promotions."
+msgstr "استخدام واحد لكل عميل. لإدارة عروض المنتجات والفئات، افتح «العروض الترويجية» من قسم التسويق."
+
+#. js-lingui-explicit-id
+msgid "shop.Only enter manufacturer-confirmed information. Empty fields appear as not provided."
+msgstr "أدخل المعلومات المعتمدة من الشركة المصنّعة فقط. تظهر الحقول الفارغة على أنها غير متوفرة."
+
+#. js-lingui-explicit-id
+msgid "shop.Open"
+msgstr "فتح"
+
+#. js-lingui-explicit-id
+msgid "shop.Open native order"
+msgstr "إدارة الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Opening Shop operations"
+msgstr "جارٍ فتح إدارة المتجر…"
+
+#. js-lingui-explicit-id
+msgid "shop.Order"
+msgstr "الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Order code"
+msgstr "رقم الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Order items & shipping"
+msgstr "بنود الطلب والشحن"
+
+#. js-lingui-explicit-id
+msgid "shop.Order items and shipping"
+msgstr "بنود الطلب والشحن"
+
+#. js-lingui-explicit-id
+msgid "shop.Order value"
+msgstr "قيمة الطلبات"
+
+#. js-lingui-explicit-id
+msgid "shop.orders"
+msgstr "طلبات"
+
+#. js-lingui-explicit-id
+msgid "shop.Orders"
+msgstr "الطلبات"
+
+#. js-lingui-explicit-id
+msgid "shop.Organization"
+msgstr "المؤسسة"
+
+#. js-lingui-explicit-id
+msgid "shop.Other carrier"
+msgstr "شركة شحن أخرى"
+
+#. js-lingui-explicit-id
+msgid "shop.Payment"
+msgstr "الدفع"
+
+#. js-lingui-explicit-id
+msgid "shop.Payment method"
+msgstr "طريقة الدفع"
+
+#. js-lingui-explicit-id
+msgid "shop.Payments"
+msgstr "الدفع"
+
+#. js-lingui-explicit-id
+msgid "shop.Payments are collected centrally. Confirm delivery only after the parcel arrives."
+msgstr "التحصيل عند الإدارة؛ حدّث التسليم بعد وصول الشحنة فعليًا."
+
+#. js-lingui-explicit-id
+msgid "shop.Pending"
+msgstr "بانتظار المراجعة"
+
+#. js-lingui-explicit-id
+msgid "shop.Phone"
+msgstr "الهاتف"
+
+#. js-lingui-explicit-id
+msgid "shop.Phone confirmation"
+msgstr "حالة الاتصال"
+
+#. js-lingui-explicit-id
+msgid "shop.Placed replacement order"
+msgstr "طلب استبدال"
+
+#. js-lingui-explicit-id
+msgid "shop.Policies & notifications"
+msgstr "الإعدادات"
+
+#. js-lingui-explicit-id
+msgid "shop.Previous"
+msgstr "السابق"
+
+#. js-lingui-explicit-id
+msgid "shop.Price"
+msgstr "السعر"
+
+#. js-lingui-explicit-id
+msgid "shop.Price (EGP)"
+msgstr "السعر بالجنيه"
+
+#. js-lingui-explicit-id
+msgid "shop.Prices exclude store tax"
+msgstr "الأسعار قبل ضريبة المتجر"
+
+#. js-lingui-explicit-id
+msgid "shop.Prices include store tax"
+msgstr "الأسعار شاملة ضريبة المتجر"
+
+#. js-lingui-explicit-id
+msgid "shop.Private photo"
+msgstr "صورة خاصة"
+
+#. js-lingui-explicit-id
+msgid "shop.Private return photo"
+msgstr "صورة المرتجع الخاصة"
+
+#. js-lingui-explicit-id
+msgid "shop.Product"
+msgstr "المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Product / variant"
+msgstr "المنتج أو الإصدار"
+
+#. js-lingui-explicit-id
+msgid "shop.Product content saved"
+msgstr "تم حفظ بيانات المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Product editor"
+msgstr "محرر المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Product images"
+msgstr "صور المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Product name"
+msgstr "اسم المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Products"
+msgstr "المنتجات"
+
+#. js-lingui-explicit-id
+msgid "shop.Programming"
+msgstr "البرمجة"
+
+#. js-lingui-explicit-id
+msgid "shop.Public receiving instructions"
+msgstr "بيانات الاستقبال المنشورة"
+
+#. js-lingui-explicit-id
+msgid "shop.Publish bundle"
+msgstr "نشر الباقة"
+
+#. js-lingui-explicit-id
+msgid "shop.Publish offer"
+msgstr "إرسال العرض"
+
+#. js-lingui-explicit-id
+msgid "shop.Published"
+msgstr "منشور"
+
+#. js-lingui-explicit-id
+msgid "shop.Publishing sends the actual proposed prices and delivery charge to the customer. An accepted quote is finalized by creating a matching placed order in native Orders, then linking it here."
+msgstr "عند نشر العرض، تُرسَل الأسعار المقترحة ورسوم التوصيل إلى العميل. بعد قبوله، أنشئ الطلب المطابق في صفحة الطلبات واربطه بالعرض هنا."
+
+#. js-lingui-explicit-id
+msgid "shop.Quantity"
+msgstr "العدد"
+
+#. js-lingui-explicit-id
+msgid "shop.Question"
+msgstr "السؤال"
+
+#. js-lingui-explicit-id
+msgid "shop.Quotation #"
+msgstr "عرض سعر رقم"
+
+#. js-lingui-explicit-id
+msgid "shop.Rates are charged separately for each seller. No carrier API is used."
+msgstr "لكل بائع مصاريف شحن مستقلة، والتسليم لشركة الشحن يدوي."
+
+#. js-lingui-explicit-id
+msgid "shop.Reason"
+msgstr "السبب"
+
+#. js-lingui-explicit-id
+msgid "shop.Reason for rejecting proof"
+msgstr "سبب رفض الإيصال"
+
+#. js-lingui-explicit-id
+msgid "shop.Receipt confirmed"
+msgstr "تم تأكيد استلام التحويل"
+
+#. js-lingui-explicit-id
+msgid "shop.Record actual dispatch"
+msgstr "تسجيل الشحن الفعلي"
+
+#. js-lingui-explicit-id
+msgid "shop.Record cash received"
+msgstr "تسجيل استلام النقد"
+
+#. js-lingui-explicit-id
+msgid "shop.Refund amount (EGP)"
+msgstr "قيمة الاسترداد"
+
+#. js-lingui-explicit-id
+msgid "shop.Refunded"
+msgstr "مسترد"
+
+#. js-lingui-explicit-id
+msgid "shop.Reject"
+msgstr "رفض"
+
+#. js-lingui-explicit-id
+msgid "shop.Reject proof"
+msgstr "رفض الإيصال"
+
+#. js-lingui-explicit-id
+msgid "shop.Rejected"
+msgstr "مرفوض"
+
+#. js-lingui-explicit-id
+msgid "shop.Remove"
+msgstr "إزالة"
+
+#. js-lingui-explicit-id
+msgid "shop.Remove component"
+msgstr "إزالة المكوّن"
+
+#. js-lingui-explicit-id
+msgid "shop.Remove variant"
+msgstr "حذف الإصدار"
+
+#. js-lingui-explicit-id
+msgid "shop.Replacement order ID"
+msgstr "معرّف طلب الاستبدال"
+
+#. js-lingui-explicit-id
+msgid "shop.Request"
+msgstr "الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Request failed"
+msgstr "تعذر تنفيذ الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Return #"
+msgstr "طلب إرجاع رقم"
+
+#. js-lingui-explicit-id
+msgid "shop.Return updated"
+msgstr "تم تحديث الطلب"
+
+#. js-lingui-explicit-id
+msgid "shop.Return window & mail"
+msgstr "المرتجعات والرسائل"
+
+#. js-lingui-explicit-id
+msgid "shop.Returns"
+msgstr "المرتجعات"
+
+#. js-lingui-explicit-id
+msgid "shop.Review status"
+msgstr "حالة المراجعة"
+
+#. js-lingui-explicit-id
+msgid "shop.Reviews"
+msgstr "التقييمات"
+
+#. js-lingui-explicit-id
+msgid "shop.Role"
+msgstr "الدور"
+
+#. js-lingui-explicit-id
+msgid "shop.Run notification check"
+msgstr "فحص التنبيهات"
+
+#. js-lingui-explicit-id
+msgid "shop.Sales"
+msgstr "المبيعات"
+
+#. js-lingui-explicit-id
+msgid "shop.Save"
+msgstr "حفظ"
+
+#. js-lingui-explicit-id
+msgid "shop.Save bundle"
+msgstr "حفظ الباقة"
+
+#. js-lingui-explicit-id
+msgid "shop.Save callback"
+msgstr "حفظ الاتصال"
+
+#. js-lingui-explicit-id
+msgid "shop.Save draft"
+msgstr "مسودة"
+
+#. js-lingui-explicit-id
+msgid "shop.Save method"
+msgstr "حفظ الطريقة"
+
+#. js-lingui-explicit-id
+msgid "shop.Save product"
+msgstr "حفظ المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Save product content"
+msgstr "حفظ البيانات"
+
+#. js-lingui-explicit-id
+msgid "shop.Save rate"
+msgstr "حفظ السعر"
+
+#. js-lingui-explicit-id
+msgid "shop.Save status"
+msgstr "حفظ الحالة"
+
+#. js-lingui-explicit-id
+msgid "shop.Saved"
+msgstr "تم الحفظ"
+
+#. js-lingui-explicit-id
+msgid "shop.School quotes"
+msgstr "عروض الأسعار"
+
+#. js-lingui-explicit-id
+msgid "shop.Search"
+msgstr "بحث"
+
+#. js-lingui-explicit-id
+msgid "shop.Seller"
+msgstr "بائع"
+
+#. js-lingui-explicit-id
+msgid "shop.Seller code"
+msgstr "كود البائع"
+
+#. js-lingui-explicit-id
+msgid "shop.Sellers"
+msgstr "البائعون"
+
+#. js-lingui-explicit-id
+msgid "shop.Send requested back-in-stock alerts"
+msgstr "تنبيهات عودة التوافر"
+
+#. js-lingui-explicit-id
+msgid "shop.Sent once per low-stock episode, reset after restocking. Email and the job queue must be running."
+msgstr "يُرسل التنبيه مرة واحدة عند انخفاض المخزون ويتاح مجددًا بعد إعادة التوريد. يتطلب الإرسال تشغيل البريد وقائمة المهام."
+
+#. js-lingui-explicit-id
+msgid "shop.Settings"
+msgstr "الإعدادات"
+
+#. js-lingui-explicit-id
+msgid "shop.Settings saved"
+msgstr "تم حفظ الإعدادات"
+
+#. js-lingui-explicit-id
+msgid "shop.Settled refund"
+msgstr "مبلغ مسترد فعليًا"
+
+#. js-lingui-explicit-id
+msgid "shop.Shipment recorded"
+msgstr "تم تسجيل الشحنة"
+
+#. js-lingui-explicit-id
+msgid "shop.Shipments"
+msgstr "الشحنات"
+
+#. js-lingui-explicit-id
+msgid "shop.Shipping"
+msgstr "الشحن"
+
+#. js-lingui-explicit-id
+msgid "shop.Shop operations"
+msgstr "إدارة المتجر"
+
+#. js-lingui-explicit-id
+msgid "shop.Show report"
+msgstr "عرض التقرير"
+
+#. js-lingui-explicit-id
+msgid "shop.SKU"
+msgstr "رمز الصنف"
+
+#. js-lingui-explicit-id
+msgid "shop.Starts at"
+msgstr "يبدأ في"
+
+#. js-lingui-explicit-id
+msgid "shop.State"
+msgstr "الحالة"
+
+#. js-lingui-explicit-id
+msgid "shop.Status"
+msgstr "الحالة"
+
+#. js-lingui-explicit-id
+msgid "shop.Stock"
+msgstr "المخزون"
+
+#. js-lingui-explicit-id
+msgid "shop.Stock alerts"
+msgstr "تنبيهات المخزون"
+
+#. js-lingui-explicit-id
+msgid "shop.Stock check completed"
+msgstr "تمت مراجعة المخزون"
+
+#. js-lingui-explicit-id
+msgid "shop.Store-owned product"
+msgstr "منتج المتجر"
+
+#. js-lingui-explicit-id
+msgid "shop.Store-owned products"
+msgstr "منتجات المتجر"
+
+#. js-lingui-explicit-id
+msgid "shop.Suitable competitions"
+msgstr "المسابقات المناسبة"
+
+#. js-lingui-explicit-id
+msgid "shop.Tax registration, if applicable"
+msgstr "رقم التسجيل الضريبي إن وجد"
+
+#. js-lingui-explicit-id
+msgid "shop.Team & sellers"
+msgstr "الحسابات والبائعون"
+
+#. js-lingui-explicit-id
+msgid "shop.Telephone confirmation:"
+msgstr "تأكيد الاتصال:"
+
+#. js-lingui-explicit-id
+msgid "shop.The money was actually returned"
+msgstr "تم رد المبلغ فعليًا"
+
+#. js-lingui-explicit-id
+msgid "shop.Title"
+msgstr "العنوان"
+
+#. js-lingui-explicit-id
+msgid "shop.To"
+msgstr "إلى"
+
+#. js-lingui-explicit-id
+msgid "shop.Total"
+msgstr "الإجمالي"
+
+#. js-lingui-explicit-id
+msgid "shop.Total uses"
+msgstr "عدد مرات الاستخدام"
+
+#. js-lingui-explicit-id
+msgid "shop.Total:"
+msgstr "الإجمالي:"
+
+#. js-lingui-explicit-id
+msgid "shop.Track"
+msgstr "تتبّع"
+
+#. js-lingui-explicit-id
+msgid "shop.Tracking number"
+msgstr "رقم التتبع"
+
+#. js-lingui-explicit-id
+msgid "shop.Transfer"
+msgstr "التحويل"
+
+#. js-lingui-explicit-id
+msgid "shop.Transfer receipt"
+msgstr "إيصال التحويل"
+
+#. js-lingui-explicit-id
+msgid "shop.Type"
+msgstr "النوع"
+
+#. js-lingui-explicit-id
+msgid "shop.Unable to save"
+msgstr "تعذر الحفظ"
+
+#. js-lingui-explicit-id
+msgid "shop.Unit price (EGP)"
+msgstr "سعر الوحدة بالجنيه"
+
+#. js-lingui-explicit-id
+msgid "shop.Units"
+msgstr "الوحدات"
+
+#. js-lingui-explicit-id
+msgid "shop.Unpaid order cancelled"
+msgstr "إلغاء طلب غير محصل"
+
+#. js-lingui-explicit-id
+msgid "shop.Unreachable"
+msgstr "تعذّر التواصل"
+
+#. js-lingui-explicit-id
+msgid "shop.UpdateCatalog and CreatePromotion permissions are both required."
+msgstr "يلزم توفر صلاحيتي تحديث الكتالوج وإنشاء العروض."
+
+#. js-lingui-explicit-id
+msgid "shop.Upload failed"
+msgstr "تعذر رفع الملف"
+
+#. js-lingui-explicit-id
+msgid "shop.Upload image, max 5 MB"
+msgstr "رفع صورة"
+
+#. js-lingui-explicit-id
+msgid "shop.URL slug"
+msgstr "معرّف رابط المنتج"
+
+#. js-lingui-explicit-id
+msgid "shop.Variant name"
+msgstr "اسم الإصدار"
+
+#. js-lingui-explicit-id
+msgid "shop.Variants & stock"
+msgstr "الإصدارات والمخزون"
+
+#. js-lingui-explicit-id
+msgid "shop.Verified transfer reference"
+msgstr "مرجع التحويل"
+
+#. js-lingui-explicit-id
+msgid "shop.View items"
+msgstr "عرض البنود"
+
+#. js-lingui-explicit-id
+msgid "shop.View private receipt"
+msgstr "عرض الإيصال"
+
+#. js-lingui-explicit-id
+msgid "shop.Yes"
+msgstr "نعم"
+
+#. js-lingui-explicit-id
+msgid "shop.Your items + delivery"
+msgstr "قيمة بنودك وشحنها"
+
+#. js-lingui-explicit-id
+msgid "shop.Your products, stock and order items only"
+msgstr "منتجاتك ومخزونك وبنود طلباتك فقط"
+
+#. js-lingui-explicit-id
+msgid "shop.Dispatch"
+msgstr "شحن"
+
+#. js-lingui-explicit-id
+msgid "shop.Quote quantity"
+msgstr "كمية عرض السعر"
+
+#. js-lingui-explicit-id
+msgid "shop.resource.manual"
+msgstr "دليل"
+
+#. js-lingui-explicit-id
+msgid "shop.resource.video"
+msgstr "فيديو"
+
+#. js-lingui-explicit-id
+msgid "shop.resource.code"
+msgstr "ملف برمجة"
+
+#. js-lingui-explicit-id
+msgid "shop.resource.link"
+msgstr "رابط"
+
+#. js-lingui-explicit-id
+msgid "shop.return.requested"
+msgstr "مطلوب"
+
+#. js-lingui-explicit-id
+msgid "shop.return.authorized"
+msgstr "تمت الموافقة"
+
+#. js-lingui-explicit-id
+msgid "shop.return.received"
+msgstr "تم الاستلام"
+
+#. js-lingui-explicit-id
+msgid "shop.return.resolved"
+msgstr "تمت التسوية"
+
+#. js-lingui-explicit-id
+msgid "shop.return.rejected"
+msgstr "مرفوض"
+
+#. js-lingui-explicit-id
+msgid "shop.Declining a call blocks dispatch. Cancel the order below to release reserved stock."
+msgstr "رفض الطلب خلال المكالمة يمنع الشحن. ألغِ الطلب من الأسفل لإتاحة المخزون المحجوز."
+
+#. js-lingui-explicit-id
+msgid "shop.Declining a call blocks dispatch. Cancel the actual order in Orders to release reserved stock."
+msgstr "رفض الطلب خلال المكالمة يمنع الشحن. ألغِ الطلب من صفحة الطلبات لإتاحة المخزون المحجوز."
+
+#. js-lingui-explicit-id
+msgid "shop.Notification counts"
+msgstr "تنبيهات المخزون: {stock}، وتذكيرات السلة: {carts}"
