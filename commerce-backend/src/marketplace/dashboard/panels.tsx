@@ -120,7 +120,11 @@ const blankProduct = (): Product => ({
     assets: [],
     variants: [{ sku: '', name: '', price: 0, stockOnHand: 0, enabled: true }],
 });
-const styles = `.sv-market{padding:24px;max-width:1300px;margin:auto;line-height:1.6}.sv-market h1{font-size:26px;font-weight:700}.sv-market h2{font-size:21px;font-weight:650}.sv-market h3{font-weight:650}.sv-market p{margin:8px 0}.sv-market nav,.sv-market .actions{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.sv-market button,.sv-market input,.sv-market select,.sv-market textarea{font:inherit;border:1px solid #cbd5e1;border-radius:8px;padding:9px 12px;background:var(--card,#fff);color:inherit}.sv-market button{cursor:pointer;font-weight:600}.sv-market button.primary,.sv-market button[aria-current=page]{background:#087f5b;color:white;border-color:#087f5b}.sv-market button:disabled{opacity:.5;cursor:default}.sv-market button:focus-visible,.sv-market input:focus-visible,.sv-market select:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}.sv-market label{display:grid;gap:6px}.sv-market input:not([type=checkbox]),.sv-market select,.sv-market textarea{width:100%;min-width:0}.sv-market .panel{border:1px solid #dce5e2;border-radius:14px;padding:20px;margin:16px 0;background:var(--card,#fff)}.sv-market .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:12px 0}.sv-market .scroll{overflow-x:auto}.sv-market table{width:100%;border-collapse:collapse}.sv-market th,.sv-market td{text-align:start;padding:12px;border-bottom:1px solid #e2e8f0}.sv-market .notice{padding:12px;background:#e9f8f0;color:#14532d;border-radius:8px}.sv-market .error{padding:12px;background:#fff1f2;color:#991b1b;border-radius:8px}.sv-market .images{display:flex;gap:12px;flex-wrap:wrap}.sv-market .images img{width:100px;height:100px;object-fit:contain}.sv-market textarea{min-height:95px}.sv-market-embedded{padding:0;max-width:none;margin:0}.sv-market .actions{align-items:flex-end}`;
+const styles = `.sv-market{padding:24px;max-width:1300px;margin:auto;line-height:1.6}.sv-market h1{font-size:26px;font-weight:700}.sv-market h2{font-size:21px;font-weight:650}.sv-market h3{font-weight:650}.sv-market p{margin:8px 0}.sv-market nav,.sv-market .actions{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.sv-market button,.sv-market input,.sv-market select,.sv-market textarea{font:inherit;border:1px solid #cbd5e1;border-radius:8px;padding:9px 12px;background:var(--card,#fff);color:inherit}.sv-market button{cursor:pointer;font-weight:600}.sv-market button.primary,.sv-market button[aria-current=page]{background:#087f5b;color:white;border-color:#087f5b}.sv-market button:disabled{opacity:.5;cursor:default}.sv-market button:focus-visible,.sv-market input:focus-visible,.sv-market select:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}.sv-market label{display:grid;gap:6px}.sv-market input:not([type=checkbox]),.sv-market select,.sv-market textarea{width:100%;min-width:0}.sv-market .panel{border:1px solid #dce5e2;border-radius:14px;padding:20px;margin:16px 0;background:var(--card,#fff)}.sv-market .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:12px 0}.sv-market .scroll{overflow-x:auto}.sv-market table{width:100%;border-collapse:collapse}.sv-market th,.sv-market td{text-align:start;padding:12px;border-bottom:1px solid #e2e8f0}.sv-market .notice{padding:12px;background:#e9f8f0;color:#14532d;border-radius:8px}.sv-market .error{padding:12px;background:#fff1f2;color:#991b1b;border-radius:8px}.sv-market .images{display:flex;gap:12px;flex-wrap:wrap}.sv-market .images img{width:100px;height:100px;object-fit:contain}.sv-market textarea{min-height:95px}.sv-market-embedded{padding:0;max-width:none;margin:0}.sv-market .actions{align-items:flex-end}
+.sv-market .variant-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.sv-market .variant-actions label { margin: 0; }
+.sv-market .variant-actions button { width: fit-content; min-height: 28px; padding: 3px 8px; font-size: 12px; line-height: 1.4; }
+`;
 
 export type SellingSection =
     | 'catalog'
@@ -1053,47 +1057,50 @@ function ProductEditor({
                             }
                         />
                     </label>
-                    <label>
-                        <span>
-                            <input
-                                type="checkbox"
-                                checked={v.enabled !== false}
-                                onChange={(e) =>
-                                    set({
-                                        ...p,
-                                        variants: p.variants.map((row, i) =>
-                                            i === index
-                                                ? {
-                                                      ...row,
-                                                      enabled: e.target.checked,
-                                                  }
-                                                : row,
-                                        ),
-                                    })
-                                }
-                            />{' '}
-                            Available / متاح
-                        </span>
-                    </label>
-                    <button
-                        type="button"
-                        disabled={p.variants.length === 1}
-                        title={
-                            p.variants.length === 1
-                                ? 'Keep at least one variant / يلزم إصدار واحد على الأقل'
-                                : undefined
-                        }
-                        onClick={() =>
-                            set((prev) => ({
-                                ...prev,
-                                variants: prev.variants.filter(
-                                    (_, i) => i !== index,
-                                ),
-                            }))
-                        }
-                    >
-                        Remove variant / حذف الإصدار
-                    </button>
+                    <div className="variant-actions">
+                        <label>
+                            <span>
+                                <input
+                                    type="checkbox"
+                                    checked={v.enabled !== false}
+                                    onChange={(e) =>
+                                        set({
+                                            ...p,
+                                            variants: p.variants.map((row, i) =>
+                                                i === index
+                                                    ? {
+                                                          ...row,
+                                                          enabled: e.target.checked,
+                                                      }
+                                                    : row,
+                                            ),
+                                        })
+                                    }
+                                />{' '}
+                                Available / متاح
+                            </span>
+                        </label>
+                        <button
+                            type="button"
+                            aria-label="Remove variant / حذف الإصدار"
+                            disabled={p.variants.length === 1}
+                            title={
+                                p.variants.length === 1
+                                    ? 'Keep at least one variant / يلزم إصدار واحد على الأقل'
+                                    : undefined
+                            }
+                            onClick={() =>
+                                set((prev) => ({
+                                    ...prev,
+                                    variants: prev.variants.filter(
+                                        (_, i) => i !== index,
+                                    ),
+                                }))
+                            }
+                        >
+                            Remove / حذف
+                        </button>
+                    </div>
                 </div>
             ))}
             <button
