@@ -119,7 +119,8 @@ export async function marketplaceCheckoutBrowserSuite(
             }
             // Accordion transitions briefly retain the outgoing hidden panel.
             // Assert against the accessible delivery region, not both copies.
-            const delivery = page.getByRole('region', { name: 'Delivery Method', exact: true });
+            // The accessible name includes the step number until completed.
+            const delivery = page.getByRole('region', { name: /Delivery Method/ });
             await delivery
                 .getByText(
                     'Your items ship separately. Choose delivery for each seller; the total includes all delivery charges.',
