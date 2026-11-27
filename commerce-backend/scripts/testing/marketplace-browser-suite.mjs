@@ -165,6 +165,16 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             const remove = form.getByRole('button', { name: 'Remove variant / حذف الإصدار' });
             assert.ok(await remove.first().isDisabled());
             await form.getByRole('button', { name: 'Add variant / إضافة إصدار' }).click();
+            for (const width of [1500, 390]) {
+                await page.setViewportSize({ width, height: 1000 });
+                const checkbox = form.getByRole('checkbox', { name: 'Available / متاح' }).nth(1);
+                const box = await checkbox.boundingBox();
+                const button = await remove.nth(1).boundingBox();
+                assert.ok(box && button && button.y >= box.y + box.height);
+                assert.ok(Math.abs(button.x - box.x) < 10);
+                assert.ok(button.width < 180 && button.height <= 36);
+            }
+            await page.setViewportSize({ width: 1500, height: 1000 });
             await remove.nth(1).click();
             assert.equal(await remove.count(), 1);
             await form
