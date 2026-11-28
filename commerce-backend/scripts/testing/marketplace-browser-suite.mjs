@@ -138,13 +138,22 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
                     .count(),
                 0,
             );
-            await page
-                .getByRole('button', { name: 'Add product' })
-                .click();
+            const add = page.getByRole('button', { name: 'Add product', exact: true });
+            const search = page.getByRole('textbox', { name: 'Search', exact: true });
+            const [addBox, searchBox] = await Promise.all([add.boundingBox(), search.boundingBox()]);
+            assert.ok(addBox && searchBox && Math.abs(addBox.y + addBox.height - searchBox.y - searchBox.height) < 2);
+            const dialog = page.getByRole('dialog', { name: 'New product' });
+            assert.equal(await dialog.count(), 0);
+            await add.click();
+            const draftName = dialog.getByLabel('Name (English)', { exact: true });
+            await draftName.fill('Abandoned draft');
+            await page.keyboard.press('Escape');
+            await dialog.waitFor({ state: 'hidden' });
+            assert.equal(await add.evaluate(button => button === document.activeElement), true);
+            await add.click();
+            assert.equal(await draftName.inputValue(), '');
+            await draftName.fill('Browser Seller Robot');
             const form = page.getByRole('form', { name: 'Product editor' });
-            await form
-                .getByLabel('Name (English)', { exact: true })
-                .fill('Browser Seller Robot');
             const slug = form.getByLabel('URL slug', { exact: true });
             assert.equal(await slug.inputValue(), 'browser-seller-robot');
             await slug.fill('custom-robot-kit');
@@ -196,6 +205,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
             await form
                 .getByRole('button', { name: 'Save product' })
                 .click();
+            await dialog.waitFor({ state: 'hidden' });
             await page
                 .getByRole('status')
                 .filter({ hasText: 'Saved' })
@@ -527,7 +537,9 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         await page.reload();
         await page.getByRole('tab', {name: 'المنتجات', exact: true}).click();
         await page.getByRole('button', {name: 'إضافة منتج', exact: true}).click();
-        const form = page.getByRole('form', {name: 'محرر المنتج'});
+        const productDialog = page.getByRole('dialog', {name: 'منتج جديد'});
+        assert.equal(await productDialog.getAttribute('dir'), 'rtl');
+        const form = productDialog.getByRole('form', {name: 'محرر المنتج'});
         await form.getByRole('button', {name: 'حفظ المنتج', exact: true}).waitFor();
         const toolbar = form.getByRole('group', {name: 'التفاصيل بالإنجليزية'});
         assert.equal(await toolbar.getByRole('button', {name: 'عريض'}).getAttribute('title'), 'عريض');
