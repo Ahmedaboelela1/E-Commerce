@@ -84,7 +84,7 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         assert.ok(await dialog.evaluate(element => element.scrollTop > 0));
         await page.keyboard.press('Escape');
         await dialog.waitFor({ state: 'hidden' });
-        assert.equal(await open.evaluate(button => button === document.activeElement), true);
+        await open.and(page.locator(':focus')).waitFor({timeout: 5000});
         assert.equal(new URL(page.url()).searchParams.get('tab'), 'orders');
         await page.setViewportSize({ width: 1500, height: 1000 });
         await page.getByRole('button').filter({ hasText: /skillverse-eg/ }).first().click();
