@@ -537,9 +537,9 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         await page.reload();
         await page.getByRole('tab', {name: 'المنتجات', exact: true}).click();
         await page.getByRole('button', {name: 'إضافة منتج', exact: true}).click();
-        const dialog = page.getByRole('dialog', {name: 'منتج جديد'});
-        assert.equal(await dialog.getAttribute('dir'), 'rtl');
-        const form = dialog.getByRole('form', {name: 'محرر المنتج'});
+        const productDialog = page.getByRole('dialog', {name: 'منتج جديد'});
+        assert.equal(await productDialog.getAttribute('dir'), 'rtl');
+        const form = productDialog.getByRole('form', {name: 'محرر المنتج'});
         await form.getByRole('button', {name: 'حفظ المنتج', exact: true}).waitFor();
         const toolbar = form.getByRole('group', {name: 'التفاصيل بالإنجليزية'});
         assert.equal(await toolbar.getByRole('button', {name: 'عريض'}).getAttribute('title'), 'عريض');
