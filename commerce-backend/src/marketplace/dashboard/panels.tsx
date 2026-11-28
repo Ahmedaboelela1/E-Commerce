@@ -1,9 +1,9 @@
-import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, useLingui, api, useChannel } from '@vendure/dashboard';
-import { X } from 'lucide-react';
+import { useLingui, api, useChannel } from '@vendure/dashboard';
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { ProductDetailsEditor } from './product-details-editor';
 import './product-details-editor.css';
-import './product-dialog.css';
+import './product-list.css';
+import { ShopDialog } from '../../dashboard/shop-dialog';
 import { slugFromProductName } from '../product-slug';
 import { egyptGovernorates } from '../../egypt-governorates';
 
@@ -343,30 +343,18 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                     <p>{t('shop.No products yet')}</p>
                                 )}
                             </div>
-                            <Dialog
+                            <ShopDialog
                                 open={creating}
-                                disablePointerDismissal
-                                onOpenChange={(open) => {
-                                    if (!open && !busy) closeProductEditor();
-                                }}
+                                busy={busy}
+                                title={t('shop.New product')}
+                                className="sv-market"
+                                opener={addProductButton}
+                                onClose={closeProductEditor}
                             >
-                                <DialogContent
-                                    className="sv-market sv-product-dialog"
-                                    dir={i18n.locale === 'ar' ? 'rtl' : 'ltr'}
-                                    finalFocus={addProductButton}
-                                    showCloseButton={false}
-                                >
-                                    <DialogHeader className="product-dialog-header">
-                                        <DialogTitle>{t('shop.New product')}</DialogTitle>
-                                        <DialogClose aria-label={t('shop.Close')} disabled={busy}>
-                                            <X size={18} aria-hidden="true" />
-                                        </DialogClose>
-                                    </DialogHeader>
-                                    <fieldset disabled={busy} className="min-w-0">
-                                        {creating && productEditor}
-                                    </fieldset>
-                                </DialogContent>
-                            </Dialog>
+                                <fieldset disabled={busy} className="min-w-0">
+                                    {creating && productEditor}
+                                </fieldset>
+                            </ShopDialog>
                             {!creating && productEditor}
                         </>
                     )}

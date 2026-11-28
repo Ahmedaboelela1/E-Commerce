@@ -1,8 +1,4 @@
-.sv-market .product-list-actions label {
-    margin-block: 0;
-}
-
-.sv-market.sv-product-dialog {
+.sv-shop-dialog[data-slot="dialog-content"] {
     width: min(70rem, calc(100% - 2rem));
     max-width: none;
     max-height: calc(100dvh - 2rem);
@@ -14,13 +10,15 @@
     color: var(--foreground);
 }
 
-.sv-product-dialog .product-dialog-header {
+.sv-shop-dialog .shop-dialog-header {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    overflow-wrap: anywhere;
 }
 
-.sv-product-dialog .product-dialog-header button {
+.sv-shop-dialog .shop-dialog-header button {
     padding: 6px;
+    flex-shrink: 0;
 }
