@@ -400,15 +400,16 @@ export async function browserSuite(
                 .filter({hasText: cod.code})
                 .getByRole('button', {name: 'Open', exact: true})
                 .click();
-            await adminPage
-                .getByText('Private telephone confirmation', {exact: false})
-                .waitFor();
-            const confirmTransfer=adminPage.getByRole('button',{name:'Confirm receipt and settle payment',exact:true});
+            const orderDialog = adminPage.getByRole('dialog');
+            await orderDialog.getByRole('combobox', {name: /Phone confirmation/}).waitFor();
+            const confirmTransfer=orderDialog.getByRole('button',{name:'Confirm receipt and settle payment',exact:true});
             assert.equal(await confirmTransfer.count(),0,'COD must not display bank verification controls');
             await adminPage.screenshot({
                 path: path.join(artifacts, 'admin-order-operations.png'),
                 fullPage: true,
             });
+            await orderDialog.getByRole('button', {name: 'Close', exact: true}).click();
+            await orderDialog.waitFor({state: 'hidden'});
             await adminPage.getByRole('row').filter({hasText:pendingBank.code})
                 .getByRole('button',{name:'Open',exact:true}).click();
             await confirmTransfer.waitFor();
@@ -431,6 +432,8 @@ export async function browserSuite(
             assert.equal(paid.receiptStatus,'accepted');
             assert.equal(paid.transferReference,'ADMIN-BROWSER-VERIFIED-TRANSFER');
             assert.equal(await confirmTransfer.count(),0,'settled transfers must not be settled twice');
+            await orderDialog.getByRole('button', {name: 'Close', exact: true}).click();
+            await orderDialog.waitFor({state: 'hidden'});
             for (const tab of [
                 'Sales',
                 'Stock',

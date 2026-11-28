@@ -6,8 +6,9 @@ import {
     useChannel,
     usePermissions,
 } from '@vendure/dashboard';
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {consolidateCommerceNavigation} from './navigation';
+import {ShopDialog} from '../../dashboard/shop-dialog';
 
 type Payment = {
     id: string;
@@ -144,6 +145,8 @@ function OperationsPage() {
     const [total, setTotal] = useState(0);
     const [orders, setOrders] = useState<OrderRow[]>([]);
     const [selected, setSelected] = useState<OrderDetail | null>(null);
+    const orderOpener = useRef<HTMLButtonElement>(null);
+    const openOrderSession = useRef<{id: string} | null>(null);
     const [notes, setNotes] = useState('');
     const [phoneStatus, setPhoneStatus] = useState('pending');
     const [reference, setReference] = useState('');
@@ -198,11 +201,14 @@ function OperationsPage() {
         setOrders(d.shopOperationsOrders.items);
         setTotal(d.shopOperationsOrders.total);
     }, [search, skip]);
-    const openOrder = async (id: string) => {
+    const loadOrder = async (id: string) => {
+        const session = openOrderSession.current;
+        if (session?.id !== id) return;
         const d = await request<{shopOperationsOrder: OrderDetail}>(
             'query($id:ID!){shopOperationsOrder(orderId:$id)}',
             {id},
         );
+        if (openOrderSession.current !== session) return;
         setSelected(d.shopOperationsOrder);
         setNotes(d.shopOperationsOrder.notes);
         setPhoneStatus(d.shopOperationsOrder.phoneStatus);
@@ -241,6 +247,7 @@ function OperationsPage() {
         }
     }, [tab, loadOrders, stockSkip, reviewStatus, reviewSkip, canReadOrders]);
     useEffect(() => {
+        openOrderSession.current = null;
         setSelected(null);
         setReceipt(null);
         setError('');
@@ -257,9 +264,32 @@ function OperationsPage() {
     }, [loadTab, activeChannel?.id]);
     const permissions = allowed;
     const refreshOrder = async () => {
-        if (selected) await openOrder(selected.id);
+        if (selected) await loadOrder(selected.id);
         await loadOrders();
     };
+
+    const showOrder = tab === 'orders' && selected !== null;
+    const closeOrder = () => {
+        openOrderSession.current = null;
+        setSelected(null);
+        setReceipt(null);
+        setError('');
+        setMessage('');
+    };
+    const feedback = (
+        <>
+            {error && (
+                <p role="alert" className="sv-error">
+                    {error}
+                </p>
+            )}
+            {message && (
+                <p role="status" className="sv-success">
+                    {message}
+                </p>
+            )}
+        </>
+    );
 
     return (
         <div className="sv-suite" dir={i18n.locale === 'ar' ? 'rtl' : 'ltr'}>
@@ -278,25 +308,14 @@ function OperationsPage() {
                             setTab(key);
                             const url=new URL(window.location.href);url.searchParams.set('tab',key);
                             window.history.replaceState(window.history.state,'',url);
-                            setSelected(null);
-                            setError('');
-                            setMessage('');
+                            closeOrder();
                         }}
                     >
                         {title}
                     </button>
                 ))}
             </div>
-            {error && (
-                <p role="alert" className="sv-error">
-                    {error}
-                </p>
-            )}
-            {message && (
-                <p role="status" className="sv-success">
-                    {message}
-                </p>
-            )}
+            {!showOrder && feedback}
             {sellerOnly&&tab==='orders'&&<SellingSectionPanel key="seller-orders" section="orders"/>}
             {(['products','delivery','payments','accounts'].includes(tab))&&<SellingSectionPanel key={tab} section={(tab==='products'?'catalog':tab) as SellingSection}/>}
             {tab === 'orders' && permissions('ReadOrder') && (
@@ -346,11 +365,14 @@ function OperationsPage() {
                                         </td>
                                         <td>
                                             <button
-                                                onClick={() =>
-                                                    void run(() =>
-                                                        openOrder(o.id),
-                                                    )
-                                                }
+                                                type="button"
+                                                aria-haspopup="dialog"
+                                                disabled={busy}
+                                                onClick={(event) => {
+                                                    orderOpener.current = event.currentTarget;
+                                                    openOrderSession.current = {id: o.id};
+                                                    void run(() => loadOrder(o.id));
+                                                }}
                                             >
                                                 {t('shop.Open')}
                                             </button>
@@ -375,11 +397,16 @@ function OperationsPage() {
                             </button>
                         </div>
                     </div>
-                    {selected && (
-                        <div className="sv-box">
-                            <h2>
-                                {selected.code} — {selected.customerName}
-                            </h2>
+                    <ShopDialog
+                        open={showOrder}
+                        busy={busy}
+                        title={selected ? `${selected.code} — ${selected.customerName}` : ''}
+                        className="sv-suite"
+                        opener={orderOpener}
+                        onClose={closeOrder}
+                    >
+                        {selected && <div className="min-w-0 break-words">
+                            {feedback}
                             <p>
                                 {selected.email} · {selected.phone}
                             </p>
@@ -678,8 +705,8 @@ function OperationsPage() {
                             >
                                 {t('shop.Download PDF')}
                             </button>
-                        </div>
-                    )}
+                        </div>}
+                    </ShopDialog>
                 </>
             )}
             {tab === 'reports' && permissions('ReadOrder') && (

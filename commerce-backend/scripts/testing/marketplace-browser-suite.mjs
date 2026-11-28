@@ -68,11 +68,25 @@ export async function marketplaceBrowserSuite(t, f, { orderId }) {
         await page.getByRole('heading', { name: 'Cash on Delivery', exact: true }).waitFor();
         await page.getByRole('tab', { name: 'Orders', exact: true }).click();
         const source = (await f.admin('query($id:ID!){order(id:$id){code}}', { id: orderId })).data.order;
-        await page.getByRole('row').filter({ hasText: source.code })
-            .getByRole('button', { name: 'Open', exact: true }).click();
-        await page.getByRole('heading', { name: 'Order items & shipping', exact: true }).waitFor();
-        await page.getByRole('link', { name: 'Advanced order details', exact: true }).waitFor();
+        const open = page.getByRole('row').filter({ hasText: source.code })
+            .getByRole('button', { name: 'Open', exact: true });
+        await open.click();
+        const dialog = page.getByRole('dialog', { name: new RegExp(source.code) });
+        await dialog.getByRole('heading', { name: 'Order items & shipping', exact: true }).waitFor();
+        await dialog.getByRole('link', { name: 'Advanced order details', exact: true }).waitFor();
         await page.screenshot({ path: path.join(artifacts, 'superadmin-single-commerce-navigation.png'), fullPage: true });
+
+        await page.setViewportSize({ width: 390, height: 750 });
+        const bounds = await dialog.boundingBox();
+        assert.ok(bounds && bounds.x >= 0 && bounds.x + bounds.width <= 390);
+        const invoice = dialog.getByRole('button', { name: 'Download PDF', exact: true });
+        await invoice.scrollIntoViewIfNeeded();
+        assert.ok(await dialog.evaluate(element => element.scrollTop > 0));
+        await page.keyboard.press('Escape');
+        await dialog.waitFor({ state: 'hidden' });
+        assert.equal(await open.evaluate(button => button === document.activeElement), true);
+        assert.equal(new URL(page.url()).searchParams.get('tab'), 'orders');
+        await page.setViewportSize({ width: 1500, height: 1000 });
         await page.getByRole('button').filter({ hasText: /skillverse-eg/ }).first().click();
         await page.getByText('Default channel', { exact: true }).last().click();
         for (const name of ['Catalog', 'Settings']) {
