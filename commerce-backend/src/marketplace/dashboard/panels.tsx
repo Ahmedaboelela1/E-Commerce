@@ -1,7 +1,9 @@
-import { useLingui, api, useChannel } from '@vendure/dashboard';
-import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, useLingui, api, useChannel } from '@vendure/dashboard';
+import { X } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { ProductDetailsEditor } from './product-details-editor';
 import './product-details-editor.css';
+import './product-dialog.css';
 import { slugFromProductName } from '../product-slug';
 import { egyptGovernorates } from '../../egypt-governorates';
 
@@ -136,6 +138,7 @@ export type SellingSection =
 export function SellingSectionPanel({ section }: { section: SellingSection }) {
     const { _: t, i18n } = useLingui();
     const tab = section;
+    const addProductButton = useRef<HTMLButtonElement>(null);
     const { activeChannel } = useChannel();
     const [access, setAccess] = useState<Access | null>(null),
         [error, setError] = useState(''),
@@ -219,10 +222,31 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
             setBusy(false);
         }
     }
+    const creating = edit !== null && !edit.id;
+    const closeProductEditor = () => {
+        setEdit(null);
+        setError('');
+    };
+    const productEditor = edit && access && (
+        <ProductEditor
+            key={`${edit.id || 'new'}-${activeChannel?.id}`}
+            product={edit}
+            access={access}
+            vendors={vendors}
+            error={creating ? error : undefined}
+            close={closeProductEditor}
+            save={(input) =>
+                run(async () => {
+                    await mutate('saveMarketplaceProduct', input);
+                    setEdit(null);
+                })
+            }
+        />
+    );
     return (
         <section className="sv-market sv-market-embedded">
             <style>{styles}</style>
-            {error && (
+            {error && !creating && (
                 <p role="alert" className="error">
                     {error}
                 </p>
@@ -239,7 +263,7 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                 >
                     {tab === 'catalog' && (
                         <>
-                            <div className="actions">
+                            <div className="actions product-list-actions">
                                 <label>
                                     {t('shop.Search')}
                                     <input
@@ -251,8 +275,14 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                     />
                                 </label>
                                 <button
+                                    ref={addProductButton}
+                                    type="button"
                                     className="primary"
-                                    onClick={() => setEdit(blankProduct())}
+                                    aria-haspopup="dialog"
+                                    onClick={() => {
+                                        setError('');
+                                        setEdit(blankProduct());
+                                    }}
                                 >
                                     {t('shop.Add product')}
                                 </button>
@@ -313,24 +343,31 @@ export function SellingSectionPanel({ section }: { section: SellingSection }) {
                                     <p>{t('shop.No products yet')}</p>
                                 )}
                             </div>
-                            {edit && (
-                                <ProductEditor
-                                    key={`${edit.id || 'new'}-${activeChannel?.id}`}
-                                    product={edit}
-                                    access={access}
-                                    vendors={vendors}
-                                    close={() => setEdit(null)}
-                                    save={(input) =>
-                                        run(async () => {
-                                            await mutate(
-                                                'saveMarketplaceProduct',
-                                                input,
-                                            );
-                                            setEdit(null);
-                                        })
-                                    }
-                                />
-                            )}
+                            <Dialog
+                                open={creating}
+                                disablePointerDismissal
+                                onOpenChange={(open) => {
+                                    if (!open && !busy) closeProductEditor();
+                                }}
+                            >
+                                <DialogContent
+                                    className="sv-market sv-product-dialog"
+                                    dir={i18n.locale === 'ar' ? 'rtl' : 'ltr'}
+                                    finalFocus={addProductButton}
+                                    showCloseButton={false}
+                                >
+                                    <DialogHeader className="product-dialog-header">
+                                        <DialogTitle>{t('shop.New product')}</DialogTitle>
+                                        <DialogClose aria-label={t('shop.Close')} disabled={busy}>
+                                            <X size={18} aria-hidden="true" />
+                                        </DialogClose>
+                                    </DialogHeader>
+                                    <fieldset disabled={busy} className="min-w-0">
+                                        {creating && productEditor}
+                                    </fieldset>
+                                </DialogContent>
+                            </Dialog>
+                            {!creating && productEditor}
                         </>
                     )}
                     {tab === 'orders' && (
@@ -820,12 +857,14 @@ function ProductEditor({
     product,
     access,
     vendors,
+    error,
     save,
     close,
 }: {
     product: Product;
     access: Access;
     vendors: Vendor[];
+    error?: string;
     save: (input: unknown) => Promise<void>;
     close: () => void;
 }) {
@@ -842,7 +881,7 @@ function ProductEditor({
         set((prev) => ({ ...prev, [key]: value }));
     return (
         <form
-            className="panel"
+            className={p.id ? 'panel' : undefined}
             aria-label={t('shop.Product editor')}
             onSubmit={(e) => {
                 e.preventDefault();
@@ -864,11 +903,7 @@ function ProductEditor({
                 });
             }}
         >
-            <h2>
-                {p.id
-                    ? t('shop.Edit product')
-                    : t('shop.New product')}
-            </h2>
+            {p.id && <h2>{t('shop.Edit product')}</h2>}
             <p>
                 {access.pricesIncludeTax
                     ? t('shop.Prices include store tax')
@@ -1208,6 +1243,7 @@ function ProductEditor({
                     {t('shop.Published')}
                 </span>
             </label>
+            {error && <p role="alert" className="error">{error}</p>}
             <div className="actions">
                 <button className="primary" disabled={uploading}>
                     {t('shop.Save product')}

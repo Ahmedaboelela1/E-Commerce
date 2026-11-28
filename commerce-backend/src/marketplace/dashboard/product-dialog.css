@@ -1,0 +1,26 @@
+.sv-market .product-list-actions label {
+    margin-block: 0;
+}
+
+.sv-market.sv-product-dialog {
+    width: min(70rem, calc(100% - 2rem));
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    overflow: auto;
+    color: var(--foreground);
+}
+
+.sv-product-dialog .product-dialog-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.sv-product-dialog .product-dialog-header button {
+    padding: 6px;
+}
